@@ -9,7 +9,6 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.google.inject.AbstractModule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.TestInstance;
@@ -32,13 +31,7 @@ class DalTest {
         _dynamoDB = createAmazonDynamoDBClient();
         _dynamoDBMapper = new DynamoDBMapper(_dynamoDB);
         Util.createTables(_dynamoDBMapper, _dynamoDB);
-        _injector = Guice.createInjector(new AbstractModule() {
-
-            @Override
-            protected void configure() {
-                bind(NominatorDao.class).toInstance(new DynamoDBNominatorDao(new DynamoDBMapper(_dynamoDB)));
-            }
-        });
+        _injector = Guice.createInjector(new NominatorModule(_dynamoDB));
 
         _nominatorDao = _injector.getInstance(NominatorDao.class);
     }
