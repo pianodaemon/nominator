@@ -21,5 +21,21 @@ public class Target {
     private String identifier;
 
     @DynamoDBAttribute
-    private String first_name;
+    private String userName;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        //   Target temp = (Target) o;
+        //  return this.getIssuer() == temp.getIssuer();
+        //           && identifier == temp.identifier
+        //           && userName == temp.userName;
+        return true;
+    }
 }

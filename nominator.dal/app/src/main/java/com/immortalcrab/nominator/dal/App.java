@@ -24,11 +24,11 @@ public class App {
         TargetDao bdao = new TargetDao(new DynamoDBMapper(client));
 
         Target target = new Target();
-        target.setFirst_name("Edwin");
-        target.setIdentifier("PACE8001104V2");
-        target.setIssuer("KACE8001104V0");
+        target.setUserName("Edwin Plauchu Camacho");
+        target.setIdentifier("EMP#PACE8001104V2");
+        target.setIssuer("ORG#KACE8001104V0");
 
-        bdao.put(target);
+        Target put = bdao.put(target);
         System.out.println(bdao.getAll()
                 .stream()
                 .map(Target::toString)
