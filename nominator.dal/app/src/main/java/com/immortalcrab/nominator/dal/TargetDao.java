@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.immortalcrab.nominator.entities.Target;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class TargetDao {
         Target target = new Target();
         target.setName(name);
         target.setSurname(surname);
-        target.setOptionalSurname(optionalSurname);
+        target.setOptionalSurname(Optional.ofNullable(optionalSurname).orElse(""));
         target.setIdentifier(identifier);
         target.setIssuer(issuer);
         mapper.save(target);
@@ -32,7 +33,7 @@ public class TargetDao {
         return mapper.load(Target.class, issuer, identifier);
     }
 
-    public void delete(final String issuer, final String identifier) {
+    public void deleteEmployee(final String issuer, final String identifier) {
         Target target = new Target();
         target.setIssuer(issuer);
         target.setIdentifier(identifier);
@@ -40,7 +41,7 @@ public class TargetDao {
         mapper.delete(target);
     }
 
-    public List<Target> getAll() {
+    public List<Target> getAllEmployees() {
         return mapper.scan(Target.class, new DynamoDBScanExpression());
     }
 }
