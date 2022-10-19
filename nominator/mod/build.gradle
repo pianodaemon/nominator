@@ -18,23 +18,23 @@ dependencies {
     implementation project(':dal')
 
     // Small client-side database and server that mimics the DynamoDB service
-    testImplementation 'com.amazonaws:DynamoDBLocal:1.11.477'
-    dynamodb 'com.amazonaws:DynamoDBLocal:1.11.477'
+    testImplementation "com.amazonaws:DynamoDBLocal:${dynamo_db_local_version}"
+    dynamodb "com.amazonaws:DynamoDBLocal:${dynamo_db_local_version}"
 
     //SQLite4Java, required by local DynamoDB
     testImplementation 'com.almworks.sqlite4java:sqlite4java:1.0.392'
 
     // Use JUnit Jupiter for testing.
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter}"
 
     implementation 'org.apache.commons:commons-text:1.10.0'
 
-    implementation 'com.google.inject:guice:5.1.0'
+    implementation "com.google.inject:guice:${guice_version}"
 
-    implementation 'com.amazonaws:aws-java-sdk:1.12.319'
+    implementation "com.amazonaws:aws-java-sdk:${amazon_sdk_version}"
 
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly "org.projectlombok:lombok:${lombok_version}"
+    annotationProcessor "org.projectlombok:lombok:${lombok_version}"
 }
 
 tasks.named('test') {
