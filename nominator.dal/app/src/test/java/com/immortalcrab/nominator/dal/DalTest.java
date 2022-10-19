@@ -14,7 +14,7 @@ class DalTest {
 
     static DynamoDBMapper _dynamoDBMapper;
     static AmazonDynamoDB _dynamoDB;
-    static ServerLessDao _bdao;
+    static DynamoDBNominatorDao _bdao;
     static DynamoDBProxyServer _server;
 
     @BeforeAll
@@ -23,7 +23,7 @@ class DalTest {
         _dynamoDB = createAmazonDynamoDBClient();
         _dynamoDBMapper = new DynamoDBMapper(_dynamoDB);
         Util.createTables(_dynamoDBMapper, _dynamoDB);
-        _bdao = new ServerLessDao(new DynamoDBMapper(_dynamoDB));
+        _bdao = new DynamoDBNominatorDao(new DynamoDBMapper(_dynamoDB));
     }
 
     public static void runDynamoDB() {

@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class ServerLessDao {
+public class DynamoDBNominatorDao {
 
     private final @NonNull
     DynamoDBMapper mapper;
