@@ -3,8 +3,8 @@ description = 'entities'
 
 dependencies {
 
-    implementation 'com.amazonaws:aws-java-sdk:1.12.319'
+    implementation "com.amazonaws:aws-java-sdk:${amazon_sdk_version}"
 
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly "org.projectlombok:lombok:${lombok_version}"
+    annotationProcessor "org.projectlombok:lombok:${lombok_version}"
 }
