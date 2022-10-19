@@ -25,6 +25,9 @@ dependencies {
     testImplementation 'com.amazonaws:DynamoDBLocal:1.11.477'
     dynamodb 'com.amazonaws:DynamoDBLocal:1.11.477'
 
+    //SQLite4Java, required by local DynamoDB
+    testImplementation 'com.almworks.sqlite4java:sqlite4java:1.0.392'
+
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.0.1-jre'
 

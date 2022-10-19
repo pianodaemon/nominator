@@ -32,10 +32,11 @@ public class Target {
             return false;
         }
 
-        //   Target temp = (Target) o;
-        //  return this.getIssuer() == temp.getIssuer();
-        //           && identifier == temp.identifier
-        //           && userName == temp.userName;
-        return true;
+        Target temp = (Target) o;
+        boolean result = temp.getIssuer().equals(this.getIssuer()) &&
+                temp.getIdentifier().equals(this.getIdentifier())  &&
+                temp.getUserName().equals(this.getUserName());
+
+        return result;
     }
 }
