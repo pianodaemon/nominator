@@ -54,8 +54,4 @@ task copyNativeDeps(type: Copy) {
 test.dependsOn copyNativeDeps
 test.doFirst {
     systemProperty "java.library.path", 'build/libs'
-<<<<<<< HEAD:nominator/mod/build.gradle
 }
-=======
-}
->>>>>>> master:nominator.dal/app/build.gradle
