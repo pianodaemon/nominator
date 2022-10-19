@@ -1,0 +1,6 @@
+rootProject.name = 'nominator'
+
+include ':mod'
+include ':entities'
+include ':dal'
+

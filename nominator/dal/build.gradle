@@ -1,0 +1,5 @@
+description = 'dal'
+
+dependencies {
+    implementation project(':entities')
+}

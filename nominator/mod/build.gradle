@@ -1,0 +1,57 @@
+description = 'mod'
+
+repositories {
+
+    maven {
+        name "DynamoDB Local Release Repository - EU (Frankfurt) Region"
+        url "https://s3-us-west-2.amazonaws.com/dynamodb-local/release"
+    }
+}
+
+configurations {
+    dynamodb
+}
+
+dependencies {
+
+    implementation project(':entities')
+    implementation project(':dal')
+
+    // Small client-side database and server that mimics the DynamoDB service
+    testImplementation 'com.amazonaws:DynamoDBLocal:1.11.477'
+    dynamodb 'com.amazonaws:DynamoDBLocal:1.11.477'
+
+    //SQLite4Java, required by local DynamoDB
+    testImplementation 'com.almworks.sqlite4java:sqlite4java:1.0.392'
+
+    // Use JUnit Jupiter for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+
+    implementation 'org.apache.commons:commons-text:1.10.0'
+
+    implementation 'com.google.inject:guice:5.1.0'
+
+    implementation 'com.amazonaws:aws-java-sdk:1.12.319'
+
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+}
+
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
+
+task copyNativeDeps(type: Copy) {
+    from configurations.dynamodb {
+        include '*.dll'
+        include '*.dylib'
+        include '*.so'
+    }
+    into 'build/libs'
+}
+
+test.dependsOn copyNativeDeps
+test.doFirst {
+    systemProperty "java.library.path", 'build/libs'
+}
