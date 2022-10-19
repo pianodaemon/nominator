@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @DynamoDBTable(tableName = "nominator.targets")
-public class Target {
+public class Employee {
 
     @DynamoDBHashKey
     private String org;
@@ -38,7 +38,7 @@ public class Target {
             return false;
         }
 
-        Target temp = (Target) o;
+        Employee temp = (Employee) o;
         boolean result = temp.getOrg().equals(this.getOrg())
                 && temp.getIdentifier().equals(this.getIdentifier())
                 && temp.getName().equals(this.getName())

@@ -7,7 +7,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.immortalcrab.nominator.entities.Target;
+import com.immortalcrab.nominator.entities.Employee;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
@@ -74,7 +74,7 @@ class AppTest {
         final String identifier = "EMP#PACE8001104V2";
         final String org = "ORG#KACE8001104V0";
 
-        Target newerEmployee = _bdao.createEmployee(name, surname, optionalSurname, identifier, org);
+        Employee newerEmployee = _bdao.createEmployee(name, surname, optionalSurname, identifier, org);
         boolean result = newerEmployee.getOrg().equals(org)
                 && newerEmployee.getIdentifier().equals(identifier)
                 && newerEmployee.getName().equals(name)
