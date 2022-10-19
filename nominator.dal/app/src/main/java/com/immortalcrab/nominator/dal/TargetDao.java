@@ -15,12 +15,20 @@ public class TargetDao {
     private final @NonNull
     DynamoDBMapper mapper;
 
-    public Target put(Target target) {
-        mapper.save(target);
-        return target;
-    }
+    Target createEmployee(final String name,
+            final String surname,
+            final String optionalSurname,
+            final String identifier,
+            final String issuer) {
 
-    public Target get(final String issuer, final String identifier) {
+        Target target = new Target();
+        target.setName(name);
+        target.setSurname(surname);
+        target.setOptionalSurname(optionalSurname);
+        target.setIdentifier(identifier);
+        target.setIssuer(issuer);
+        mapper.save(target);
+
         return mapper.load(Target.class, issuer, identifier);
     }
 

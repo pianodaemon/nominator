@@ -21,7 +21,13 @@ public class Target {
     private String identifier;
 
     @DynamoDBAttribute
-    private String userName;
+    private String Name;
+
+    @DynamoDBAttribute
+    private String surname;
+
+    @DynamoDBAttribute
+    private String optionalSurname;
 
     @Override
     public boolean equals(Object o) {
@@ -33,9 +39,11 @@ public class Target {
         }
 
         Target temp = (Target) o;
-        boolean result = temp.getIssuer().equals(this.getIssuer()) &&
-                temp.getIdentifier().equals(this.getIdentifier())  &&
-                temp.getUserName().equals(this.getUserName());
+        boolean result = temp.getIssuer().equals(this.getIssuer())
+                && temp.getIdentifier().equals(this.getIdentifier())
+                && temp.getName().equals(this.getName())
+                && temp.getSurname().equals(this.getSurname())
+                && temp.getOptionalSurname().equals(this.getOptionalSurname());
 
         return result;
     }

@@ -68,18 +68,19 @@ class AppTest {
     @Test
     void createAndRetreiveEmployee() {
 
-        final String useraName = "Edwin Plauchu Camacho";
+        final String name = "Edwin";
+        final String surname = "Plauchu";
+        final String optionalSurname = "Camacho";
         final String identifier = "EMP#PACE8001104V2";
         final String issuer = "ORG#KACE8001104V0";
 
-        Target target = new Target();
-        target.setUserName(useraName);
-        target.setIdentifier(identifier);
-        target.setIssuer(issuer);
-        _bdao.put(target);
+        Target newerEmployee = _bdao.createEmployee(name, surname, optionalSurname, identifier, issuer);
+        boolean result = newerEmployee.getIssuer().equals(issuer)
+                && newerEmployee.getIdentifier().equals(identifier)
+                && newerEmployee.getName().equals(name)
+                && newerEmployee.getSurname().equals(surname)
+                && newerEmployee.getOptionalSurname().equals(optionalSurname);
 
-        Target newerEmployee = _bdao.get(issuer, identifier);
-
-        assertTrue(target.equals(newerEmployee));
+        assertTrue(result);
     }
 }
