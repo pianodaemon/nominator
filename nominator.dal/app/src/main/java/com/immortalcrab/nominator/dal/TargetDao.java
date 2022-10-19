@@ -20,22 +20,22 @@ public class TargetDao {
             final String surname,
             final String optionalSurname,
             final String identifier,
-            final String issuer) {
+            final String org) {
 
         Target target = new Target();
         target.setName(name);
         target.setSurname(surname);
         target.setOptionalSurname(Optional.ofNullable(optionalSurname).orElse(""));
         target.setIdentifier(identifier);
-        target.setIssuer(issuer);
+        target.setOrg(org);
         mapper.save(target);
 
-        return mapper.load(Target.class, issuer, identifier);
+        return mapper.load(Target.class, org, identifier);
     }
 
     public void deleteEmployee(final String issuer, final String identifier) {
         Target target = new Target();
-        target.setIssuer(issuer);
+        target.setOrg(issuer);
         target.setIdentifier(identifier);
 
         mapper.delete(target);

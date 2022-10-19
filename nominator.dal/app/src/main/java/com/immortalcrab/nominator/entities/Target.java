@@ -15,7 +15,7 @@ import lombok.Setter;
 public class Target {
 
     @DynamoDBHashKey
-    private String issuer;
+    private String org;
 
     @DynamoDBRangeKey
     private String identifier;
@@ -39,7 +39,7 @@ public class Target {
         }
 
         Target temp = (Target) o;
-        boolean result = temp.getIssuer().equals(this.getIssuer())
+        boolean result = temp.getOrg().equals(this.getOrg())
                 && temp.getIdentifier().equals(this.getIdentifier())
                 && temp.getName().equals(this.getName())
                 && temp.getSurname().equals(this.getSurname())

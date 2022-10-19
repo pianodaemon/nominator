@@ -72,10 +72,10 @@ class AppTest {
         final String surname = "Plauchu";
         final String optionalSurname = "Camacho";
         final String identifier = "EMP#PACE8001104V2";
-        final String issuer = "ORG#KACE8001104V0";
+        final String org = "ORG#KACE8001104V0";
 
-        Target newerEmployee = _bdao.createEmployee(name, surname, optionalSurname, identifier, issuer);
-        boolean result = newerEmployee.getIssuer().equals(issuer)
+        Target newerEmployee = _bdao.createEmployee(name, surname, optionalSurname, identifier, org);
+        boolean result = newerEmployee.getOrg().equals(org)
                 && newerEmployee.getIdentifier().equals(identifier)
                 && newerEmployee.getName().equals(name)
                 && newerEmployee.getSurname().equals(surname)
