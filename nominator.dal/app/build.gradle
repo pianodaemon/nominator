@@ -31,6 +31,8 @@ dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.0.1-jre'
 
+    implementation 'org.apache.commons:commons-text:1.10.0'
+
     implementation 'com.amazonaws:aws-java-sdk:1.12.319'
 
     compileOnly 'org.projectlombok:lombok:1.18.24'

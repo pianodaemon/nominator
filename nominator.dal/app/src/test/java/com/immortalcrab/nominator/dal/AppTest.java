@@ -7,7 +7,10 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.google.common.collect.ImmutableMap;
 import com.immortalcrab.nominator.entities.Employee;
+import com.immortalcrab.nominator.entities.Organization;
+import org.apache.commons.text.StringSubstitutor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
@@ -66,21 +69,27 @@ class AppTest {
     }
 
     @Test
-    void createAndRetreiveEmployee() {
+    void createOrgWithEmployee() {
 
-        final String name = "Edwin";
-        final String surname = "Plauchu";
-        final String optionalSurname = "Camacho";
-        final String identifier = "EMP#PACE8001104V2";
-        final String org = "ORG#KACE8001104V0";
+        final String orgName = "ORG#KACE8001104V0";
+        StringSubstitutor sub = new StringSubstitutor(ImmutableMap.of("org", orgName));
+        Organization newerOrg = _bdao.createOrganization(sub.replace("${org}#0001"), orgName);
 
-        Employee newerEmployee = _bdao.createEmployee(name, surname, optionalSurname, identifier, org);
-        boolean result = newerEmployee.getOrg().equals(org)
-                && newerEmployee.getIdentifier().equals(identifier)
-                && newerEmployee.getName().equals(name)
-                && newerEmployee.getSurname().equals(surname)
-                && newerEmployee.getOptionalSurname().equals(optionalSurname);
+        {
+            final String name = "Edwin";
+            final String surname = "Plauchu";
+            final String optionalSurname = "Camacho";
+            final String employeeIdentifier = "EMP#PACE8001104V2";
 
-        assertTrue(result);
+            Employee newerEmployee = _bdao.createEmployee(name, surname, optionalSurname, employeeIdentifier, newerOrg.getOrgName());
+            boolean result = newerEmployee.getOrgName().equals(newerOrg.getOrgName())
+                    && newerEmployee.getIdentifier().equals(employeeIdentifier)
+                    && newerEmployee.getName().equals(name)
+                    && newerEmployee.getSurname().equals(surname)
+                    && newerEmployee.getOptionalSurname().equals(optionalSurname);
+
+            assertTrue(result);
+        }
+
     }
 }

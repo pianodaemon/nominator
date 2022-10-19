@@ -9,6 +9,7 @@ import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
 import com.amazonaws.services.dynamodbv2.model.TableDescription;
 import com.amazonaws.services.dynamodbv2.model.TableStatus;
 import com.immortalcrab.nominator.entities.Employee;
+import com.immortalcrab.nominator.entities.Organization;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,11 +17,12 @@ public class Util {
 
     static void createTables(DynamoDBMapper _dynamoDBMapper, AmazonDynamoDB _dynamoDB) {
         createTable(Employee.class, _dynamoDBMapper, _dynamoDB);
+        createTable(Organization.class, _dynamoDBMapper, _dynamoDB);
     }
 
-    public static void createTable(Class<Employee> itemClass, DynamoDBMapper dynamoDBMapper, AmazonDynamoDB dynamoDB) {
+    public static void createTable(Class cls, DynamoDBMapper dynamoDBMapper, AmazonDynamoDB dynamoDB) {
 
-        CreateTableRequest createTableRequest = dynamoDBMapper.generateCreateTableRequest(itemClass);
+        CreateTableRequest createTableRequest = dynamoDBMapper.generateCreateTableRequest(cls);
         createTableRequest.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
 
         if (!tableExists(dynamoDB, createTableRequest)) {

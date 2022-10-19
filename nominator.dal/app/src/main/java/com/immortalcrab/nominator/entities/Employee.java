@@ -11,11 +11,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@DynamoDBTable(tableName = "nominator.targets")
+@DynamoDBTable(tableName = "nominator.entities")
 public class Employee {
 
     @DynamoDBHashKey
-    private String org;
+    private String orgName;
 
     @DynamoDBRangeKey
     private String identifier;
@@ -39,7 +39,7 @@ public class Employee {
         }
 
         Employee temp = (Employee) o;
-        boolean result = temp.getOrg().equals(this.getOrg())
+        boolean result = temp.getOrgName().equals(this.getOrgName())
                 && temp.getIdentifier().equals(this.getIdentifier())
                 && temp.getName().equals(this.getName())
                 && temp.getSurname().equals(this.getSurname())
