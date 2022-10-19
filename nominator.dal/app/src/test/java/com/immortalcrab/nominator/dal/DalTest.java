@@ -1,5 +1,7 @@
 package com.immortalcrab.nominator.dal;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.amazonaws.services.dynamodbv2.local.main.ServerRunner;
 import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer;
 import com.amazonaws.client.builder.AwsClientBuilder;
@@ -7,26 +9,41 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.google.inject.AbstractModule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
+@TestInstance(Lifecycle.PER_CLASS)
 class DalTest {
 
-    static DynamoDBMapper _dynamoDBMapper;
-    static AmazonDynamoDB _dynamoDB;
-    static DynamoDBNominatorDao _bdao;
-    static DynamoDBProxyServer _server;
+    protected DynamoDBMapper _dynamoDBMapper;
+    protected AmazonDynamoDB _dynamoDB;
+    protected DynamoDBProxyServer _server;
+    protected NominatorDao _nominatorDao;
+
+    protected Injector _injector;
 
     @BeforeAll
-    public static void before() {
+    public void setUpFixture() {
+
         runDynamoDB();
         _dynamoDB = createAmazonDynamoDBClient();
         _dynamoDBMapper = new DynamoDBMapper(_dynamoDB);
         Util.createTables(_dynamoDBMapper, _dynamoDB);
-        _bdao = new DynamoDBNominatorDao(new DynamoDBMapper(_dynamoDB));
+        _injector = Guice.createInjector(new AbstractModule() {
+
+            @Override
+            protected void configure() {
+                bind(NominatorDao.class).toInstance(new DynamoDBNominatorDao(new DynamoDBMapper(_dynamoDB)));
+            }
+        });
+
+        _nominatorDao = _injector.getInstance(NominatorDao.class);
     }
 
-    public static void runDynamoDB() {
+    public void runDynamoDB() {
 
         //Need to set the SQLite4Java library path to avoid a linker error
         System.setProperty("sqlite4java.library.path", "./build/libs/");
@@ -45,14 +62,14 @@ class DalTest {
         }
     }
 
-    private static AmazonDynamoDB createAmazonDynamoDBClient() {
+    private AmazonDynamoDB createAmazonDynamoDBClient() {
         return AmazonDynamoDBClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localhost:8000", Regions.US_EAST_2.getName()))
                 .build();
     }
 
     @AfterAll
-    public static void shutdownDynamoDB() {
+    public void shutdownDynamoDB() {
         if (_server != null) {
             try {
                 _server.stop();
@@ -60,5 +77,6 @@ class DalTest {
                 e.printStackTrace();
             }
         }
+        _injector = null;
     }
 }

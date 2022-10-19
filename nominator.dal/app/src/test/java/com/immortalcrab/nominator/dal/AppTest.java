@@ -15,7 +15,7 @@ class AppTest extends DalTest {
         final String orgName = "ORG#KACE8001104V0";
         StringSubstitutor sub = new StringSubstitutor(ImmutableMap.of("org", orgName));
         final String orgIdentifier = sub.replace("${org}#0001");
-        Organization newerOrg = _bdao.createOrganization(orgIdentifier, orgName);
+        Organization newerOrg = _nominatorDao.createOrganization(orgIdentifier, orgName);
 
         {
             final String name = "Edwin";
@@ -23,7 +23,7 @@ class AppTest extends DalTest {
             final String optionalSurname = "Camacho";
             final String employeeIdentifier = "EMP#PACE8001104V2";
 
-            Employee newerEmployee = _bdao.createEmployee(name, surname, optionalSurname, employeeIdentifier, newerOrg.getOrgName());
+            Employee newerEmployee = _nominatorDao.createEmployee(name, surname, optionalSurname, employeeIdentifier, newerOrg.getOrgName());
             assertTrue(newerEmployee.getOrgName().equals(newerOrg.getOrgName()));
             assertTrue(newerEmployee.getIdentifier().equals(employeeIdentifier));
             assertTrue(newerEmployee.getName().equals(name));
