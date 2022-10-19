@@ -73,7 +73,8 @@ class AppTest {
 
         final String orgName = "ORG#KACE8001104V0";
         StringSubstitutor sub = new StringSubstitutor(ImmutableMap.of("org", orgName));
-        Organization newerOrg = _bdao.createOrganization(sub.replace("${org}#0001"), orgName);
+        final String orgIdentifier = sub.replace("${org}#0001");
+        Organization newerOrg = _bdao.createOrganization(orgIdentifier, orgName);
 
         {
             final String name = "Edwin";
@@ -82,14 +83,14 @@ class AppTest {
             final String employeeIdentifier = "EMP#PACE8001104V2";
 
             Employee newerEmployee = _bdao.createEmployee(name, surname, optionalSurname, employeeIdentifier, newerOrg.getOrgName());
-            boolean result = newerEmployee.getOrgName().equals(newerOrg.getOrgName())
-                    && newerEmployee.getIdentifier().equals(employeeIdentifier)
-                    && newerEmployee.getName().equals(name)
-                    && newerEmployee.getSurname().equals(surname)
-                    && newerEmployee.getOptionalSurname().equals(optionalSurname);
-
-            assertTrue(result);
+            assertTrue(newerEmployee.getOrgName().equals(newerOrg.getOrgName()));
+            assertTrue(newerEmployee.getIdentifier().equals(employeeIdentifier));
+            assertTrue(newerEmployee.getName().equals(name));
+            assertTrue(newerEmployee.getSurname().equals(surname));
+            assertTrue(newerEmployee.getOptionalSurname().equals(optionalSurname));
         }
 
+        assertTrue(newerOrg.getOrgName().equals(orgName));
+        assertTrue(newerOrg.getIdentifier().equals(orgIdentifier));
     }
 }

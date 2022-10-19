@@ -17,7 +17,7 @@ public class TargetDao {
     private final @NonNull
     DynamoDBMapper mapper;
 
-    Employee createEmployee(final String name,
+    public Employee createEmployee(final String name,
             final String surname,
             final String optionalSurname,
             final String identifier,
@@ -46,7 +46,7 @@ public class TargetDao {
         return mapper.scan(Employee.class, new DynamoDBScanExpression());
     }
 
-    Organization createOrganization(final String identifier, final String orgName) {
+    public Organization createOrganization(final String identifier, final String orgName) {
 
         Organization target = new Organization();
         target.setIdentifier(identifier);
