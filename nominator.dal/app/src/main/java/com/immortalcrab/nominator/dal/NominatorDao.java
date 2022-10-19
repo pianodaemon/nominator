@@ -11,8 +11,8 @@ public interface NominatorDao {
             final String optionalSurname,
             final String identifier,
             final String orgName);
-    
-    Organization createOrganization(
+
+    public Organization createOrganization(
             final String identifier,
             final String orgName);
 }
