@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.DescribeTableRequest;
+import com.amazonaws.services.dynamodbv2.model.Projection;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
 import com.amazonaws.services.dynamodbv2.model.TableDescription;
@@ -20,10 +21,29 @@ class Util {
         createTable(Organization.class, _dynamoDBMapper, _dynamoDB);
     }
 
-    public static void createTable(Class cls, DynamoDBMapper dynamoDBMapper, AmazonDynamoDB dynamoDB) {
+    public static void createTable(Class<?> cls, DynamoDBMapper dynamoDBMapper, AmazonDynamoDB dynamoDB) {
 
         CreateTableRequest createTableRequest = dynamoDBMapper.generateCreateTableRequest(cls);
         createTableRequest.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+
+        if (createTableRequest.getGlobalSecondaryIndexes() != null) {
+
+            createTableRequest.getGlobalSecondaryIndexes().stream().forEach(gsi -> {
+
+                Projection projection = new Projection().withProjectionType("ALL");
+                gsi.withProjection(projection);
+                gsi.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+            });
+        }
+
+        if (createTableRequest.getLocalSecondaryIndexes() != null) {
+
+            createTableRequest.getLocalSecondaryIndexes().stream().forEach(lsi -> {
+
+                Projection projection = new Projection().withProjectionType("ALL");
+                lsi.withProjection(projection);
+            });
+        }
 
         if (!tableExists(dynamoDB, createTableRequest)) {
             dynamoDB.createTable(createTableRequest);
