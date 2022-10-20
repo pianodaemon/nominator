@@ -3,7 +3,7 @@ package com.immortalcrab.nominator.mod;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.google.inject.AbstractModule;
-import com.immortalcrab.nominator.dal.DynamoDBNominatorDao;
+import com.immortalcrab.nominator.dal.dynamo.DynamoDBNominatorDao;
 import com.immortalcrab.nominator.dal.NominatorDao;
 import lombok.AllArgsConstructor;
 

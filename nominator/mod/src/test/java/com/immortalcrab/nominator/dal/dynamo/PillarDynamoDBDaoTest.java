@@ -1,4 +1,4 @@
-package com.immortalcrab.nominator.testing;
+package com.immortalcrab.nominator.dal.dynamo;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -21,22 +21,17 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 @TestInstance(Lifecycle.PER_CLASS)
 class PillarDynamoDBDaoTest {
 
-    protected DynamoDBMapper _dynamoDBMapper;
-    protected AmazonDynamoDB _dynamoDB;
-    protected DynamoDBProxyServer _server;
+    private DynamoDBProxyServer _server;
+    private AmazonDynamoDB _dynamoDB = createAmazonDynamoDBClient();
+    private  DynamoDBMapper _dynamoDBMapper = new DynamoDBMapper(_dynamoDB);
+    protected Injector _injector = Guice.createInjector(new NominatorModule(_dynamoDB));
     protected NominatorDao _nominatorDao;
-
-    protected Injector _injector;
 
     @BeforeAll
     public void setUpFixture() {
 
         startUp();
-        _dynamoDB = createAmazonDynamoDBClient();
-        _dynamoDBMapper = new DynamoDBMapper(_dynamoDB);
         Util.createTables(_dynamoDBMapper, _dynamoDB);
-        _injector = Guice.createInjector(new NominatorModule(_dynamoDB));
-
         _nominatorDao = _injector.getInstance(NominatorDao.class);
     }
 

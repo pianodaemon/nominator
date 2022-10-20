@@ -1,4 +1,4 @@
-package com.immortalcrab.nominator.testing;
+package com.immortalcrab.nominator.dal.dynamo;
 
 import com.google.common.collect.ImmutableMap;
 import com.immortalcrab.nominator.entities.Employee;
