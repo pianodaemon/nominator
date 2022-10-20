@@ -13,8 +13,10 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.immortalcrab.nominator.dal.NominatorDao;
 import com.immortalcrab.nominator.mod.NominatorModule;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
@@ -22,39 +24,64 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 class PillarDynamoDBDaoTest {
 
     private DynamoDBProxyServer _server;
-    private AmazonDynamoDB _dynamoDB = createAmazonDynamoDBClient();
-    private  DynamoDBMapper _dynamoDBMapper = new DynamoDBMapper(_dynamoDB);
-    protected Injector _injector = Guice.createInjector(new NominatorModule(_dynamoDB));
+    private AmazonDynamoDB _dynamoDB;
+    private DynamoDBMapper _dynamoDBMapper;
+    private Injector _injector;
     protected NominatorDao _nominatorDao;
 
     @BeforeAll
+    public void initAll() {
+
+        // Need to set the SQLite4Java library path to avoid a linker error
+        System.setProperty("sqlite4java.library.path", "./build/libs/");
+
+        _dynamoDB = createAmazonDynamoDBClient();
+        _dynamoDBMapper = new DynamoDBMapper(_dynamoDB);
+        _injector = Guice.createInjector(new NominatorModule(_dynamoDB));
+    }
+
+    @BeforeEach
     public void setUpFixture() {
 
-        startUp();
+        // It starts up in-memory and in-process instance
+        // of DynamoDB Local that runs over HTTP
+        {
+
+            final String[] localArgs = { "-inMemory" };
+
+            try {
+                _server = ServerRunner.createServerFromCommandLineArgs(localArgs);
+                _server.start();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Assert.fail(e.getMessage());
+                // return;
+            }
+        }
+
         Util.createTables(_dynamoDBMapper, _dynamoDB);
         _nominatorDao = _injector.getInstance(NominatorDao.class);
     }
 
-    public void startUp() {
+    private AmazonDynamoDB createAmazonDynamoDBClient() {
 
-        //Need to set the SQLite4Java library path to avoid a linker error
-        System.setProperty("sqlite4java.library.path", "./build/libs/");
-
-        // Create an in-memory and in-process instance of DynamoDB Local that runs over HTTP
-        final String[] localArgs = {"-inMemory"};
-
-        try {
-            _server = ServerRunner.createServerFromCommandLineArgs(localArgs);
-            _server.start();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            //Assert.fail(e.getMessage());
-            //return;
-        }
+        return AmazonDynamoDBClientBuilder.standard()
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localhost:8000",
+                        Regions.US_EAST_2.getName()))
+                .withCredentials(credentialsProvider())
+                .build();
     }
 
-    public void shutdown() {
+    private AWSStaticCredentialsProvider credentialsProvider() {
+
+        BasicAWSCredentials creds = new BasicAWSCredentials("fakeId", "fakeSecret");
+        return new AWSStaticCredentialsProvider(creds);
+    }
+
+    @AfterEach
+    public void tearDown() {
+
         if (_server != null) {
             try {
                 _server.stop();
@@ -64,20 +91,9 @@ class PillarDynamoDBDaoTest {
         }
     }
 
-    private AmazonDynamoDB createAmazonDynamoDBClient() {
-        return AmazonDynamoDBClientBuilder.standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localhost:8000", Regions.US_EAST_2.getName()))
-                .withCredentials(credentialsProvider())
-                .build();
-    }
-
-    private AWSStaticCredentialsProvider credentialsProvider() {
-        return new AWSStaticCredentialsProvider(new BasicAWSCredentials("fakeId", "fakeSecret"));
-    }
-
     @AfterAll
-    public void dismissFixture() {
-        shutdown();
+    public void tearDownAll() {
+
         _injector = null;
     }
 }
