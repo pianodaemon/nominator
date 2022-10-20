@@ -31,7 +31,7 @@ class PillarDynamoDBDaoTest {
     @BeforeAll
     public void setUpFixture() {
 
-        runDynamoDB();
+        startUp();
         _dynamoDB = createAmazonDynamoDBClient();
         _dynamoDBMapper = new DynamoDBMapper(_dynamoDB);
         Util.createTables(_dynamoDBMapper, _dynamoDB);
@@ -40,7 +40,7 @@ class PillarDynamoDBDaoTest {
         _nominatorDao = _injector.getInstance(NominatorDao.class);
     }
 
-    public void runDynamoDB() {
+    public void startUp() {
 
         //Need to set the SQLite4Java library path to avoid a linker error
         System.setProperty("sqlite4java.library.path", "./build/libs/");
@@ -59,6 +59,16 @@ class PillarDynamoDBDaoTest {
         }
     }
 
+    public void shutdown() {
+        if (_server != null) {
+            try {
+                _server.stop();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private AmazonDynamoDB createAmazonDynamoDBClient() {
         return AmazonDynamoDBClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localhost:8000", Regions.US_EAST_2.getName()))
@@ -71,14 +81,8 @@ class PillarDynamoDBDaoTest {
     }
 
     @AfterAll
-    public void shutdownDynamoDB() {
-        if (_server != null) {
-            try {
-                _server.stop();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    public void dismissFixture() {
+        shutdown();
         _injector = null;
     }
 }
