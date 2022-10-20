@@ -5,6 +5,8 @@ import com.google.inject.Injector;
 import com.amazonaws.services.dynamodbv2.local.main.ServerRunner;
 import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
@@ -60,7 +62,12 @@ class DaoTest {
     private AmazonDynamoDB createAmazonDynamoDBClient() {
         return AmazonDynamoDBClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localhost:8000", Regions.US_EAST_2.getName()))
+                .withCredentials(credentialsProvider())
                 .build();
+    }
+
+    private AWSStaticCredentialsProvider credentialsProvider() {
+        return new AWSStaticCredentialsProvider(new BasicAWSCredentials("fakeId", "fakeSecret"));
     }
 
     @AfterAll
