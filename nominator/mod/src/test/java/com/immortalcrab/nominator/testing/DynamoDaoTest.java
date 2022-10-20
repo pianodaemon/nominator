@@ -7,7 +7,7 @@ import org.apache.commons.text.StringSubstitutor;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class DynamoDaoTest extends DaoTest {
+class DynamoDaoTest extends PillarDynamoDBDaoTest {
 
     @Test
     void createOrgWithEmployee() {

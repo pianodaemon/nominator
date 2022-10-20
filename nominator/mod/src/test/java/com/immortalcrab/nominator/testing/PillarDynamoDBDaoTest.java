@@ -19,7 +19,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
-class DaoTest {
+class PillarDynamoDBDaoTest {
 
     protected DynamoDBMapper _dynamoDBMapper;
     protected AmazonDynamoDB _dynamoDB;
