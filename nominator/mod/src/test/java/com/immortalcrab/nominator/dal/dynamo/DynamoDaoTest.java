@@ -16,7 +16,9 @@ class DynamoDaoTest extends PillarDynamoDBDaoTest {
         final Integer regimen = 601;
         StringSubstitutor sub = new StringSubstitutor(ImmutableMap.of("org", orgName));
         final String orgIdentifier = sub.replace("${org}#PROF00");
-        Organization newerOrg = _nominatorDao.createOrganization(orgIdentifier, orgName, regimen);
+        final String aka = "Immortal crab system incorporated";
+
+        Organization newerOrg = _nominatorDao.createOrganization(orgIdentifier, orgName, aka, regimen);
 
         {
             final String name = "Edwin";
