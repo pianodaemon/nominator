@@ -15,5 +15,8 @@ public interface NominatorDao {
     public Organization createOrganization(
             final String identifier,
             final String orgName,
+            final String aka,
             final Integer regimen);
+
+    public Organization searchOrganization(String aka);
 }

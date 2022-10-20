@@ -1,6 +1,7 @@
 package com.immortalcrab.nominator.dal.dynamo;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.immortalcrab.nominator.dal.NominatorDao;
 import com.immortalcrab.nominator.entities.Employee;
@@ -47,14 +48,29 @@ public class DynamoDBNominatorDao implements NominatorDao{
         return mapper.scan(Employee.class, new DynamoDBScanExpression());
     }
 
-    public Organization createOrganization(final String identifier, final String orgName, final Integer regimen) {
+    public Organization createOrganization(final String identifier, final String orgName, final String aka, final Integer regimen) {
+
+        final String nature = "ORGANIZATION";
 
         Organization target = new Organization();
         target.setIdentifier(identifier);
         target.setOrgName(orgName);
         target.setRegimen(regimen);
+        target.setNature(nature);
+        target.setAka(aka);
         mapper.save(target);
 
         return mapper.load(Organization.class, orgName, identifier);
+    }
+
+    @Override
+    public Organization searchOrganization(String aka) {
+
+        final String nature = "ORGANIZATION";
+        Organization o = new Organization();
+        o.setNature(nature);
+
+        DynamoDBQueryExpression<Organization> qe = new DynamoDBQueryExpression<Organization>();
+        return null;
     }
 }
