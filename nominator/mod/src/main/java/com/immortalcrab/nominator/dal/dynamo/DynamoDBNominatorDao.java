@@ -47,11 +47,12 @@ public class DynamoDBNominatorDao implements NominatorDao{
         return mapper.scan(Employee.class, new DynamoDBScanExpression());
     }
 
-    public Organization createOrganization(final String identifier, final String orgName) {
+    public Organization createOrganization(final String identifier, final String orgName, final Integer regimen) {
 
         Organization target = new Organization();
         target.setIdentifier(identifier);
         target.setOrgName(orgName);
+        target.setRegimen(regimen);
         mapper.save(target);
 
         return mapper.load(Organization.class, orgName, identifier);

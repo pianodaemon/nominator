@@ -1,5 +1,6 @@
 package com.immortalcrab.nominator.entities;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
@@ -18,4 +19,25 @@ public class Organization {
 
     @DynamoDBRangeKey
     private String identifier;
+
+    @DynamoDBAttribute
+    private Integer regimen; 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Organization temp = (Organization) o;
+        boolean result = temp.getOrgName().equals(this.getOrgName())
+                && temp.getIdentifier().equals(this.getIdentifier())
+                && temp.getRegimen().equals(this.getRegimen());
+
+        return result;
+    }
+
 }

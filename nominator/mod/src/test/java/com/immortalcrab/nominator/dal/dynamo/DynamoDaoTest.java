@@ -13,9 +13,10 @@ class DynamoDaoTest extends PillarDynamoDBDaoTest {
     void createOrgWithEmployee() {
 
         final String orgName = "ORG#KACE8001104V0";
+        final Integer regimen = 601;
         StringSubstitutor sub = new StringSubstitutor(ImmutableMap.of("org", orgName));
-        final String orgIdentifier = sub.replace("${org}#0001");
-        Organization newerOrg = _nominatorDao.createOrganization(orgIdentifier, orgName);
+        final String orgIdentifier = sub.replace("${org}#PROF00");
+        Organization newerOrg = _nominatorDao.createOrganization(orgIdentifier, orgName, regimen);
 
         {
             final String name = "Edwin";
@@ -33,5 +34,6 @@ class DynamoDaoTest extends PillarDynamoDBDaoTest {
 
         assertTrue(newerOrg.getOrgName().equals(orgName));
         assertTrue(newerOrg.getIdentifier().equals(orgIdentifier));
+        assertTrue(newerOrg.getRegimen().equals(regimen));
     }
 }
