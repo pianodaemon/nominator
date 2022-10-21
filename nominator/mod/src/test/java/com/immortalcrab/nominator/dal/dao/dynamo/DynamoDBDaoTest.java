@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 
-class DynamoDaoTest extends PillarDynamoDBDaoTest {
+class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
 
     @Test
     void createAndFindEmployee() {
