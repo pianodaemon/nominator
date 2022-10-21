@@ -2,6 +2,7 @@ package com.immortalcrab.nominator.dal.dynamo;
 
 import com.google.common.collect.ImmutableMap;
 import com.immortalcrab.nominator.dal.EmployeeDto;
+import com.immortalcrab.nominator.dal.OrganizationDto;
 import com.immortalcrab.nominator.entities.Employee;
 import com.immortalcrab.nominator.entities.Organization;
 import org.apache.commons.text.StringSubstitutor;
@@ -52,10 +53,14 @@ class DynamoDaoTest extends PillarDynamoDBDaoTest {
         final String orgIdentifier = sub.replace("${org}#PROF00");
         final String aka = "Immortal crab system incorporated";
 
-        Organization newerOrg = _nominatorDao.createOrganization(orgIdentifier, orgName, aka, regimen);
-        Optional<Organization> target = _nominatorDao.searchOrganization(aka);
+        _nominatorDao.createOrganization(orgIdentifier, orgName, aka, regimen);
+        Optional<OrganizationDto> dto = _nominatorDao.searchOrganization(aka);
 
-        assertTrue(target.isPresent() && newerOrg.equals(target.get()));
+        assertTrue(dto.isPresent());
+        assertTrue(dto.get().getOrgName().equals(orgName));
+        assertTrue(dto.get().getIdentifier().equals(orgIdentifier));
+        assertTrue(dto.get().getRegimen().equals(regimen));
+        assertTrue(dto.get().getAka().equals(aka));
     }
 
     @Test

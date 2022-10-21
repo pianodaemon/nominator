@@ -22,5 +22,5 @@ public interface NominatorDao {
             final String aka,
             final Integer regimen);
 
-    public Optional<Organization> searchOrganization(String aka);
+    public Optional<OrganizationDto> searchOrganization(String aka);
 }

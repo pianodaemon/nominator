@@ -7,6 +7,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
 import com.google.common.collect.ImmutableMap;
 import com.immortalcrab.nominator.dal.EmployeeDto;
 import com.immortalcrab.nominator.dal.NominatorDao;
+import com.immortalcrab.nominator.dal.OrganizationDto;
 import com.immortalcrab.nominator.entities.Employee;
 import com.immortalcrab.nominator.entities.Organization;
 import java.util.List;
@@ -123,7 +124,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
     }
 
     @Override
-    public Optional<Organization> searchOrganization(String aka) {
+    public Optional<OrganizationDto> searchOrganization(String aka) {
 
         final String nature = Nature.ORGANIZATION.name();
 
@@ -136,6 +137,17 @@ public class DynamoDBNominatorDao implements NominatorDao {
         qe.withHashKeyValues(target).withConsistentRead(false);
         PaginatedQueryList<Organization> rl = mapper.query(Organization.class, qe);
 
-        return Optional.ofNullable(rl.isEmpty() ? null : rl.get(0));
+        return Optional.ofNullable(rl.isEmpty() ? null : copyFromOrganizationToOrganizationDto(rl.get(0)));
+    }
+
+    protected OrganizationDto copyFromOrganizationToOrganizationDto(final Organization origin) {
+
+        OrganizationDto dot = new OrganizationDto();
+
+        dot.setIdentifier(origin.getIdentifier());
+        dot.setOrgName(origin.getOrgName());
+        dot.setRegimen(origin.getRegimen());
+        dot.setAka(origin.getAka());
+        return dot;
     }
 }
