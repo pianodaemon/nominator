@@ -3,8 +3,6 @@ package com.immortalcrab.nominator.dal.dynamo;
 import com.google.common.collect.ImmutableMap;
 import com.immortalcrab.nominator.dal.EmployeeDto;
 import com.immortalcrab.nominator.dal.OrganizationDto;
-import com.immortalcrab.nominator.entities.Employee;
-import com.immortalcrab.nominator.entities.Organization;
 import org.apache.commons.text.StringSubstitutor;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

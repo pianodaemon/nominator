@@ -2,7 +2,6 @@ package com.immortalcrab.nominator.dal;
 
 import java.util.Optional;
 
-import com.immortalcrab.nominator.entities.Employee;
 
 public interface NominatorDao {
 
