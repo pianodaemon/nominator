@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 class DynamoDBTableCreator {
 
-    static void createTables(DynamoDBMapper _dynamoDBMapper, AmazonDynamoDB _dynamoDB) {
+    static void inception(DynamoDBMapper _dynamoDBMapper, AmazonDynamoDB _dynamoDB) {
         createTable(Organization.class, _dynamoDBMapper, _dynamoDB);
         createTable(Employee.class, _dynamoDBMapper, _dynamoDB);
     }

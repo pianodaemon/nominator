@@ -60,7 +60,7 @@ class PillarDynamoDBDaoTest {
             }
         }
 
-        DynamoDBTableCreator.createTables(_dynamoDBMapper, _dynamoDB);
+        DynamoDBTableCreator.inception(_dynamoDBMapper, _dynamoDB);
         _nominatorDao = _injector.getInstance(NominatorDao.class);
     }
 
