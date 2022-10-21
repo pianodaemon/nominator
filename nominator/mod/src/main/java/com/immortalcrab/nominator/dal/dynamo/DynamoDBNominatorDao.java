@@ -19,7 +19,8 @@ public class DynamoDBNominatorDao implements NominatorDao {
 
     private final @NonNull DynamoDBMapper mapper;
 
-    public Employee createEmployee(final String name,
+    public Employee createEmployee(
+            final String name,
             final String surname,
             final String optionalSurname,
             final String identifier,
@@ -49,7 +50,10 @@ public class DynamoDBNominatorDao implements NominatorDao {
     }
 
     @Override
-    public Organization createOrganization(final String identifier, final String orgName, final String aka,
+    public Organization createOrganization(
+            final String identifier,
+            final String orgName,
+            final String aka,
             final Integer regimen) {
 
         final String nature = "ORGANIZATION";
@@ -66,7 +70,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
     }
 
     @Override
-    public Organization searchOrganization(String aka) {
+    public Optional<Organization> searchOrganization(String aka) {
 
         final String nature = "ORGANIZATION";
 
@@ -79,6 +83,6 @@ public class DynamoDBNominatorDao implements NominatorDao {
         qe.withHashKeyValues(target).withConsistentRead(false);
         PaginatedQueryList<Organization> rl = mapper.query(Organization.class, qe);
 
-        return rl.isEmpty() ? null : rl.get(0);
+        return Optional.ofNullable(rl.isEmpty() ? null : rl.get(0));
     }
 }

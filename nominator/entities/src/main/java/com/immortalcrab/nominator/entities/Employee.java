@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@DynamoDBTable(tableName = "nominator.entities")
+@DynamoDBTable(tableName = "nominator.employees")
 public class Employee {
 
     @DynamoDBHashKey

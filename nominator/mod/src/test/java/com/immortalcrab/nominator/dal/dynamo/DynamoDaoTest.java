@@ -7,6 +7,8 @@ import org.apache.commons.text.StringSubstitutor;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Optional;
+
 class DynamoDaoTest extends PillarDynamoDBDaoTest {
 
     @Test
@@ -19,9 +21,9 @@ class DynamoDaoTest extends PillarDynamoDBDaoTest {
         final String aka = "Immortal crab system incorporated";
 
         Organization newerOrg = _nominatorDao.createOrganization(orgIdentifier, orgName, aka, regimen);
-        Organization target = _nominatorDao.searchOrganization(aka);
+        Optional<Organization> target = _nominatorDao.searchOrganization(aka);
 
-        assertTrue(newerOrg.equals(target));
+        assertTrue(target.isPresent() && newerOrg.equals(target.get()));
     }
 
     @Test

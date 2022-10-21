@@ -1,5 +1,7 @@
 package com.immortalcrab.nominator.dal;
 
+import java.util.Optional;
+
 import com.immortalcrab.nominator.entities.Employee;
 import com.immortalcrab.nominator.entities.Organization;
 
@@ -18,5 +20,5 @@ public interface NominatorDao {
             final String aka,
             final Integer regimen);
 
-    public Organization searchOrganization(String aka);
+    public Optional<Organization> searchOrganization(String aka);
 }
