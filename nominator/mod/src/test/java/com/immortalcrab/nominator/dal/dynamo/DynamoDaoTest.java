@@ -21,7 +21,7 @@ class DynamoDaoTest extends PillarDynamoDBDaoTest {
         final String optionalSurname = "Camacho";
         final String employeeIdentifier = "EMP#PACE8001104V2";
 
-        Employee newerEmployee = _nominatorDao.createEmployee(
+        _nominatorDao.createEmployee(
                 name, surname, optionalSurname, employeeIdentifier, orgName);
 
         Optional<EmployeeDto> dto = _nominatorDao.searchEmployee(new StringSubstitutor(
