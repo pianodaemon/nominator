@@ -43,12 +43,20 @@ class DynamoDaoTest extends PillarDynamoDBDaoTest {
             final String optionalSurname = "Camacho";
             final String employeeIdentifier = "EMP#PACE8001104V2";
 
-            Employee newerEmployee = _nominatorDao.createEmployee(name, surname, optionalSurname, employeeIdentifier, newerOrg.getOrgName());
+            Employee newerEmployee = _nominatorDao.createEmployee(
+                    name, surname, optionalSurname, employeeIdentifier, newerOrg.getOrgName());
             assertTrue(newerEmployee.getOrgName().equals(newerOrg.getOrgName()));
             assertTrue(newerEmployee.getIdentifier().equals(employeeIdentifier));
             assertTrue(newerEmployee.getName().equals(name));
             assertTrue(newerEmployee.getSurname().equals(surname));
             assertTrue(newerEmployee.getOptionalSurname().equals(optionalSurname));
+
+            // Verification of the full name's formation
+            {
+                assertTrue(newerEmployee.getFullName().equals(new StringSubstitutor(
+                        ImmutableMap.of("v0", name, "v1", surname, "v2", optionalSurname))
+                        .replace("${v0} #${v1} #${v2}")));
+            }
         }
 
         assertTrue(newerOrg.getOrgName().equals(orgName));
