@@ -2,6 +2,7 @@ package com.immortalcrab.nominator.dal.dao.dynamo;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,11 +39,11 @@ class DynamoDBTableCreator {
         Class<?> catalog[] = { Organization.class, Employee.class };
         DynamoDBTableCreator ic = new DynamoDBTableCreator(_mapper, _dynDB);
         for (int idx = 0; idx < catalog.length; idx++) {
-            ic.createTable(catalog[idx]);
+            ic.setupTable(catalog[idx]);
         }
     }
 
-    private void createTable(Class<?> cls) {
+    private void setupTable(Class<?> cls) {
 
         CreateTableRequest createTableRequest = _mapper.generateCreateTableRequest(cls);
         createTableRequest.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
@@ -85,26 +86,32 @@ class DynamoDBTableCreator {
         });
     }
 
+    private boolean createTable(String tableName, final Integer delay) {
+
+        boolean goal = false;
+
+        try {
+
+            Thread.sleep(delay);
+            DescribeTableRequest dtr = new DescribeTableRequest(tableName);
+            Optional<TableDescription> table = Optional.ofNullable(_dynDB.describeTable(dtr).getTable());
+
+            goal = table.isPresent() && table.get().getTableStatus().equals(TableStatus.ACTIVE.toString());
+
+        } catch (ResourceNotFoundException ex) {
+            // ignored for now
+        } catch (InterruptedException ex) {
+            Logger.getLogger(DynamoDBTableCreator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return goal;
+    }
+
     private void waitForTableCreated(String tableName) {
 
-        for (;;) {
-            try {
-                Thread.sleep(500);
-                DescribeTableRequest dtr = new DescribeTableRequest(tableName);
-                TableDescription table = _dynDB.describeTable(dtr).getTable();
-                if (table == null) {
-                    continue;
-                }
-
-                String tableStatus = table.getTableStatus();
-                if (tableStatus.equals(TableStatus.ACTIVE.toString())) {
-                    return;
-                }
-            } catch (ResourceNotFoundException ex) {
-                // ignored for now
-            } catch (InterruptedException ex) {
-                Logger.getLogger(DynamoDBTableCreator.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        do {
+            if (createTable(tableName, 500))
+                return;
+        } while (true);
     }
 }
