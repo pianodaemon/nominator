@@ -61,28 +61,28 @@ class DynamoDBTableCreator {
 
     private void setupLSIs(Optional<List<LocalSecondaryIndex>> localSecondaryIndexes) {
 
-        if (localSecondaryIndexes.isPresent()) {
+        localSecondaryIndexes.ifPresent(idxs -> {
 
-            for (LocalSecondaryIndex lsi : localSecondaryIndexes.get()) {
+            for (LocalSecondaryIndex lsi : idxs) {
 
                 Projection projection = new Projection().withProjectionType("ALL");
                 lsi.withProjection(projection);
             }
-        }
+        });
     }
 
     private void setupGSIs(Optional<List<GlobalSecondaryIndex>> globalSecondaryIndexes) {
 
-        if (globalSecondaryIndexes.isPresent()) {
+        globalSecondaryIndexes.ifPresent(idxs -> {
 
-            for (GlobalSecondaryIndex gsi : globalSecondaryIndexes.get()) {
+            for (GlobalSecondaryIndex gsi : idxs) {
 
                 gsi.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
 
                 Projection projection = new Projection().withProjectionType("ALL");
                 gsi.withProjection(projection);
             }
-        }
+        });
     }
 
     private void waitForTableCreated(String tableName) {
