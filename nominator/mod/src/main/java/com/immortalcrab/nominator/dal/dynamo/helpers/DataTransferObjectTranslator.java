@@ -1,11 +1,11 @@
-package com.immortalcrab.nominator.dal.dynamo;
+package com.immortalcrab.nominator.dal.dynamo.helpers;
 
 import com.immortalcrab.nominator.dal.EmployeeDto;
 import com.immortalcrab.nominator.dal.OrganizationDto;
 import com.immortalcrab.nominator.entities.Employee;
 import com.immortalcrab.nominator.entities.Organization;
 
-class HelperDataTransferObjectTranslator {
+public class DataTransferObjectTranslator {
 
     public static OrganizationDto render(final Organization origin) {
 
