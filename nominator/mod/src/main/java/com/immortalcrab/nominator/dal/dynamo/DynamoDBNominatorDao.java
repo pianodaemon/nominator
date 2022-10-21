@@ -37,6 +37,12 @@ public class DynamoDBNominatorDao implements NominatorDao {
         return mapper.load(Employee.class, orgName, identifier);
     }
 
+    @Override
+    public Optional<Employee> searchEmployee(String fullName) {
+        // TODO Auto-generated method stub
+        return Optional.empty();
+    }
+
     public void deleteEmployee(final String issuer, final String identifier) {
         Employee target = new Employee();
         target.setOrgName(issuer);
