@@ -17,13 +17,19 @@ import com.amazonaws.services.dynamodbv2.model.TableStatus;
 import com.immortalcrab.nominator.dal.entities.dynamo.Employee;
 import com.immortalcrab.nominator.dal.entities.dynamo.Organization;
 
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
 class DynamoDBTableCreator {
 
     private DynamoDBMapper _mapper;
     private AmazonDynamoDB _dynDB;
+
+    DynamoDBTableCreator(DynamoDBMapper m, AmazonDynamoDB d) {
+        if (d == null)
+            throw new NullPointerException("AmazonDynamoDB instance is null");
+        if (m == null)
+            throw new NullPointerException("DynamoDBMapper instance is null");
+        this._mapper = m;
+        this._dynDB = d;
+    }
 
     static void inception(DynamoDBMapper _mapper, AmazonDynamoDB _dynDB) {
 
