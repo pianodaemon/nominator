@@ -39,8 +39,18 @@ public class DynamoDBNominatorDao implements NominatorDao {
 
     @Override
     public Optional<Employee> searchEmployee(String fullName) {
-        // TODO Auto-generated method stub
-        return Optional.empty();
+
+        final String nature = "PERSON";
+        DynamoDBQueryExpression<Employee> qe = new DynamoDBQueryExpression<Employee>();
+
+        Employee target = new Employee();
+        target.setNature(nature);
+        target.setFullName(fullName);
+
+        qe.withHashKeyValues(target).withConsistentRead(false);
+        PaginatedQueryList<Employee> rl = mapper.query(Employee.class, qe);
+
+        return Optional.ofNullable(rl.isEmpty() ? null : rl.get(0));
     }
 
     public void deleteEmployee(final String issuer, final String identifier) {

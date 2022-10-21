@@ -51,7 +51,9 @@ public class Employee {
                 && temp.getIdentifier().equals(this.getIdentifier())
                 && temp.getName().equals(this.getName())
                 && temp.getSurname().equals(this.getSurname())
-                && temp.getOptionalSurname().equals(this.getOptionalSurname());
+                && temp.getOptionalSurname().equals(this.getOptionalSurname())
+                && temp.getNature().equals(this.getNature())
+                && temp.getFullName().equals(this.getFullName());
 
         return result;
     }
