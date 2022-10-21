@@ -28,7 +28,7 @@ public class Organization {
     @DynamoDBIndexHashKey(globalSecondaryIndexName = "gsiNature")
     private String nature;
 
-    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "gsiNature", localSecondaryIndexName = "gskaka")
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "gsiNature", localSecondaryIndexName = "gskAka")
     private String aka;
 
     @Override

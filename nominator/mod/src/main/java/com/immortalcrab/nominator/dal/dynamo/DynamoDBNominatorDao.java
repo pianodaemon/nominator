@@ -3,6 +3,7 @@ package com.immortalcrab.nominator.dal.dynamo;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
 import com.immortalcrab.nominator.dal.NominatorDao;
 import com.immortalcrab.nominator.entities.Employee;
 import com.immortalcrab.nominator.entities.Organization;
@@ -14,10 +15,9 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class DynamoDBNominatorDao implements NominatorDao{
+public class DynamoDBNominatorDao implements NominatorDao {
 
-    private final @NonNull
-    DynamoDBMapper mapper;
+    private final @NonNull DynamoDBMapper mapper;
 
     public Employee createEmployee(final String name,
             final String surname,
@@ -48,7 +48,9 @@ public class DynamoDBNominatorDao implements NominatorDao{
         return mapper.scan(Employee.class, new DynamoDBScanExpression());
     }
 
-    public Organization createOrganization(final String identifier, final String orgName, final String aka, final Integer regimen) {
+    @Override
+    public Organization createOrganization(final String identifier, final String orgName, final String aka,
+            final Integer regimen) {
 
         final String nature = "ORGANIZATION";
 
@@ -67,10 +69,16 @@ public class DynamoDBNominatorDao implements NominatorDao{
     public Organization searchOrganization(String aka) {
 
         final String nature = "ORGANIZATION";
-        Organization o = new Organization();
-        o.setNature(nature);
 
         DynamoDBQueryExpression<Organization> qe = new DynamoDBQueryExpression<Organization>();
-        return null;
+
+        Organization target = new Organization();
+        target.setNature(nature);
+        target.setAka(aka);
+
+        qe.withHashKeyValues(target).withConsistentRead(false);
+        PaginatedQueryList<Organization> rl = mapper.query(Organization.class, qe);
+
+        return rl.isEmpty() ? null : rl.get(0);
     }
 }

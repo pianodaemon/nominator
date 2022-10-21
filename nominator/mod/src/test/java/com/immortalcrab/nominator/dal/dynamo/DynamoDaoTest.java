@@ -10,6 +10,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class DynamoDaoTest extends PillarDynamoDBDaoTest {
 
     @Test
+    void createAndFindOrg() {
+
+        final String orgName = "ORG#KACE8001104V0";
+        final Integer regimen = 601;
+        StringSubstitutor sub = new StringSubstitutor(ImmutableMap.of("org", orgName));
+        final String orgIdentifier = sub.replace("${org}#PROF00");
+        final String aka = "Immortal crab system incorporated";
+
+        Organization newerOrg = _nominatorDao.createOrganization(orgIdentifier, orgName, aka, regimen);
+        Organization target = _nominatorDao.searchOrganization(aka);
+
+        assertTrue(newerOrg.equals(target));
+    }
+
+    @Test
     void createOrgWithEmployee() {
 
         final String orgName = "ORG#KACE8001104V0";
