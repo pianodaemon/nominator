@@ -58,7 +58,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
         }
 
         mapper.save(target);
-        return copyFromEmployeeToEmployeeDto(mapper.load(Employee.class, orgName, identifier));
+        return HelperRenderDto.render(mapper.load(Employee.class, orgName, identifier));
     }
 
     @Override
@@ -74,22 +74,9 @@ public class DynamoDBNominatorDao implements NominatorDao {
         qe.withHashKeyValues(target).withConsistentRead(false);
         PaginatedQueryList<Employee> rl = mapper.query(Employee.class, qe);
 
-        return Optional.ofNullable(rl.isEmpty() ? null : copyFromEmployeeToEmployeeDto(rl.get(0)));
+        return Optional.ofNullable(rl.isEmpty() ? null : HelperRenderDto.render(rl.get(0)));
     }
 
-    protected EmployeeDto copyFromEmployeeToEmployeeDto(final Employee origin) {
-
-        EmployeeDto dot = new EmployeeDto();
-
-        dot.setName(origin.getName());
-        dot.setSurname(origin.getSurname());
-        dot.setOptionalSurname(origin.getOptionalSurname());
-        dot.setIdentifier(origin.getIdentifier());
-        dot.setOrgName(origin.getOrgName());
-        dot.setFullName(origin.getFullName());
-
-        return dot;
-    }
 
     public void deleteEmployee(final String issuer, final String identifier) {
         Employee target = new Employee();
@@ -120,7 +107,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
         target.setAka(aka);
         mapper.save(target);
 
-        return copyFromOrganizationToOrganizationDto(mapper.load(Organization.class, orgName, identifier));
+        return HelperRenderDto.render(mapper.load(Organization.class, orgName, identifier));
     }
 
     @Override
@@ -137,17 +124,6 @@ public class DynamoDBNominatorDao implements NominatorDao {
         qe.withHashKeyValues(target).withConsistentRead(false);
         PaginatedQueryList<Organization> rl = mapper.query(Organization.class, qe);
 
-        return Optional.ofNullable(rl.isEmpty() ? null : copyFromOrganizationToOrganizationDto(rl.get(0)));
-    }
-
-    protected OrganizationDto copyFromOrganizationToOrganizationDto(final Organization origin) {
-
-        OrganizationDto dot = new OrganizationDto();
-
-        dot.setIdentifier(origin.getIdentifier());
-        dot.setOrgName(origin.getOrgName());
-        dot.setRegimen(origin.getRegimen());
-        dot.setAka(origin.getAka());
-        return dot;
+        return Optional.ofNullable(rl.isEmpty() ? null : HelperRenderDto.render(rl.get(0)));
     }
 }
