@@ -2,8 +2,8 @@ package com.immortalcrab.nominator.dal.dao.dynamo;
 
 import com.immortalcrab.nominator.dal.dto.EmployeeDto;
 import com.immortalcrab.nominator.dal.dto.OrganizationDto;
-import com.immortalcrab.nominator.entities.Employee;
-import com.immortalcrab.nominator.entities.Organization;
+import com.immortalcrab.nominator.dal.entities.dynamo.Employee;
+import com.immortalcrab.nominator.dal.entities.dynamo.Organization;
 
 public class DataTransferObjectConverter {
 

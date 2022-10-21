@@ -1,4 +1,4 @@
-package com.immortalcrab.nominator.entities;
+package com.immortalcrab.nominator.dal.entities.dynamo;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
@@ -11,8 +11,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@DynamoDBTable(tableName = "nominator.organizations")
-public class Organization {
+@DynamoDBTable(tableName = "nominator.employees")
+public class Employee {
 
     @DynamoDBHashKey
     private String orgName;
@@ -21,13 +21,19 @@ public class Organization {
     private String identifier;
 
     @DynamoDBAttribute
-    private Integer regimen;
+    private String Name;
 
-    @DynamoDBIndexHashKey(globalSecondaryIndexName = "gsiOrganizationNature")
+    @DynamoDBAttribute
+    private String surname;
+
+    @DynamoDBAttribute
+    private String optionalSurname;
+
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = "gsiEmployeeNature")
     private String nature;
 
-    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "gsiOrganizationNature", localSecondaryIndexName = "gskOrganizationAka")
-    private String aka;
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "gsiEmployeeNature", localSecondaryIndexName = "gskEmployeeFullName")
+    private String fullName;
 
     @Override
     public boolean equals(Object o) {
@@ -38,12 +44,14 @@ public class Organization {
             return false;
         }
 
-        Organization temp = (Organization) o;
+        Employee temp = (Employee) o;
         boolean result = temp.getOrgName().equals(this.getOrgName())
                 && temp.getIdentifier().equals(this.getIdentifier())
+                && temp.getName().equals(this.getName())
+                && temp.getSurname().equals(this.getSurname())
+                && temp.getOptionalSurname().equals(this.getOptionalSurname())
                 && temp.getNature().equals(this.getNature())
-                && temp.getAka().equals(this.getAka())
-                && temp.getRegimen().equals(this.getRegimen());
+                && temp.getFullName().equals(this.getFullName());
 
         return result;
     }

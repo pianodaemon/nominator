@@ -11,8 +11,9 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
 import com.amazonaws.services.dynamodbv2.model.TableDescription;
 import com.amazonaws.services.dynamodbv2.model.TableStatus;
-import com.immortalcrab.nominator.entities.Employee;
-import com.immortalcrab.nominator.entities.Organization;
+import com.immortalcrab.nominator.dal.entities.dynamo.Employee;
+import com.immortalcrab.nominator.dal.entities.dynamo.Organization;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

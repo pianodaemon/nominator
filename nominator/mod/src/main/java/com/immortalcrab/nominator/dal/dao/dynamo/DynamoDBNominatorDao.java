@@ -8,8 +8,9 @@ import com.google.common.collect.ImmutableMap;
 import com.immortalcrab.nominator.dal.dao.NominatorDao;
 import com.immortalcrab.nominator.dal.dto.EmployeeDto;
 import com.immortalcrab.nominator.dal.dto.OrganizationDto;
-import com.immortalcrab.nominator.entities.Employee;
-import com.immortalcrab.nominator.entities.Organization;
+import com.immortalcrab.nominator.dal.entities.dynamo.Employee;
+import com.immortalcrab.nominator.dal.entities.dynamo.Organization;
+
 import java.util.List;
 import java.util.Optional;
 

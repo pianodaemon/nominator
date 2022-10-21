@@ -1,4 +1,4 @@
-package com.immortalcrab.nominator.entities;
+package com.immortalcrab.nominator.dal.entities.dynamo;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
@@ -11,8 +11,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@DynamoDBTable(tableName = "nominator.employees")
-public class Employee {
+@DynamoDBTable(tableName = "nominator.organizations")
+public class Organization {
 
     @DynamoDBHashKey
     private String orgName;
@@ -21,19 +21,13 @@ public class Employee {
     private String identifier;
 
     @DynamoDBAttribute
-    private String Name;
+    private Integer regimen;
 
-    @DynamoDBAttribute
-    private String surname;
-
-    @DynamoDBAttribute
-    private String optionalSurname;
-
-    @DynamoDBIndexHashKey(globalSecondaryIndexName = "gsiEmployeeNature")
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = "gsiOrganizationNature")
     private String nature;
 
-    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "gsiEmployeeNature", localSecondaryIndexName = "gskEmployeeFullName")
-    private String fullName;
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "gsiOrganizationNature", localSecondaryIndexName = "gskOrganizationAka")
+    private String aka;
 
     @Override
     public boolean equals(Object o) {
@@ -44,14 +38,12 @@ public class Employee {
             return false;
         }
 
-        Employee temp = (Employee) o;
+        Organization temp = (Organization) o;
         boolean result = temp.getOrgName().equals(this.getOrgName())
                 && temp.getIdentifier().equals(this.getIdentifier())
-                && temp.getName().equals(this.getName())
-                && temp.getSurname().equals(this.getSurname())
-                && temp.getOptionalSurname().equals(this.getOptionalSurname())
                 && temp.getNature().equals(this.getNature())
-                && temp.getFullName().equals(this.getFullName());
+                && temp.getAka().equals(this.getAka())
+                && temp.getRegimen().equals(this.getRegimen());
 
         return result;
     }
