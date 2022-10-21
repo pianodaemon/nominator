@@ -20,8 +20,11 @@ import java.util.logging.Logger;
 class DynamoDBTableCreator {
 
     static void inception(DynamoDBMapper _dynamoDBMapper, AmazonDynamoDB _dynamoDB) {
-        createTable(Organization.class, _dynamoDBMapper, _dynamoDB);
-        createTable(Employee.class, _dynamoDBMapper, _dynamoDB);
+
+        Class<?> catalog[] = {Organization.class, Employee.class};
+        for(int idx = 0; idx < catalog.length; idx++){
+            createTable(catalog[idx], _dynamoDBMapper, _dynamoDB);
+        }
     }
 
     public static void createTable(Class<?> cls, DynamoDBMapper dynamoDBMapper, AmazonDynamoDB dynamoDB) {
