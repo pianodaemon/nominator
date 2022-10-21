@@ -2,7 +2,6 @@ package com.immortalcrab.nominator.dal.dao.dynamo;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,7 +56,10 @@ class DynamoDBTableCreator {
             _dynDB.createTable(createTableRequest);
         }
 
-        waitForTableCreated(createTableRequest.getTableName());
+        do {
+            if (createTable(createTableRequest.getTableName(), 500))
+                return;
+        } while (true);
     }
 
     private void setupLSIs(Optional<List<LocalSecondaryIndex>> localSecondaryIndexes) {
@@ -105,13 +107,5 @@ class DynamoDBTableCreator {
         }
 
         return goal;
-    }
-
-    private void waitForTableCreated(String tableName) {
-
-        do {
-            if (createTable(tableName, 500))
-                return;
-        } while (true);
     }
 }
