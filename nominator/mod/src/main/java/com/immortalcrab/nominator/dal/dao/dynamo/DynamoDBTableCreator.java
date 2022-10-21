@@ -1,5 +1,8 @@
 package com.immortalcrab.nominator.dal.dao.dynamo;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
@@ -14,27 +17,31 @@ import com.amazonaws.services.dynamodbv2.model.TableStatus;
 import com.immortalcrab.nominator.dal.entities.dynamo.Employee;
 import com.immortalcrab.nominator.dal.entities.dynamo.Organization;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 class DynamoDBTableCreator {
 
-    static void inception(DynamoDBMapper _dynamoDBMapper, AmazonDynamoDB _dynamoDB) {
+    private DynamoDBMapper mapper;
+    private AmazonDynamoDB dynamoDB;
 
-        Class<?> catalog[] = {Organization.class, Employee.class};
-        for(int idx = 0; idx < catalog.length; idx++){
-            createTable(catalog[idx], _dynamoDBMapper, _dynamoDB);
+    static void inception(DynamoDBMapper mapper, AmazonDynamoDB dynamoDB) {
+
+        Class<?> catalog[] = { Organization.class, Employee.class };
+        DynamoDBTableCreator ic = new DynamoDBTableCreator(mapper, dynamoDB);
+        for (int idx = 0; idx < catalog.length; idx++) {
+            ic.createTable(catalog[idx]);
         }
     }
 
-    public static void createTable(Class<?> cls, DynamoDBMapper dynamoDBMapper, AmazonDynamoDB dynamoDB) {
+    private void createTable(Class<?> cls) {
 
-        CreateTableRequest createTableRequest = dynamoDBMapper.generateCreateTableRequest(cls);
+        CreateTableRequest createTableRequest = mapper.generateCreateTableRequest(cls);
         createTableRequest.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
 
         if (createTableRequest.getGlobalSecondaryIndexes() != null) {
 
-            for(GlobalSecondaryIndex gsi : createTableRequest.getGlobalSecondaryIndexes()){
+            for (GlobalSecondaryIndex gsi : createTableRequest.getGlobalSecondaryIndexes()) {
 
                 gsi.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
 
@@ -45,21 +52,21 @@ class DynamoDBTableCreator {
 
         if (createTableRequest.getLocalSecondaryIndexes() != null) {
 
-            for(LocalSecondaryIndex lsi : createTableRequest.getLocalSecondaryIndexes()) {
+            for (LocalSecondaryIndex lsi : createTableRequest.getLocalSecondaryIndexes()) {
 
                 Projection projection = new Projection().withProjectionType("ALL");
                 lsi.withProjection(projection);
             }
         }
 
-        if (!tableExists(dynamoDB, createTableRequest)) {
+        if (!tableExists(createTableRequest)) {
             dynamoDB.createTable(createTableRequest);
         }
 
-        waitForTableCreated(createTableRequest.getTableName(), dynamoDB);
+        waitForTableCreated(createTableRequest.getTableName());
     }
 
-    private static void waitForTableCreated(String tableName, AmazonDynamoDB dynamoDB) {
+    private void waitForTableCreated(String tableName) {
 
         for (;;) {
             try {
@@ -82,7 +89,7 @@ class DynamoDBTableCreator {
         }
     }
 
-    private static boolean tableExists(AmazonDynamoDB dynamoDB, CreateTableRequest createTableRequest) {
+    private boolean tableExists(CreateTableRequest createTableRequest) {
 
         try {
             dynamoDB.describeTable(createTableRequest.getTableName());
