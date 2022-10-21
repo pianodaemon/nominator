@@ -4,6 +4,8 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.DescribeTableRequest;
+import com.amazonaws.services.dynamodbv2.model.GlobalSecondaryIndex;
+import com.amazonaws.services.dynamodbv2.model.LocalSecondaryIndex;
 import com.amazonaws.services.dynamodbv2.model.Projection;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
@@ -17,8 +19,8 @@ import java.util.logging.Logger;
 class Util {
 
     static void createTables(DynamoDBMapper _dynamoDBMapper, AmazonDynamoDB _dynamoDB) {
-        createTable(Employee.class, _dynamoDBMapper, _dynamoDB);
         createTable(Organization.class, _dynamoDBMapper, _dynamoDB);
+        createTable(Employee.class, _dynamoDBMapper, _dynamoDB);
     }
 
     public static void createTable(Class<?> cls, DynamoDBMapper dynamoDBMapper, AmazonDynamoDB dynamoDB) {
@@ -28,21 +30,22 @@ class Util {
 
         if (createTableRequest.getGlobalSecondaryIndexes() != null) {
 
-            createTableRequest.getGlobalSecondaryIndexes().stream().forEach(gsi -> {
+            for(GlobalSecondaryIndex gsi : createTableRequest.getGlobalSecondaryIndexes()){
+
+                gsi.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
 
                 Projection projection = new Projection().withProjectionType("ALL");
                 gsi.withProjection(projection);
-                gsi.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
-            });
+            }
         }
 
         if (createTableRequest.getLocalSecondaryIndexes() != null) {
 
-            createTableRequest.getLocalSecondaryIndexes().stream().forEach(lsi -> {
+            for(LocalSecondaryIndex lsi : createTableRequest.getLocalSecondaryIndexes()) {
 
                 Projection projection = new Projection().withProjectionType("ALL");
                 lsi.withProjection(projection);
-            });
+            }
         }
 
         if (!tableExists(dynamoDB, createTableRequest)) {
