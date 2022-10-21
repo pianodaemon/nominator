@@ -12,6 +12,25 @@ import java.util.Optional;
 class DynamoDaoTest extends PillarDynamoDBDaoTest {
 
     @Test
+    void createAndFindEmployee() {
+
+        final String orgName = "ORG#KACE8001104V0";
+            final String name = "Edwin";
+            final String surname = "Plauchu";
+            final String optionalSurname = "Camacho";
+            final String employeeIdentifier = "EMP#PACE8001104V2";
+
+            Employee newerEmployee = _nominatorDao.createEmployee(
+                    name, surname, optionalSurname, employeeIdentifier, orgName);
+
+        Optional<Employee> target = _nominatorDao.searchEmployee(new StringSubstitutor(
+                        ImmutableMap.of("v0", name, "v1", surname, "v2", optionalSurname))
+                        .replace("${v0} #${v1} #${v2}"));
+
+        assertTrue(target.isPresent() && newerEmployee.equals(target.get()));
+    }
+
+    @Test
     void createAndFindOrg() {
 
         final String orgName = "ORG#KACE8001104V0";
