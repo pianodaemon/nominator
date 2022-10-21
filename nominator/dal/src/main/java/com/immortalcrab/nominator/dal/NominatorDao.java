@@ -14,7 +14,7 @@ public interface NominatorDao {
             final String identifier,
             final String orgName);
 
-    public Optional<Employee> searchEmployee(String fullName);
+    public Optional<EmployeeDto> searchEmployee(String fullName);
 
     public Organization createOrganization(
             final String identifier,

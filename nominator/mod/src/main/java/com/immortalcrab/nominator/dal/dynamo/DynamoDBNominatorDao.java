@@ -5,6 +5,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
 import com.google.common.collect.ImmutableMap;
+import com.immortalcrab.nominator.dal.EmployeeDto;
 import com.immortalcrab.nominator.dal.NominatorDao;
 import com.immortalcrab.nominator.entities.Employee;
 import com.immortalcrab.nominator.entities.Organization;
@@ -60,7 +61,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
     }
 
     @Override
-    public Optional<Employee> searchEmployee(String fullName) {
+    public Optional<EmployeeDto> searchEmployee(String fullName) {
 
         final String nature = Nature.PERSON.name();
         DynamoDBQueryExpression<Employee> qe = new DynamoDBQueryExpression<Employee>();
@@ -72,7 +73,21 @@ public class DynamoDBNominatorDao implements NominatorDao {
         qe.withHashKeyValues(target).withConsistentRead(false);
         PaginatedQueryList<Employee> rl = mapper.query(Employee.class, qe);
 
-        return Optional.ofNullable(rl.isEmpty() ? null : rl.get(0));
+        return Optional.ofNullable(rl.isEmpty() ? null : copyFromEmployeeToEmployeeDto(rl.get(0)));
+    }
+
+    protected EmployeeDto copyFromEmployeeToEmployeeDto(final Employee origin) {
+
+        EmployeeDto dot = new EmployeeDto();
+
+        dot.setName(origin.getName());
+        dot.setSurname(origin.getSurname());
+        dot.setOptionalSurname(origin.getOptionalSurname());
+        dot.setIdentifier(origin.getIdentifier());
+        dot.setOrgName(origin.getOrgName());
+        dot.setFullName(origin.getFullName());
+
+        return dot;
     }
 
     public void deleteEmployee(final String issuer, final String identifier) {

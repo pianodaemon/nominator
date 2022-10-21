@@ -1,6 +1,7 @@
 package com.immortalcrab.nominator.dal.dynamo;
 
 import com.google.common.collect.ImmutableMap;
+import com.immortalcrab.nominator.dal.EmployeeDto;
 import com.immortalcrab.nominator.entities.Employee;
 import com.immortalcrab.nominator.entities.Organization;
 import org.apache.commons.text.StringSubstitutor;
@@ -23,11 +24,23 @@ class DynamoDaoTest extends PillarDynamoDBDaoTest {
         Employee newerEmployee = _nominatorDao.createEmployee(
                 name, surname, optionalSurname, employeeIdentifier, orgName);
 
-        Optional<Employee> target = _nominatorDao.searchEmployee(new StringSubstitutor(
+        Optional<EmployeeDto> dto = _nominatorDao.searchEmployee(new StringSubstitutor(
                 ImmutableMap.of("v0", name, "v1", surname, "v2", optionalSurname))
                 .replace("${v0} #${v1} #${v2}"));
 
-        assertTrue(target.isPresent() && newerEmployee.equals(target.get()));
+        assertTrue(dto.isPresent());
+        assertTrue(dto.get().getOrgName().equals(orgName));
+        assertTrue(dto.get().getIdentifier().equals(employeeIdentifier));
+        assertTrue(dto.get().getName().equals(name));
+        assertTrue(dto.get().getSurname().equals(surname));
+        assertTrue(dto.get().getOptionalSurname().equals(optionalSurname));
+
+        // Verification of the full name's formation
+        {
+            assertTrue(dto.get().getFullName().equals(new StringSubstitutor(
+                    ImmutableMap.of("v0", name, "v1", surname, "v2", optionalSurname))
+                    .replace("${v0} #${v1} #${v2}")));
+        }
     }
 
     @Test
