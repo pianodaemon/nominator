@@ -17,7 +17,7 @@ import com.immortalcrab.nominator.dal.entities.dynamo.Organization;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class Util {
+class DynamoDBTableCreator {
 
     static void createTables(DynamoDBMapper _dynamoDBMapper, AmazonDynamoDB _dynamoDB) {
         createTable(Organization.class, _dynamoDBMapper, _dynamoDB);
@@ -74,7 +74,7 @@ class Util {
             } catch (ResourceNotFoundException ex) {
                 // ignored for now
             } catch (InterruptedException ex) {
-                Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DynamoDBTableCreator.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
