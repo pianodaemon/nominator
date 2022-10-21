@@ -2,6 +2,8 @@ package com.immortalcrab.nominator.entities;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import lombok.Getter;
@@ -28,6 +30,12 @@ public class Employee {
 
     @DynamoDBAttribute
     private String optionalSurname;
+
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = "gsiNature")
+    private String nature;
+
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "gsiNature", localSecondaryIndexName = "gskFullName")
+    private String fullName;
 
     @Override
     public boolean equals(Object o) {
