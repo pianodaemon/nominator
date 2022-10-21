@@ -1,4 +1,4 @@
-package com.immortalcrab.nominator.dal.dynamo.helpers;
+package com.immortalcrab.nominator.dal.dynamo;
 
 import com.immortalcrab.nominator.dal.EmployeeDto;
 import com.immortalcrab.nominator.dal.OrganizationDto;
@@ -15,6 +15,7 @@ public class DataTransferObjectConverter {
         dot.setOrgName(origin.getOrgName());
         dot.setRegimen(origin.getRegimen());
         dot.setAka(origin.getAka());
+        dot.setNature(origin.getNature());
         return dot;
     }
 
@@ -28,6 +29,7 @@ public class DataTransferObjectConverter {
         dot.setIdentifier(origin.getIdentifier());
         dot.setOrgName(origin.getOrgName());
         dot.setFullName(origin.getFullName());
+        dot.setNature(origin.getNature());
 
         return dot;
     }
