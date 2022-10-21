@@ -59,7 +59,9 @@ class DynamoDBTableCreator {
             }
         }
 
-        if (!tableExists(createTableRequest)) {
+        try {
+            _dynDB.describeTable(createTableRequest.getTableName());
+        } catch (ResourceNotFoundException ex) {
             _dynDB.createTable(createTableRequest);
         }
 
@@ -88,15 +90,4 @@ class DynamoDBTableCreator {
             }
         }
     }
-
-    private boolean tableExists(CreateTableRequest createTableRequest) {
-
-        try {
-            _dynDB.describeTable(createTableRequest.getTableName());
-            return true;
-        } catch (ResourceNotFoundException ex) {
-            return false;
-        }
-    }
-
 }
