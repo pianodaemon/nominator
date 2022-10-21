@@ -3,7 +3,6 @@ package com.immortalcrab.nominator.dal;
 import java.util.Optional;
 
 import com.immortalcrab.nominator.entities.Employee;
-import com.immortalcrab.nominator.entities.Organization;
 
 public interface NominatorDao {
 
@@ -16,7 +15,7 @@ public interface NominatorDao {
 
     public Optional<EmployeeDto> searchEmployee(String fullName);
 
-    public Organization createOrganization(
+    public OrganizationDto createOrganization(
             final String identifier,
             final String orgName,
             final String aka,

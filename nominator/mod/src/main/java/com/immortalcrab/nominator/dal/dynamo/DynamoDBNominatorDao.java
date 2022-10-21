@@ -104,7 +104,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
     }
 
     @Override
-    public Organization createOrganization(
+    public OrganizationDto createOrganization(
             final String identifier,
             final String orgName,
             final String aka,
@@ -120,7 +120,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
         target.setAka(aka);
         mapper.save(target);
 
-        return mapper.load(Organization.class, orgName, identifier);
+        return copyFromOrganizationToOrganizationDto(mapper.load(Organization.class, orgName, identifier));
     }
 
     @Override
