@@ -5,7 +5,7 @@ import com.immortalcrab.nominator.dal.OrganizationDto;
 import com.immortalcrab.nominator.entities.Employee;
 import com.immortalcrab.nominator.entities.Organization;
 
-class HelperRenderDto {
+class HelperDto {
 
     public static OrganizationDto render(final Organization origin) {
 
