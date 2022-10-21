@@ -1,4 +1,4 @@
-package com.immortalcrab.nominator.dal.dynamo;
+package com.immortalcrab.nominator.dal.dao.dynamo;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

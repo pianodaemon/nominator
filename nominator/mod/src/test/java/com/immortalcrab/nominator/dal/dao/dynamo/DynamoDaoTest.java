@@ -1,4 +1,4 @@
-package com.immortalcrab.nominator.dal.dynamo;
+package com.immortalcrab.nominator.dal.dao.dynamo;
 
 import com.google.common.collect.ImmutableMap;
 import com.immortalcrab.nominator.dal.dto.EmployeeDto;

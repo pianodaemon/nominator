@@ -1,4 +1,4 @@
-package com.immortalcrab.nominator.dal.dynamo;
+package com.immortalcrab.nominator.dal.dao.dynamo;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
