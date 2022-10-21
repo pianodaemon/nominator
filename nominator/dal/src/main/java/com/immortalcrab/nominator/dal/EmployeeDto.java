@@ -1,5 +1,8 @@
 package com.immortalcrab.nominator.dal;
 
+import lombok.Getter;
+
+@Getter
 public class EmployeeDto {
 
     private String orgName;
@@ -10,52 +13,24 @@ public class EmployeeDto {
     private final String nature = "PERSON";
     private String fullName;   
 
-    public String getOrgName() {
-        return orgName;
-    }
-
     public void setOrgName(String orgName) {
         this.orgName = orgName;
-    }
-
-    public String getIdentifier() {
-        return identifier;
     }
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
 
-    public String getName() {
-        return Name;
-    }
-
     public void setName(String name) {
         Name = name;
-    }
-
-    public String getSurname() {
-        return surname;
     }
 
     public void setSurname(String surname) {
         this.surname = surname;
     }
 
-    public String getOptionalSurname() {
-        return optionalSurname;
-    }
-
     public void setOptionalSurname(String optionalSurname) {
         this.optionalSurname = optionalSurname;
-    }
-
-    public String getNature() {
-        return nature;
-    }
-
-    public String getFullName() {
-        return fullName;
     }
 
     public void setFullName(String fullName) {
