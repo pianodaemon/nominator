@@ -5,9 +5,9 @@ import com.immortalcrab.nominator.dal.OrganizationDto;
 import com.immortalcrab.nominator.entities.Employee;
 import com.immortalcrab.nominator.entities.Organization;
 
-public class DataTransferObjectTranslator {
+public class DataTransferObjectConverter {
 
-    public static OrganizationDto render(final Organization origin) {
+    public static OrganizationDto basic(final Organization origin) {
 
         OrganizationDto dot = new OrganizationDto();
 
@@ -18,7 +18,7 @@ public class DataTransferObjectTranslator {
         return dot;
     }
 
-    public static EmployeeDto render(final Employee origin) {
+    public static EmployeeDto basic(final Employee origin) {
 
         EmployeeDto dot = new EmployeeDto();
 

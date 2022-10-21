@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableMap;
 import com.immortalcrab.nominator.dal.EmployeeDto;
 import com.immortalcrab.nominator.dal.NominatorDao;
 import com.immortalcrab.nominator.dal.OrganizationDto;
+import com.immortalcrab.nominator.dal.dynamo.helpers.DataTransferObjectConverter;
 import com.immortalcrab.nominator.entities.Employee;
 import com.immortalcrab.nominator.entities.Organization;
 import java.util.List;
@@ -58,7 +59,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
         }
 
         mapper.save(target);
-        return HelperDataTransferObjectTranslator.render(mapper.load(Employee.class, orgName, identifier));
+        return DataTransferObjectConverter.basic(mapper.load(Employee.class, orgName, identifier));
     }
 
     @Override
@@ -74,7 +75,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
         qe.withHashKeyValues(target).withConsistentRead(false);
         PaginatedQueryList<Employee> rl = mapper.query(Employee.class, qe);
 
-        return Optional.ofNullable(rl.isEmpty() ? null : HelperDataTransferObjectTranslator.render(rl.get(0)));
+        return Optional.ofNullable(rl.isEmpty() ? null : DataTransferObjectConverter.basic(rl.get(0)));
     }
 
 
@@ -107,7 +108,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
         target.setAka(aka);
         mapper.save(target);
 
-        return HelperDataTransferObjectTranslator.render(mapper.load(Organization.class, orgName, identifier));
+        return DataTransferObjectConverter.basic(mapper.load(Organization.class, orgName, identifier));
     }
 
     @Override
@@ -124,6 +125,6 @@ public class DynamoDBNominatorDao implements NominatorDao {
         qe.withHashKeyValues(target).withConsistentRead(false);
         PaginatedQueryList<Organization> rl = mapper.query(Organization.class, qe);
 
-        return Optional.ofNullable(rl.isEmpty() ? null : HelperDataTransferObjectTranslator.render(rl.get(0)));
+        return Optional.ofNullable(rl.isEmpty() ? null : DataTransferObjectConverter.basic(rl.get(0)));
     }
 }
