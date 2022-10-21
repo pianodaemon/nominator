@@ -23,10 +23,10 @@ public class Organization {
     @DynamoDBAttribute
     private Integer regimen;
 
-    @DynamoDBIndexHashKey(globalSecondaryIndexName = "gsiNature")
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = "gsiOrganizationNature")
     private String nature;
 
-    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "gsiNature", localSecondaryIndexName = "gskAka")
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "gsiOrganizationNature", localSecondaryIndexName = "gskOrganizationAka")
     private String aka;
 
     @Override

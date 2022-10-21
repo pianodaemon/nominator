@@ -29,10 +29,10 @@ public class Employee {
     @DynamoDBAttribute
     private String optionalSurname;
 
-    @DynamoDBIndexHashKey(globalSecondaryIndexName = "gsiNature")
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = "gsiEmployeeNature")
     private String nature;
 
-    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "gsiNature", localSecondaryIndexName = "gskFullName")
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "gsiEmployeeNature", localSecondaryIndexName = "gskEmployeeFullName")
     private String fullName;
 
     @Override
