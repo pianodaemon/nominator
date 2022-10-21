@@ -22,13 +22,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 class DynamoDBTableCreator {
 
-    private DynamoDBMapper mapper;
-    private AmazonDynamoDB dynamoDB;
+    private DynamoDBMapper _mapper;
+    private AmazonDynamoDB _dynDB;
 
-    static void inception(DynamoDBMapper mapper, AmazonDynamoDB dynamoDB) {
+    static void inception(DynamoDBMapper _mapper, AmazonDynamoDB _dynDB) {
 
         Class<?> catalog[] = { Organization.class, Employee.class };
-        DynamoDBTableCreator ic = new DynamoDBTableCreator(mapper, dynamoDB);
+        DynamoDBTableCreator ic = new DynamoDBTableCreator(_mapper, _dynDB);
         for (int idx = 0; idx < catalog.length; idx++) {
             ic.createTable(catalog[idx]);
         }
@@ -36,7 +36,7 @@ class DynamoDBTableCreator {
 
     private void createTable(Class<?> cls) {
 
-        CreateTableRequest createTableRequest = mapper.generateCreateTableRequest(cls);
+        CreateTableRequest createTableRequest = _mapper.generateCreateTableRequest(cls);
         createTableRequest.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
 
         if (createTableRequest.getGlobalSecondaryIndexes() != null) {
@@ -60,7 +60,7 @@ class DynamoDBTableCreator {
         }
 
         if (!tableExists(createTableRequest)) {
-            dynamoDB.createTable(createTableRequest);
+            _dynDB.createTable(createTableRequest);
         }
 
         waitForTableCreated(createTableRequest.getTableName());
@@ -72,7 +72,7 @@ class DynamoDBTableCreator {
             try {
                 Thread.sleep(500);
                 DescribeTableRequest dtr = new DescribeTableRequest(tableName);
-                TableDescription table = dynamoDB.describeTable(dtr).getTable();
+                TableDescription table = _dynDB.describeTable(dtr).getTable();
                 if (table == null) {
                     continue;
                 }
@@ -92,7 +92,7 @@ class DynamoDBTableCreator {
     private boolean tableExists(CreateTableRequest createTableRequest) {
 
         try {
-            dynamoDB.describeTable(createTableRequest.getTableName());
+            _dynDB.describeTable(createTableRequest.getTableName());
             return true;
         } catch (ResourceNotFoundException ex) {
             return false;
