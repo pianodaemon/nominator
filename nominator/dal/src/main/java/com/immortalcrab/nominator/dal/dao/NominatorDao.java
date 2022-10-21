@@ -1,6 +1,9 @@
-package com.immortalcrab.nominator.dal;
+package com.immortalcrab.nominator.dal.dao;
 
 import java.util.Optional;
+
+import com.immortalcrab.nominator.dal.dto.EmployeeDto;
+import com.immortalcrab.nominator.dal.dto.OrganizationDto;
 
 
 public interface NominatorDao {

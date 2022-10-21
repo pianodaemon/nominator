@@ -1,4 +1,4 @@
-package com.immortalcrab.nominator.dal;
+package com.immortalcrab.nominator.dal.dto;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -11,7 +11,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.immortalcrab.nominator.dal.NominatorDao;
+import com.immortalcrab.nominator.dal.dao.NominatorDao;
 import com.immortalcrab.nominator.mod.NominatorModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterAll;

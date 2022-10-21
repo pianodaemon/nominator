@@ -1,13 +1,13 @@
-package com.immortalcrab.nominator.dal.dynamo;
+package com.immortalcrab.nominator.dal.dao.dynamo;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
 import com.google.common.collect.ImmutableMap;
-import com.immortalcrab.nominator.dal.EmployeeDto;
-import com.immortalcrab.nominator.dal.NominatorDao;
-import com.immortalcrab.nominator.dal.OrganizationDto;
+import com.immortalcrab.nominator.dal.dao.NominatorDao;
+import com.immortalcrab.nominator.dal.dto.EmployeeDto;
+import com.immortalcrab.nominator.dal.dto.OrganizationDto;
 import com.immortalcrab.nominator.entities.Employee;
 import com.immortalcrab.nominator.entities.Organization;
 import java.util.List;
