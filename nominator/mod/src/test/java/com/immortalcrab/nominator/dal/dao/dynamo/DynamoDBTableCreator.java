@@ -1,5 +1,7 @@
 package com.immortalcrab.nominator.dal.dao.dynamo;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,25 +47,8 @@ class DynamoDBTableCreator {
         CreateTableRequest createTableRequest = _mapper.generateCreateTableRequest(cls);
         createTableRequest.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
 
-        if (createTableRequest.getGlobalSecondaryIndexes() != null) {
-
-            for (GlobalSecondaryIndex gsi : createTableRequest.getGlobalSecondaryIndexes()) {
-
-                gsi.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
-
-                Projection projection = new Projection().withProjectionType("ALL");
-                gsi.withProjection(projection);
-            }
-        }
-
-        if (createTableRequest.getLocalSecondaryIndexes() != null) {
-
-            for (LocalSecondaryIndex lsi : createTableRequest.getLocalSecondaryIndexes()) {
-
-                Projection projection = new Projection().withProjectionType("ALL");
-                lsi.withProjection(projection);
-            }
-        }
+        setupGSIs(Optional.ofNullable(createTableRequest.getGlobalSecondaryIndexes()));
+        setupLSIs(Optional.ofNullable(createTableRequest.getLocalSecondaryIndexes()));
 
         try {
             _dynDB.describeTable(createTableRequest.getTableName());
@@ -72,6 +57,32 @@ class DynamoDBTableCreator {
         }
 
         waitForTableCreated(createTableRequest.getTableName());
+    }
+
+    private void setupLSIs(Optional<List<LocalSecondaryIndex>> localSecondaryIndexes) {
+
+        if (localSecondaryIndexes.isPresent()) {
+
+            for (LocalSecondaryIndex lsi : localSecondaryIndexes.get()) {
+
+                Projection projection = new Projection().withProjectionType("ALL");
+                lsi.withProjection(projection);
+            }
+        }
+    }
+
+    private void setupGSIs(Optional<List<GlobalSecondaryIndex>> globalSecondaryIndexes) {
+
+        if (globalSecondaryIndexes.isPresent()) {
+
+            for (GlobalSecondaryIndex gsi : globalSecondaryIndexes.get()) {
+
+                gsi.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+
+                Projection projection = new Projection().withProjectionType("ALL");
+                gsi.withProjection(projection);
+            }
+        }
     }
 
     private void waitForTableCreated(String tableName) {
