@@ -6,7 +6,7 @@ import com.immortalcrab.nominator.entities.Employee;
 
 public interface NominatorDao {
 
-    public Employee createEmployee(
+    public EmployeeDto createEmployee(
             final String name,
             final String surname,
             final String optionalSurname,

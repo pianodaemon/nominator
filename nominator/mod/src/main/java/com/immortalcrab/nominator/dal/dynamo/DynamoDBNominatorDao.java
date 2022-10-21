@@ -31,7 +31,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
 
     private final @NonNull DynamoDBMapper mapper;
 
-    public Employee createEmployee(
+    public EmployeeDto createEmployee(
             final String name,
             final String surname,
             final String optionalSurname,
@@ -58,7 +58,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
         }
 
         mapper.save(target);
-        return mapper.load(Employee.class, orgName, identifier);
+        return copyFromEmployeeToEmployeeDto(mapper.load(Employee.class, orgName, identifier));
     }
 
     @Override
