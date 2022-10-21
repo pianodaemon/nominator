@@ -4,11 +4,15 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
+import com.google.common.collect.ImmutableMap;
 import com.immortalcrab.nominator.dal.NominatorDao;
 import com.immortalcrab.nominator.entities.Employee;
 import com.immortalcrab.nominator.entities.Organization;
 import java.util.List;
 import java.util.Optional;
+
+import org.apache.commons.text.StringSubstitutor;
+
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +30,26 @@ public class DynamoDBNominatorDao implements NominatorDao {
             final String identifier,
             final String orgName) {
 
+        final String nature = "PERSON";
+
         Employee target = new Employee();
         target.setName(name);
         target.setSurname(surname);
         target.setOptionalSurname(Optional.ofNullable(optionalSurname).orElse(""));
         target.setIdentifier(identifier);
         target.setOrgName(orgName);
-        mapper.save(target);
+        target.setNature(nature);
 
+        // Full name's formation
+        {
+            StringSubstitutor sub = new StringSubstitutor(
+                    ImmutableMap.of("v0", target.getName(),
+                            "v1", target.getSurname(),
+                            "v2", target.getOptionalSurname()));
+            target.setFullName(sub.replace("${v0} #${v1} #${v2}"));
+        }
+
+        mapper.save(target);
         return mapper.load(Employee.class, orgName, identifier);
     }
 
