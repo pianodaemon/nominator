@@ -21,6 +21,12 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class DynamoDBNominatorDao implements NominatorDao {
 
+    protected enum Nature {
+        ORGANIZATION,
+        PERSON,
+        HIGH
+    }
+
     private final @NonNull DynamoDBMapper mapper;
 
     public Employee createEmployee(
@@ -30,7 +36,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
             final String identifier,
             final String orgName) {
 
-        final String nature = "PERSON";
+        final String nature = Nature.PERSON.name();
 
         Employee target = new Employee();
         target.setName(name);
@@ -56,7 +62,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
     @Override
     public Optional<Employee> searchEmployee(String fullName) {
 
-        final String nature = "PERSON";
+        final String nature = Nature.PERSON.name();
         DynamoDBQueryExpression<Employee> qe = new DynamoDBQueryExpression<Employee>();
 
         Employee target = new Employee();
@@ -88,7 +94,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
             final String aka,
             final Integer regimen) {
 
-        final String nature = "ORGANIZATION";
+        final String nature = Nature.ORGANIZATION.name();
 
         Organization target = new Organization();
         target.setIdentifier(identifier);
@@ -104,7 +110,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
     @Override
     public Optional<Organization> searchOrganization(String aka) {
 
-        final String nature = "ORGANIZATION";
+        final String nature = Nature.ORGANIZATION.name();
 
         DynamoDBQueryExpression<Organization> qe = new DynamoDBQueryExpression<Organization>();
 
