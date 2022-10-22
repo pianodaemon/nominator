@@ -7,6 +7,8 @@ dependencies {
 
     implementation "commons-codec:commons-codec:1.15"
 
+    implementation "org.javatuples:javatuples:1.2"
+
     // Use JUnit Jupiter for testing.
     testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter}"
 }
