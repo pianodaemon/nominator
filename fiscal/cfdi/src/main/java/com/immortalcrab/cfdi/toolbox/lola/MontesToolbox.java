@@ -25,7 +25,7 @@ public class MontesToolbox implements IToolbox {
     }
 
     @Override
-    public ByteArrayInputStream render(String text, int width, int height) throws Exception {
+    public ByteArrayInputStream renderQrCode(String text, int width, int height) throws Exception {
         return QrCode.render(text, width, height);
     }
 
