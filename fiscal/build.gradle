@@ -11,11 +11,6 @@ allprojects {
 subprojects {
     apply plugin: 'java'
 
-}
-
-subprojects {
-    apply plugin: 'java'
-
     dependencies {
 
         compileOnly "org.projectlombok:lombok:${lombok_version}"
