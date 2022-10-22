@@ -13,6 +13,8 @@ subprojects {
 
     dependencies {
 
+        implementation "org.javatuples:javatuples:1.2"
+
         compileOnly "org.projectlombok:lombok:${lombok_version}"
         annotationProcessor "org.projectlombok:lombok:${lombok_version}"
     }
