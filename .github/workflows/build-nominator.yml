@@ -15,8 +15,13 @@ jobs:
           distribution: 'adopt'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
-      - name: Build with Gradle
+      - name: Build nominator
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build test
-          build-root-directory:  nominator
+          arguments: build 
+          build-root-directory: nominator
+      - name: Build fiscal
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build 
+          build-root-directory: fiscal
