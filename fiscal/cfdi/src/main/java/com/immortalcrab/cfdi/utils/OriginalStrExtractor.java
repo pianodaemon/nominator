@@ -34,7 +34,7 @@ public class OriginalStrExtractor {
         return sb.toString().getBytes(StandardCharsets.UTF_8.name());
     }
 
-    public static String build(byte[] chunk, Source srcXslt) throws Exception {
+    private static String build(byte[] chunk, Source srcXslt) throws Exception {
 
         InputStream is = new ByteArrayInputStream(chunk);
         final Source srcXml = new StreamSource(is);
