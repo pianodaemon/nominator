@@ -1,0 +1,5 @@
+rootProject.name = 'fiscal'
+
+include ':cfdi'
+include ':qrcode'
+

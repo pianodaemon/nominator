@@ -1,0 +1,14 @@
+description = 'fiscal'
+allprojects {
+
+    group = 'com.immortalcrab'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+}
