@@ -20,7 +20,6 @@ public class MontesToolbox implements IToolbox {
 
     @Override
     public String signOriginal(BufferedReader brPrivKeyPem, String original) throws Exception {
-
         return Signer.sign(brPrivKeyPem, original);
     }
 
