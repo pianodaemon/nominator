@@ -1,12 +1,12 @@
 package com.immortalcrab.cfdi.error;
 
-public class CfdiRequestError extends EngineError {
+public class RequestError extends EngineError {
 
-    public CfdiRequestError(String message) {
+    public RequestError(String message) {
         super(message, ErrorCodes.REQUEST_INVALID);
     }
 
-    public CfdiRequestError(String message, Throwable cause) {
+    public RequestError(String message, Throwable cause) {
         super(message, cause, ErrorCodes.REQUEST_INVALID);
     }
 }
