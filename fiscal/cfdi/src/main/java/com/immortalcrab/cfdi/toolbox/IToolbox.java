@@ -14,5 +14,5 @@ public interface IToolbox {
 
     public String signOriginal(BufferedReader brPrivKeyPem, String original) throws Exception;
     
-    public ByteArrayInputStream render(String text, int width, int height) throws Exception;
+    public ByteArrayInputStream renderQrCode(String text, int width, int height) throws Exception;
 }
