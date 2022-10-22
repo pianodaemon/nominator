@@ -3,4 +3,12 @@ description = 'cfdi'
 dependencies {
 
     implementation "commons-codec:commons-codec:1.15"
+
+    // Use JUnit Jupiter for testing.
+    testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter}"
+}
+
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
 }
