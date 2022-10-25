@@ -19,9 +19,11 @@ import org.apache.commons.text.StringSubstitutor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.apachecommons.CommonsLog;
 
 @RequiredArgsConstructor
 @Getter
+@CommonsLog
 public class DynamoDBNominatorDao implements NominatorDao {
 
     protected enum Nature {
@@ -59,6 +61,8 @@ public class DynamoDBNominatorDao implements NominatorDao {
         }
 
         mapper.save(target);
+        log.info("Employee " + target.toString() + " has been created");
+
         return DataTransferObjectConverter.basic(mapper.load(Employee.class, orgName, identifier));
     }
 
