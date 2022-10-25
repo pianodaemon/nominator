@@ -13,6 +13,8 @@ subprojects {
 
     dependencies {
 
+        implementation "commons-logging:commons-logging:${commons_logging_version}"
+
         compileOnly "org.projectlombok:lombok:${lombok_version}"
         annotationProcessor "org.projectlombok:lombok:${lombok_version}"
     }

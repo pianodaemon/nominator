@@ -15,6 +15,7 @@ subprojects {
 
         implementation "org.javatuples:javatuples:1.2"
         implementation 'com.google.collections:google-collections:1.0-rc2'
+        implementation "commons-logging:commons-logging:${commons_logging_version}"
 
         compileOnly "org.projectlombok:lombok:${lombok_version}"
         annotationProcessor "org.projectlombok:lombok:${lombok_version}"
