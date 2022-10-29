@@ -14,6 +14,7 @@ public interface NominatorDao {
             final String optionalSurname,
             final String identifier,
             final String curp,
+            final String imss,
             final String orgName);
 
     public Optional<EmployeeDto> searchEmployee(String fullName);
