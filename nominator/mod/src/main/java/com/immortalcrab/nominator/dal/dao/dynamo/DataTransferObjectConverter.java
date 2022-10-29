@@ -28,6 +28,7 @@ public class DataTransferObjectConverter {
         dot.setOptionalSurname(origin.getOptionalSurname());
         dot.setIdentifier(origin.getIdentifier());
         dot.setCurp(origin.getCurp());
+        dot.setImss(origin.getImss());
         dot.setOrgName(origin.getOrgName());
         dot.setFullName(origin.getFullName());
         dot.setNature(origin.getNature());

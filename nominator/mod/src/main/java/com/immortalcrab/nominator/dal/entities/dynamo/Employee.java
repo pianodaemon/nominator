@@ -24,6 +24,9 @@ public class Employee {
     private String curp;
 
     @DynamoDBAttribute
+    private String imss;
+
+    @DynamoDBAttribute
     private String Name;
 
     @DynamoDBAttribute

@@ -21,9 +21,10 @@ class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
         final String optionalSurname = "Camacho";
         final String employeeIdentifier = "EMP#PACE8001104V2";
         final String curp = "OEAF771012HMCRGR09";
+        final String imss = "0f9j0f9j9fj3049jf0";
 
         _nominatorDao.createEmployee(
-                name, surname, optionalSurname, employeeIdentifier, curp, orgName);
+                name, surname, optionalSurname, employeeIdentifier, curp, imss, orgName);
 
         Optional<EmployeeDto> dto = _nominatorDao.searchEmployee(new StringSubstitutor(
                 ImmutableMap.of("v0", name, "v1", surname, "v2", optionalSurname))
@@ -81,12 +82,14 @@ class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
             final String optionalSurname = "Camacho";
             final String employeeIdentifier = "EMP#PACE8001104V2";
             final String curp = "OEAF771012HMCRGR09";
+            final String imss = "0f9j0f9j9fj3049jf0";
 
             EmployeeDto newerEmployee = _nominatorDao.createEmployee(
-                    name, surname, optionalSurname, employeeIdentifier, curp, newerOrg.getOrgName());
+                    name, surname, optionalSurname, employeeIdentifier, curp, imss, newerOrg.getOrgName());
             assertTrue(newerEmployee.getOrgName().equals(newerOrg.getOrgName()));
             assertTrue(newerEmployee.getIdentifier().equals(employeeIdentifier));
             assertTrue(newerEmployee.getCurp().equals(curp));
+            assertTrue(newerEmployee.getImss().equals(imss));
             assertTrue(newerEmployee.getName().equals(name));
             assertTrue(newerEmployee.getSurname().equals(surname));
             assertTrue(newerEmployee.getOptionalSurname().equals(optionalSurname));

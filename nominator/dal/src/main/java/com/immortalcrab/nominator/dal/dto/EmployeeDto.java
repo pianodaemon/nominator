@@ -10,6 +10,7 @@ public class EmployeeDto {
     private String orgName;
     private String identifier;
     private String curp;
+    private String imss;
     private String Name;
     private String surname;
     private String optionalSurname;
