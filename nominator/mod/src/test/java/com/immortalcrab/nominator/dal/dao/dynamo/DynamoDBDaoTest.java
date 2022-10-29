@@ -26,6 +26,7 @@ class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
         _nominatorDao.createEmployee(
                 name, surname, optionalSurname, employeeIdentifier, curp, imss, orgName);
 
+
         Optional<EmployeeDto> dto = _nominatorDao.searchEmployee(new StringSubstitutor(
                 ImmutableMap.of("v0", name, "v1", surname, "v2", optionalSurname))
                 .replace("${v0} #${v1} #${v2}"));
