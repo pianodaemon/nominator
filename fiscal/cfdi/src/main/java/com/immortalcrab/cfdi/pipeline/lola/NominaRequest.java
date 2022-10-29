@@ -3,9 +3,7 @@ package com.immortalcrab.cfdi.pipeline.lola;
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
 import java.io.InputStreamReader;
-import lombok.extern.apachecommons.CommonsLog;
 
-@CommonsLog
 public class NominaRequest extends JsonRequest {
 
     private NominaRequest(InputStreamReader reader) throws RequestError, DecodeError {
