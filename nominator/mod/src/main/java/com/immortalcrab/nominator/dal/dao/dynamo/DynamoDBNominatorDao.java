@@ -39,6 +39,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
             final String surname,
             final String optionalSurname,
             final String identifier,
+            final String curp,
             final String orgName) {
 
         final String nature = Nature.PERSON.name();
@@ -48,6 +49,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
         target.setSurname(surname);
         target.setOptionalSurname(Optional.ofNullable(optionalSurname).orElse(""));
         target.setIdentifier(identifier);
+        target.setCurp(curp);
         target.setOrgName(orgName);
         target.setNature(nature);
 

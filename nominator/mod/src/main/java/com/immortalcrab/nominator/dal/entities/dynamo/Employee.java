@@ -21,6 +21,9 @@ public class Employee {
     private String identifier;
 
     @DynamoDBAttribute
+    private String curp;
+
+    @DynamoDBAttribute
     private String Name;
 
     @DynamoDBAttribute
@@ -47,6 +50,7 @@ public class Employee {
         Employee temp = (Employee) o;
         boolean result = temp.getOrgName().equals(this.getOrgName())
                 && temp.getIdentifier().equals(this.getIdentifier())
+                && temp.getCurp().equals(this.getCurp())
                 && temp.getName().equals(this.getName())
                 && temp.getSurname().equals(this.getSurname())
                 && temp.getOptionalSurname().equals(this.getOptionalSurname())
