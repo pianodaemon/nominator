@@ -1,7 +1,8 @@
-ppackage com.immortalcrab.cfdi.pipeline.lola;
+package com.immortalcrab.cfdi.pipeline.lola;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
+import com.immortalcrab.cfdi.pipeline.JsonRequest;
 import java.io.InputStreamReader;
 
 public class FacturaRequest extends JsonRequest {
