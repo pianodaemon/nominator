@@ -1,0 +1,105 @@
+{
+    "version": "4.0",
+    "serie": "RRM",
+    "folio": "5457",
+    "fecha": "2022-10-26T20:00:18",
+    "tipo_de_comprobante": "N",
+    "moneda": "MXN",
+    "descuento": 1185.82,
+    "subtotal": 7185.82,
+    "total": 6000.0,
+    "exportacion": "01",
+    "metodo_pago": "PUE",
+    "lugar_expedicion": "67100",
+    "emisor": {
+        "rfc": "RRM031001QE7",
+        "nombre": "RR MEDICA S.A. DE C.V.",
+        "regimen_fiscal": "601"
+    },
+    "receptor": {
+        "rfc": "TORG700702KZ5",
+        "nombre": "JOSE GUADALUPE DE LA TORRE RIOS",
+        "domicilio_fiscal_receptor": "45625",
+        "regimen_fiscal_receptor": "605",
+        "uso_cfdi": "CN01"
+    },
+    "conceptos": [
+        {
+            "clave_prod_serv": "84111505",
+            "cantidad": 1.0,
+            "clave_unidad": "ACT",
+            "descripcion": "Pago de nómina",
+            "valor_unitario": 7185.8200,
+            "importe": 7185.8200,
+            "descuento": 1185.82,
+            "objeto_imp": "01"
+        }
+    ],
+    "nomina": {
+        "version": "1.2",
+        "tipo_nomina": "O",
+        "fecha_pago": "2022-10-25",
+        "fecha_inicial_pago": "2022-10-16",
+        "fecha_final_pago": "2022-10-31",
+        "num_dias_pagados": 15,
+        "total_percepciones": 7185.82,
+        "total_deducciones": 1185.82,
+        "emisor": {
+            "registro_patronal": "D4562908100"
+        },
+        "receptor": {
+            "curp": "MORO700125HDFNRM09",
+            "num_seguridad_social": "68742002174",
+            "fecha_inicio_rel_laboral": "2021-10-31",
+            "antigüedad": "P52W",
+            "tipo_contrato": "01",
+            "tipo_regimen": "02",
+            "num_empleado": "1520",
+            "riesgo_puesto": "2",
+            "periodicidad_pago": "04",
+            "salario_diario_integrado": 523.34,
+            "clave_ent_fed": "MEX"
+        },
+        "percepciones": {
+            "total_sueldos": 7185.82,
+            "total_gravado": 7185.82,
+            "total_exento": 0.0,
+            "lista": [
+                {
+                    "tipo_percepcion": "001",
+                    "clave": "001",
+                    "concepto": "sueldo",
+                    "importe_gravado": 7185.82,
+                    "importe_exento": 0.0
+                }
+            ]
+        },
+        "deducciones": {
+            "total_otras_deducciones": 198.20,
+            "total_impuestos_retenidos": 987.62,
+            "lista": [
+                {
+                    "tipo_deduccion": "001",
+                    "clave": "001",
+                    "concepto": "IMSS",
+                    "importe": 198.20
+                },
+                {
+                    "tipo_deduccion": "002",
+                    "clave": "002",
+                    "concepto": "ISR",
+                    "importe": 987.62
+                }
+            ]
+        },
+        "otros_pagos": [
+            {
+                "tipo_otro_pago": "002",
+                "clave": "4455",
+                "concepto": "mi otro paguito",
+                "importe": 0.0,
+                "subsidio_causado": 0.0
+            }
+        ]
+    }
+}
