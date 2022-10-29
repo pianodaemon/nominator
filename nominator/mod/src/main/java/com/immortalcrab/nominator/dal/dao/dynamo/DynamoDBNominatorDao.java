@@ -104,7 +104,8 @@ public class DynamoDBNominatorDao implements NominatorDao {
             final String identifier,
             final String orgName,
             final String aka,
-            final Integer regimen) {
+            final Integer regimen,
+            final String regimenEmployer) {
 
         final String nature = Nature.ORGANIZATION.name();
 
@@ -112,6 +113,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
         target.setIdentifier(identifier);
         target.setOrgName(orgName);
         target.setRegimen(regimen);
+        target.setRegimenEmployer(regimenEmployer);
         target.setNature(nature);
         target.setAka(aka);
         mapper.save(target);

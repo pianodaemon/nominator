@@ -23,6 +23,9 @@ public class Organization {
     @DynamoDBAttribute
     private Integer regimen;
 
+    @DynamoDBAttribute
+    private String regimenEmployer;
+
     @DynamoDBIndexHashKey(globalSecondaryIndexName = "gsiOrganizationNature")
     private String nature;
 

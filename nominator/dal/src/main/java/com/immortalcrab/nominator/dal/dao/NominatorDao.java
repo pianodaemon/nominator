@@ -23,7 +23,8 @@ public interface NominatorDao {
             final String identifier,
             final String orgName,
             final String aka,
-            final Integer regimen);
+            final Integer regimen,
+            final String regimenEmployer);
 
     public Optional<OrganizationDto> searchOrganization(String aka);
 }

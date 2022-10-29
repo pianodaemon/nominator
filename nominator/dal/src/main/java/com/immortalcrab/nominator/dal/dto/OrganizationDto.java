@@ -10,6 +10,7 @@ public class OrganizationDto {
     private String orgName;
     private String identifier;
     private Integer regimen;
+    private String regimenEmployer;
     private String nature;
     private String aka;
 }

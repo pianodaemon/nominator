@@ -14,6 +14,7 @@ public class DataTransferObjectConverter {
         dot.setIdentifier(origin.getIdentifier());
         dot.setOrgName(origin.getOrgName());
         dot.setRegimen(origin.getRegimen());
+        dot.setRegimenEmployer(origin.getRegimenEmployer());
         dot.setAka(origin.getAka());
         dot.setNature(origin.getNature());
         return dot;

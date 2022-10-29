@@ -52,17 +52,19 @@ class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
 
         final String orgName = "ORG#KACE8001104V0";
         final Integer regimen = 601;
+        final String regimenEmployer = "D4562908100";
         StringSubstitutor sub = new StringSubstitutor(ImmutableMap.of("org", orgName));
         final String orgIdentifier = sub.replace("${org}#PROF00");
         final String aka = "Immortal crab system incorporated";
 
-        _nominatorDao.createOrganization(orgIdentifier, orgName, aka, regimen);
+        _nominatorDao.createOrganization(orgIdentifier, orgName, aka, regimen, regimenEmployer);
         Optional<OrganizationDto> dto = _nominatorDao.searchOrganization(aka);
 
         assertTrue(dto.isPresent());
         assertTrue(dto.get().getOrgName().equals(orgName));
         assertTrue(dto.get().getIdentifier().equals(orgIdentifier));
         assertTrue(dto.get().getRegimen().equals(regimen));
+        assertTrue(dto.get().getRegimenEmployer().equals(regimenEmployer));
         assertTrue(dto.get().getAka().equals(aka));
     }
 
@@ -71,11 +73,12 @@ class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
 
         final String orgName = "ORG#KACE8001104V0";
         final Integer regimen = 601;
+        final String regimenEmployer = "D4562908100";
         StringSubstitutor sub = new StringSubstitutor(ImmutableMap.of("org", orgName));
         final String orgIdentifier = sub.replace("${org}#PROF00");
         final String aka = "Immortal crab system incorporated";
 
-        OrganizationDto newerOrg = _nominatorDao.createOrganization(orgIdentifier, orgName, aka, regimen);
+        OrganizationDto newerOrg = _nominatorDao.createOrganization(orgIdentifier, orgName, aka, regimen, regimenEmployer);
 
         {
             final String name = "Edwin";
@@ -106,5 +109,6 @@ class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
         assertTrue(newerOrg.getOrgName().equals(orgName));
         assertTrue(newerOrg.getIdentifier().equals(orgIdentifier));
         assertTrue(newerOrg.getRegimen().equals(regimen));
+        assertTrue(newerOrg.getRegimenEmployer().equals(regimenEmployer));
     }
 }
