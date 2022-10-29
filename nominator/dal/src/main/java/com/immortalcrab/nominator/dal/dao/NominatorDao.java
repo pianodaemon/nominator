@@ -13,6 +13,7 @@ public interface NominatorDao {
             final String surname,
             final String optionalSurname,
             final String identifier,
+            final String curp,
             final String orgName);
 
     public Optional<EmployeeDto> searchEmployee(String fullName);

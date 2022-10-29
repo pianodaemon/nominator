@@ -20,9 +20,10 @@ class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
         final String surname = "Plauchu";
         final String optionalSurname = "Camacho";
         final String employeeIdentifier = "EMP#PACE8001104V2";
+        final String curp = "OEAF771012HMCRGR09";
 
         _nominatorDao.createEmployee(
-                name, surname, optionalSurname, employeeIdentifier, orgName);
+                name, surname, optionalSurname, employeeIdentifier, curp, orgName);
 
         Optional<EmployeeDto> dto = _nominatorDao.searchEmployee(new StringSubstitutor(
                 ImmutableMap.of("v0", name, "v1", surname, "v2", optionalSurname))
@@ -31,6 +32,7 @@ class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
         assertTrue(dto.isPresent());
         assertTrue(dto.get().getOrgName().equals(orgName));
         assertTrue(dto.get().getIdentifier().equals(employeeIdentifier));
+        assertTrue(dto.get().getCurp().equals(curp));
         assertTrue(dto.get().getName().equals(name));
         assertTrue(dto.get().getSurname().equals(surname));
         assertTrue(dto.get().getOptionalSurname().equals(optionalSurname));
@@ -78,11 +80,13 @@ class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
             final String surname = "Plauchu";
             final String optionalSurname = "Camacho";
             final String employeeIdentifier = "EMP#PACE8001104V2";
+            final String curp = "OEAF771012HMCRGR09";
 
             EmployeeDto newerEmployee = _nominatorDao.createEmployee(
-                    name, surname, optionalSurname, employeeIdentifier, newerOrg.getOrgName());
+                    name, surname, optionalSurname, employeeIdentifier, curp, newerOrg.getOrgName());
             assertTrue(newerEmployee.getOrgName().equals(newerOrg.getOrgName()));
             assertTrue(newerEmployee.getIdentifier().equals(employeeIdentifier));
+            assertTrue(newerEmployee.getCurp().equals(curp));
             assertTrue(newerEmployee.getName().equals(name));
             assertTrue(newerEmployee.getSurname().equals(surname));
             assertTrue(newerEmployee.getOptionalSurname().equals(optionalSurname));
