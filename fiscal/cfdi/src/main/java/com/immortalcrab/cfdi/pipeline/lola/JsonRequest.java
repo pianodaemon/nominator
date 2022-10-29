@@ -26,7 +26,8 @@ public class JsonRequest extends Request {
         try {
             return (mapper.readValue(reader, tr));
         } catch (IOException ex) {
-            throw new DecodeError(ex.getMessage(), ex);
+            log.warn(ex.getMessage());
+            throw new DecodeError("Issue found when reading json buffer", ex);
         }
     }
 
