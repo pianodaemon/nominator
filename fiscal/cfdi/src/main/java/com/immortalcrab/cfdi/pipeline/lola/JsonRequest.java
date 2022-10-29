@@ -1,0 +1,37 @@
+package com.immortalcrab.cfdi.pipeline.lola;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.immortalcrab.cfdi.error.DecodeError;
+import com.immortalcrab.cfdi.error.RequestError;
+import com.immortalcrab.cfdi.pipeline.Request;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Map;
+import lombok.extern.apachecommons.CommonsLog;
+
+@CommonsLog
+public class JsonRequest extends Request {
+
+    protected JsonRequest(InputStreamReader reader) throws RequestError, DecodeError {
+        super(JsonRequest.readFromJson(reader));
+    }
+
+    private static Map<String, Object> readFromJson(InputStreamReader reader) throws DecodeError {
+        ObjectMapper mapper = new ObjectMapper();
+
+        TypeReference<Map<String, Object>> tr = new TypeReference<Map<String, Object>>() {
+        };
+
+        try {
+            return (mapper.readValue(reader, tr));
+        } catch (IOException ex) {
+            throw new DecodeError(ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    protected Map<String, Object> craftImpt() throws RequestError {
+        throw new UnsupportedOperationException("Not supported and needed yet.");
+    }
+}
