@@ -6,6 +6,8 @@ import com.immortalcrab.cfdi.pipeline.Request;
 import com.immortalcrab.cfdi.pipeline.IStorage;
 import mx.gob.sat.cfd._4.ObjectFactory;
 import mx.gob.sat.sitio_internet.cfd.catalogos.CTipoDeComprobante;
+import mx.gob.sat.nomina12.Nomina;
+
 import java.io.StringWriter;
 
 import lombok.AllArgsConstructor;
