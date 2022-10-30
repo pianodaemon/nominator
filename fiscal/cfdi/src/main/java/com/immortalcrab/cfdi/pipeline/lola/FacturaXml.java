@@ -4,8 +4,15 @@ import com.immortalcrab.cfdi.error.StorageError;
 import com.immortalcrab.cfdi.error.FormatError;
 import com.immortalcrab.cfdi.pipeline.Request;
 import com.immortalcrab.cfdi.pipeline.IStorage;
+
 import mx.gob.sat.cfd._4.ObjectFactory;
+import mx.gob.sat.sitio_internet.cfd.catalogos.CMetodoPago;
+import mx.gob.sat.sitio_internet.cfd.catalogos.CMoneda;
+import mx.gob.sat.sitio_internet.cfd.catalogos.CPais;
 import mx.gob.sat.sitio_internet.cfd.catalogos.CTipoDeComprobante;
+import mx.gob.sat.sitio_internet.cfd.catalogos.CTipoFactor;
+import mx.gob.sat.sitio_internet.cfd.catalogos.CUsoCFDI;
+
 import java.io.StringWriter;
 
 import lombok.AllArgsConstructor;
