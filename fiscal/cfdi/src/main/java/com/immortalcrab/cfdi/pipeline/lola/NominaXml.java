@@ -21,7 +21,7 @@ public class NominaXml {
 
     public static String render(Request cfdiReq, IStorage st) throws FormatError, StorageError {
 
-        FacturaXml ic = new FacturaXml(cfdiReq, st);
+        NominaXml ic = new NominaXml(cfdiReq, st);
         StringWriter cfdi = ic.shape();
 
         return "It must be slightly implemented as it was in lola";
