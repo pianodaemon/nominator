@@ -19,8 +19,8 @@ task genJaxb {
 
             taskdef name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.jaxb.asPath
 
-            xjc(destdir: sourcesDir, binding: "${projectDir}/src/main/resources/schemas_cfdv40/binding.xml") {
-                schema(dir: "${projectDir}/src/main/resources/schemas_cfdv40", includes: '**/*.xsd')
+            xjc(destdir: sourcesDir, binding: "${projectDir}/src/main/resources/cfdv40/binding.xml") {
+                schema(dir: "${projectDir}/src/main/resources/cfdv40", includes: '**/*.xsd')
                 produces(dir: sourcesDir, includes: '**/*.java')
             }
 
