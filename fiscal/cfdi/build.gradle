@@ -8,7 +8,6 @@ task genJaxb {
 
     ext.sourcesDir = "${buildDir}/generated-sources/jaxb"
     ext.classesDir = "${buildDir}/classes/jaxb"
-    ext.schema = "${projectDir}/src/main/resources/cfdv40.xsd"
     outputs.dir classesDir
 
     doLast() {
@@ -20,12 +19,13 @@ task genJaxb {
 
             taskdef name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.jaxb.asPath
 
-            xjc(destdir: sourcesDir, schema: schema, 'package': "mx.gob.sat.sitio_internet.cfd") {
+            xjc(destdir: sourcesDir, binding: "${projectDir}/src/main/resources/schemas_cfdv40/binding.xml") {
+                schema(dir: "${projectDir}/src/main/resources/schemas_cfdv40", includes: '**/*.xsd')
                 produces(dir: sourcesDir, includes: '**/*.java')
             }
 
             javac(
-                destdir: classesDir, source: 1.8, target: 1.8,
+                destdir: classesDir, source: 11, target: 11,
                 debug: true, debugLevel: 'lines,vars,source',
                 includeantruntime: false, classpath: configurations.jaxb.asPath) {
 

@@ -1,0 +1,12 @@
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb" version="2.1">
+  <bindings schemaLocation="cfdv40.xsd">
+    <schemaBindings>
+      <package name="mx.gob.sat.sitio_internet.cfd.cfdv40" />
+    </schemaBindings>
+  </bindings>
+  <bindings schemaLocation="nomina12.xsd">
+    <schemaBindings>
+      <package name="mx.gob.sat.sitio_internet.cfd.nomina12" />
+    </schemaBindings>
+  </bindings>
+</bindings>
