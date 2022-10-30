@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
+import com.immortalcrab.cfdi.pipeline.lola.NominaXml;
+
 @TestInstance(Lifecycle.PER_CLASS)
 public class NominaXmlTest {
 
