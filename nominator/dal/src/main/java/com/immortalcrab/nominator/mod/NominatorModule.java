@@ -1,7 +1,6 @@
 package com.immortalcrab.nominator.mod;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.name.Names;
 import com.immortalcrab.nominator.dal.dao.NominatorDao;
 import lombok.AllArgsConstructor;
 
@@ -12,7 +11,6 @@ public class NominatorModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(NominatorDao.class).annotatedWith(
-            Names.named("DefaultDao")).to(_dao);
+        bind(NominatorDao.class).to(_dao);
     }
 }
