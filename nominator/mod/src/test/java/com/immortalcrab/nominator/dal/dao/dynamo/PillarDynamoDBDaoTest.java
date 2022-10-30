@@ -13,6 +13,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.immortalcrab.nominator.dal.dao.NominatorDao;
 import com.immortalcrab.nominator.mod.NominatorModule;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -37,7 +38,8 @@ class PillarDynamoDBDaoTest {
 
         _dynamoDB = createAmazonDynamoDBClient();
         _dynamoDBMapper = new DynamoDBMapper(_dynamoDB);
-        _injector = Guice.createInjector(new NominatorModule(_dynamoDB));
+        DynamoDBNominatorDao dynDao = new DynamoDBNominatorDao(_dynamoDBMapper);
+        _injector = Guice.createInjector(new NominatorModule(dynDao));
     }
 
     @BeforeEach
