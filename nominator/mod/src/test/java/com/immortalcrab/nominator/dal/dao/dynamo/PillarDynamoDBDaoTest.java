@@ -4,13 +4,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.amazonaws.services.dynamodbv2.local.main.ServerRunner;
 import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer;
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.immortalcrab.nominator.dal.dao.NominatorDao;
 import com.immortalcrab.nominator.mod.NominatorModule;
 
@@ -25,10 +18,8 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 class PillarDynamoDBDaoTest {
 
     private DynamoDBProxyServer _server;
-    private AmazonDynamoDB _dynamoDB;
-    private DynamoDBMapper _dynamoDBMapper;
     private Injector _injector;
-    protected NominatorDao _nominatorDao;
+    protected DynamoDBNominatorDao _nominatorDao;
 
     @BeforeAll
     public void initAll() {
@@ -36,10 +27,8 @@ class PillarDynamoDBDaoTest {
         // Need to set the SQLite4Java library path to avoid a linker error
         System.setProperty("sqlite4java.library.path", "./build/libs/");
 
-        _dynamoDB = createAmazonDynamoDBClient();
-        _dynamoDBMapper = new DynamoDBMapper(_dynamoDB);
-        DynamoDBNominatorDao dynDao = new DynamoDBNominatorDao(_dynamoDBMapper);
-        _injector = Guice.createInjector(new NominatorModule(dynDao));
+        Class<DynamoDBNominatorDao> daoCls = DynamoDBNominatorDao.class;
+        _injector = Guice.createInjector(new NominatorModule(daoCls));
     }
 
     @BeforeEach
@@ -62,23 +51,8 @@ class PillarDynamoDBDaoTest {
             }
         }
 
-        DynamoDBTableCreator.inception(_dynamoDBMapper, _dynamoDB);
-        _nominatorDao = _injector.getInstance(NominatorDao.class);
-    }
-
-    private AmazonDynamoDB createAmazonDynamoDBClient() {
-
-        return AmazonDynamoDBClientBuilder.standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localhost:8000",
-                        Regions.US_EAST_2.getName()))
-                .withCredentials(credentialsProvider())
-                .build();
-    }
-
-    private AWSStaticCredentialsProvider credentialsProvider() {
-
-        BasicAWSCredentials creds = new BasicAWSCredentials("fakeId", "fakeSecret");
-        return new AWSStaticCredentialsProvider(creds);
+        _nominatorDao = (DynamoDBNominatorDao) _injector.getInstance(NominatorDao.class);
+        DynamoDBTableCreator.inception(_nominatorDao.getConf().getMapper(), _nominatorDao.getConf().getDynamoDB());
     }
 
     @AfterEach

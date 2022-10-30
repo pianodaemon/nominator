@@ -1,6 +1,5 @@
 package com.immortalcrab.nominator.dal.dao.dynamo;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
@@ -16,12 +15,12 @@ import java.util.Optional;
 
 import org.apache.commons.text.StringSubstitutor;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Getter
 @CommonsLog
 public class DynamoDBNominatorDao implements NominatorDao {
@@ -32,7 +31,12 @@ public class DynamoDBNominatorDao implements NominatorDao {
         HIGH
     }
 
-    private final @NonNull DynamoDBMapper mapper;
+    private @NonNull DynDBNominatorConfig conf;
+    
+    public DynamoDBNominatorDao() {
+
+        this(new DynDBNominatorConfig());
+    }
 
     public EmployeeDto createEmployee(
             final String name,
@@ -64,10 +68,10 @@ public class DynamoDBNominatorDao implements NominatorDao {
             target.setFullName(sub.replace("${v0} #${v1} #${v2}"));
         }
 
-        mapper.save(target);
+        this.getConf().getMapper().save(target);
         log.info("Employee " + target.toString() + " has been created");
 
-        return DataTransferObjectConverter.basic(mapper.load(Employee.class, orgName, identifier));
+        return DataTransferObjectConverter.basic(this.getConf().getMapper().load(Employee.class, orgName, identifier));
     }
 
     @Override
@@ -81,7 +85,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
         target.setFullName(fullName);
 
         qe.withHashKeyValues(target).withConsistentRead(false);
-        PaginatedQueryList<Employee> rl = mapper.query(Employee.class, qe);
+        PaginatedQueryList<Employee> rl = this.getConf().getMapper().query(Employee.class, qe);
 
         return Optional.ofNullable(rl.isEmpty() ? null : DataTransferObjectConverter.basic(rl.get(0)));
     }
@@ -92,11 +96,11 @@ public class DynamoDBNominatorDao implements NominatorDao {
         target.setOrgName(issuer);
         target.setIdentifier(identifier);
 
-        mapper.delete(target);
+        this.getConf().getMapper().delete(target);
     }
 
     public List<Employee> getAllEmployees() {
-        return mapper.scan(Employee.class, new DynamoDBScanExpression());
+        return this.getConf().getMapper().scan(Employee.class, new DynamoDBScanExpression());
     }
 
     @Override
@@ -116,9 +120,9 @@ public class DynamoDBNominatorDao implements NominatorDao {
         target.setRegimenEmployer(regimenEmployer);
         target.setNature(nature);
         target.setAka(aka);
-        mapper.save(target);
+        this.getConf().getMapper().save(target);
 
-        return DataTransferObjectConverter.basic(mapper.load(Organization.class, orgName, identifier));
+        return DataTransferObjectConverter.basic(this.getConf().getMapper().load(Organization.class, orgName, identifier));
     }
 
     @Override
@@ -133,7 +137,7 @@ public class DynamoDBNominatorDao implements NominatorDao {
         target.setAka(aka);
 
         qe.withHashKeyValues(target).withConsistentRead(false);
-        PaginatedQueryList<Organization> rl = mapper.query(Organization.class, qe);
+        PaginatedQueryList<Organization> rl = this.getConf().getMapper().query(Organization.class, qe);
 
         return Optional.ofNullable(rl.isEmpty() ? null : DataTransferObjectConverter.basic(rl.get(0)));
     }

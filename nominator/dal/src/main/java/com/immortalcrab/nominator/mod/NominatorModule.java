@@ -7,10 +7,10 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class NominatorModule extends AbstractModule {
 
-    protected NominatorDao _dao;
+    protected Class<? extends NominatorDao> _dao;
 
     @Override
     protected void configure() {
-        bind(NominatorDao.class).toInstance(_dao);
+        bind(NominatorDao.class).to(_dao);
     }
 }
