@@ -35,8 +35,9 @@ public class FacturaXml {
     private static final String NATIONAL_CURRENCY = "MXN";
     private static final String NO_CURRENCY = "XXX";
 
-    private Comprobante shapeComprobanteTag(ObjectFactory cfdiFactory,
-            final String fechor,
+    private Comprobante shapeComprobanteTag(
+            ObjectFactory cfdiFactory,
+            final XMLGregorianCalendar fechor,
             final String serie,
             final String folio,
             final String nocert,
@@ -49,7 +50,7 @@ public class FacturaXml {
             final String metpag,
             final String conpag,
             final String forpag
-    ) throws DatatypeConfigurationException {
+    ) {
 
         Comprobante comprobante = cfdiFactory.createComprobante();
         comprobante.setVersion("4.0");
@@ -72,14 +73,15 @@ public class FacturaXml {
         comprobante.setCondicionesDePago(conpag);
         comprobante.setNoCertificado(nocert);
         comprobante.setFormaPago(forpag);
-        comprobante.setFecha(DatatypeFactory.newInstance().newXMLGregorianCalendar(fechor));
+        comprobante.setFecha(fechor);
         comprobante.setSerie(serie);
         comprobante.setFolio(folio);
 
         return comprobante;
     }
 
-    private Comprobante.Emisor shapeEmisorTag(ObjectFactory cfdiFactory,
+    private Comprobante.Emisor shapeEmisorTag(
+            ObjectFactory cfdiFactory,
             final String emirfc,
             final String eminom,
             final String regimen) {
@@ -93,7 +95,8 @@ public class FacturaXml {
         return emisor;
     }
 
-    private Comprobante.Receptor shapeReceptorTag(ObjectFactory cfdiFactory,
+    private Comprobante.Receptor shapeReceptorTag(
+            ObjectFactory cfdiFactory,
             final String cterfc,
             final String ctenom,
             CUsoCFDI uso) {
