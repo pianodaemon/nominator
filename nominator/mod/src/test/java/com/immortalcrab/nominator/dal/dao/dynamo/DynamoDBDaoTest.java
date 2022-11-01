@@ -62,7 +62,14 @@ class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
         final String orgIdentifier = sub.replace("${org}#PROF00");
         final String aka = "Immortal crab system incorporated";
 
-        _nominatorDao.createOrganization(orgIdentifier, orgName, aka, regimen, regimenEmployer);
+        OrganizationDto req = new OrganizationDto();
+        req.setIdentifier(orgIdentifier);
+        req.setAka(aka);
+        req.setOrgName(orgName);
+        req.setRegimen(regimen);
+        req.setRegimenEmployer(regimenEmployer);
+
+        _nominatorDao.createOrganization(req);
         Optional<OrganizationDto> dto = _nominatorDao.searchOrganization(aka);
 
         assertTrue(dto.isPresent());
@@ -83,8 +90,14 @@ class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
         final String orgIdentifier = sub.replace("${org}#PROF00");
         final String aka = "Immortal crab system incorporated";
 
-        OrganizationDto newerOrg = _nominatorDao.createOrganization(orgIdentifier, orgName, aka, regimen,
-                regimenEmployer);
+        OrganizationDto reqOrg = new OrganizationDto();
+        reqOrg.setIdentifier(orgIdentifier);
+        reqOrg.setAka(aka);
+        reqOrg.setOrgName(orgName);
+        reqOrg.setRegimen(regimen);
+        reqOrg.setRegimenEmployer(regimenEmployer);
+
+        OrganizationDto newerOrg = _nominatorDao.createOrganization(reqOrg);
 
         {
             EmployeeDto req = new EmployeeDto();

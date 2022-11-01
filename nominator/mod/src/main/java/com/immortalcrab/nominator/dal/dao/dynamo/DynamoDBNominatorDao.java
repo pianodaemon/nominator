@@ -98,7 +98,17 @@ public class DynamoDBNominatorDao implements NominatorDao {
     }
 
     @Override
-    public OrganizationDto createOrganization(
+    public OrganizationDto createOrganization(final OrganizationDto req) {
+
+        return _createOrganization(
+                req.getIdentifier(),
+                req.getOrgName(),
+                req.getAka(),
+                req.getRegimen(),
+                req.getRegimenEmployer());
+    }
+
+    public OrganizationDto _createOrganization(
             final String identifier,
             final String orgName,
             final String aka,
