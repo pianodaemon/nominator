@@ -23,6 +23,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -145,6 +146,7 @@ public class FacturaXml {
         return sw;
     }
 
+    @NoArgsConstructor
     @Getter
     @Setter
     private static class PseudoConcepto {
@@ -156,9 +158,6 @@ public class FacturaXml {
         private BigDecimal cantidad;
         private BigDecimal valorUnitario;
         private BigDecimal importe;
-
-        public PseudoConcepto() {
-        }
 
         public Comprobante.Conceptos.Concepto shapeConceptoTag(
                 ObjectFactory cfdiFactory) {
