@@ -25,6 +25,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.NonNull;
 
 @AllArgsConstructor
@@ -114,8 +115,21 @@ public class FacturaXml {
         return rec;
     }
 
-    private Comprobante.Conceptos.Concepto shapeConceptoTag(PseudoConcepto c) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private Comprobante.Conceptos.Concepto shapeConceptoTag(
+            ObjectFactory cfdiFactory,
+            PseudoConcepto psc) {
+
+        Comprobante.Conceptos.Concepto c = cfdiFactory.createComprobanteConceptosConcepto();
+
+        c.setClaveProdServ(c.getClaveProdServ());
+        c.setCantidad(c.getCantidad());
+        c.setClaveUnidad(c.getClaveUnidad());
+        c.setUnidad(c.getUnidad());
+        c.setDescripcion(c.getDescripcion());
+        c.setValorUnitario(c.getValorUnitario());
+        c.setImporte(c.getImporte());
+
+        return c;
     }
 
     private Comprobante.Conceptos shapeConceptosTag(
@@ -125,7 +139,7 @@ public class FacturaXml {
         Comprobante.Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
 
         for (PseudoConcepto psc : listPscs) {
-            conceptos.getConcepto().add(shapeConceptoTag(psc));
+            conceptos.getConcepto().add(shapeConceptoTag(cfdiFactory, psc));
         }
 
         return conceptos;
@@ -148,9 +162,20 @@ public class FacturaXml {
         return sw;
     }
 
+    @Getter
+    @Setter
     private static class PseudoConcepto {
+
+        private String claveProdServ;
+        private String claveUnidad;
+        private String unidad;
+        private String descripcion;
+        private BigDecimal cantidad;
+        private BigDecimal valorUnitario;
+        private BigDecimal importe;
 
         public PseudoConcepto() {
         }
+
     }
 }
