@@ -79,6 +79,20 @@ public class FacturaXml {
         return comprobante;
     }
 
+    private Comprobante.Emisor shapeEmisorTag(ObjectFactory cfdiFactory,
+            final String emirfc,
+            final String eminom,
+            final String regimen) {
+
+        Comprobante.Emisor emisor = cfdiFactory.createComprobanteEmisor();
+
+        emisor.setRfc(emirfc);
+        emisor.setNombre(eminom);
+        emisor.setRegimenFiscal(regimen);
+
+        return emisor;
+    }
+
     public static String render(Request cfdiReq, IStorage st) throws FormatError, StorageError {
 
         FacturaXml ic = new FacturaXml(cfdiReq, st);
