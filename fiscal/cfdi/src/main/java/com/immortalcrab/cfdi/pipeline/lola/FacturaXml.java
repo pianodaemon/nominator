@@ -93,6 +93,19 @@ public class FacturaXml {
         return emisor;
     }
 
+    private Comprobante.Receptor shapeReceptorTag(ObjectFactory cfdiFactory,
+            final String cterfc,
+            final String ctenom,
+            CUsoCFDI uso) {
+        
+            Comprobante.Receptor rec = cfdiFactory.createComprobanteReceptor();
+            rec.setRfc(cterfc);
+            rec.setNombre(ctenom);
+            rec.setUsoCFDI(uso);
+            
+            return rec;
+    }
+
     public static String render(Request cfdiReq, IStorage st) throws FormatError, StorageError {
 
         FacturaXml ic = new FacturaXml(cfdiReq, st);
