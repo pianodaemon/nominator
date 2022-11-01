@@ -5,26 +5,18 @@ import java.util.Optional;
 import com.immortalcrab.nominator.dal.dto.EmployeeDto;
 import com.immortalcrab.nominator.dal.dto.OrganizationDto;
 
-
 public interface NominatorDao {
 
-    public EmployeeDto createEmployee(
-            final String name,
-            final String surname,
-            final String optionalSurname,
-            final String identifier,
-            final String curp,
-            final String imss,
-            final String orgName);
+        public EmployeeDto createEmployee(final EmployeeDto dto);
 
-    public Optional<EmployeeDto> searchEmployee(String fullName);
+        public Optional<EmployeeDto> searchEmployee(String fullName);
 
-    public OrganizationDto createOrganization(
-            final String identifier,
-            final String orgName,
-            final String aka,
-            final Integer regimen,
-            final String regimenEmployer);
+        public OrganizationDto createOrganization(
+                        final String identifier,
+                        final String orgName,
+                        final String aka,
+                        final Integer regimen,
+                        final String regimenEmployer);
 
-    public Optional<OrganizationDto> searchOrganization(String aka);
+        public Optional<OrganizationDto> searchOrganization(String aka);
 }

@@ -32,31 +32,24 @@ public class DynamoDBNominatorDao implements NominatorDao {
     }
 
     private @NonNull DynDBNominatorConfig conf;
-    
+
     public DynamoDBNominatorDao() {
 
         this(new DynDBNominatorConfig());
     }
 
-    public EmployeeDto createEmployee(
-            final String name,
-            final String surname,
-            final String optionalSurname,
-            final String identifier,
-            final String curp,
-            final String imss,
-            final String orgName) {
+    public EmployeeDto createEmployee(final EmployeeDto dto) {
 
         final String nature = Nature.PERSON.name();
 
         Employee target = new Employee();
-        target.setName(name);
-        target.setSurname(surname);
-        target.setOptionalSurname(Optional.ofNullable(optionalSurname).orElse(""));
-        target.setIdentifier(identifier);
-        target.setCurp(curp);
-        target.setImss(imss);
-        target.setOrgName(orgName);
+        target.setName(dto.getName());
+        target.setSurname(dto.getSurname());
+        target.setOptionalSurname(Optional.ofNullable(dto.getOptionalSurname()).orElse(""));
+        target.setIdentifier(dto.getIdentifier());
+        target.setCurp(dto.getCurp());
+        target.setImss(dto.getImss());
+        target.setOrgName(dto.getOrgName());
         target.setNature(nature);
 
         // Full name's formation
@@ -71,7 +64,9 @@ public class DynamoDBNominatorDao implements NominatorDao {
         this.getConf().getMapper().save(target);
         log.info("Employee " + target.toString() + " has been created");
 
-        return DataTransferObjectConverter.basic(this.getConf().getMapper().load(Employee.class, orgName, identifier));
+        return DataTransferObjectConverter.basic(
+                this.getConf().getMapper().load(
+                        Employee.class, dto.getOrgName(), dto.getIdentifier()));
     }
 
     @Override
@@ -89,7 +84,6 @@ public class DynamoDBNominatorDao implements NominatorDao {
 
         return Optional.ofNullable(rl.isEmpty() ? null : DataTransferObjectConverter.basic(rl.get(0)));
     }
-
 
     public void deleteEmployee(final String issuer, final String identifier) {
         Employee target = new Employee();
@@ -122,7 +116,8 @@ public class DynamoDBNominatorDao implements NominatorDao {
         target.setAka(aka);
         this.getConf().getMapper().save(target);
 
-        return DataTransferObjectConverter.basic(this.getConf().getMapper().load(Organization.class, orgName, identifier));
+        return DataTransferObjectConverter
+                .basic(this.getConf().getMapper().load(Organization.class, orgName, identifier));
     }
 
     @Override

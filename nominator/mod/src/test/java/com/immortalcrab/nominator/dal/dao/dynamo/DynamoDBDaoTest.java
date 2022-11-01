@@ -15,34 +15,39 @@ class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
     @Test
     void createAndFindEmployee() {
 
-        final String orgName = "ORG#KACE8001104V0";
-        final String name = "Edwin";
-        final String surname = "Plauchu";
-        final String optionalSurname = "Camacho";
-        final String employeeIdentifier = "EMP#PACE8001104V2";
-        final String curp = "OEAF771012HMCRGR09";
-        final String imss = "0f9j0f9j9fj3049jf0";
+        EmployeeDto req = new EmployeeDto();
+        req.setName("Edwin");
+        req.setSurname("Plauchu");
+        req.setOptionalSurname("Camacho");
+        req.setIdentifier("EMP#PACE8001104V2");
+        req.setImss("0f9j0f9j9fj3049jf0");
+        req.setCurp("OEAF771012HMCRGR09");
+        req.setOrgName("ORG#KACE8001104V0");
 
-        _nominatorDao.createEmployee(
-                name, surname, optionalSurname, employeeIdentifier, curp, imss, orgName);
-
+        _nominatorDao.createEmployee(req);
 
         Optional<EmployeeDto> dto = _nominatorDao.searchEmployee(new StringSubstitutor(
-                ImmutableMap.of("v0", name, "v1", surname, "v2", optionalSurname))
+                ImmutableMap.of(
+                        "v0", req.getName(),
+                        "v1", req.getSurname(),
+                        "v2", req.getOptionalSurname()))
                 .replace("${v0} #${v1} #${v2}"));
 
         assertTrue(dto.isPresent());
-        assertTrue(dto.get().getOrgName().equals(orgName));
-        assertTrue(dto.get().getIdentifier().equals(employeeIdentifier));
-        assertTrue(dto.get().getCurp().equals(curp));
-        assertTrue(dto.get().getName().equals(name));
-        assertTrue(dto.get().getSurname().equals(surname));
-        assertTrue(dto.get().getOptionalSurname().equals(optionalSurname));
+        assertTrue(dto.get().getOrgName().equals(req.getOrgName()));
+        assertTrue(dto.get().getIdentifier().equals(req.getIdentifier()));
+        assertTrue(dto.get().getCurp().equals(req.getCurp()));
+        assertTrue(dto.get().getName().equals(req.getName()));
+        assertTrue(dto.get().getSurname().equals(req.getSurname()));
+        assertTrue(dto.get().getOptionalSurname().equals(req.getOptionalSurname()));
 
         // Verification of the full name's formation
         {
             assertTrue(dto.get().getFullName().equals(new StringSubstitutor(
-                    ImmutableMap.of("v0", name, "v1", surname, "v2", optionalSurname))
+                    ImmutableMap.of(
+                            "v0", req.getName(),
+                            "v1", req.getSurname(),
+                            "v2", req.getOptionalSurname()))
                     .replace("${v0} #${v1} #${v2}")));
         }
     }
@@ -78,30 +83,36 @@ class DynamoDBDaoTest extends PillarDynamoDBDaoTest {
         final String orgIdentifier = sub.replace("${org}#PROF00");
         final String aka = "Immortal crab system incorporated";
 
-        OrganizationDto newerOrg = _nominatorDao.createOrganization(orgIdentifier, orgName, aka, regimen, regimenEmployer);
+        OrganizationDto newerOrg = _nominatorDao.createOrganization(orgIdentifier, orgName, aka, regimen,
+                regimenEmployer);
 
         {
-            final String name = "Edwin";
-            final String surname = "Plauchu";
-            final String optionalSurname = "Camacho";
-            final String employeeIdentifier = "EMP#PACE8001104V2";
-            final String curp = "OEAF771012HMCRGR09";
-            final String imss = "0f9j0f9j9fj3049jf0";
+            EmployeeDto req = new EmployeeDto();
+            req.setName("Edwin");
+            req.setSurname("Plauchu");
+            req.setOptionalSurname("Camacho");
+            req.setIdentifier("EMP#PACE8001104V2");
+            req.setImss("0f9j0f9j9fj3049jf0");
+            req.setCurp("OEAF771012HMCRGR09");
+            req.setOrgName(newerOrg.getOrgName());
 
-            EmployeeDto newerEmployee = _nominatorDao.createEmployee(
-                    name, surname, optionalSurname, employeeIdentifier, curp, imss, newerOrg.getOrgName());
+            EmployeeDto newerEmployee = _nominatorDao.createEmployee(req);
+
             assertTrue(newerEmployee.getOrgName().equals(newerOrg.getOrgName()));
-            assertTrue(newerEmployee.getIdentifier().equals(employeeIdentifier));
-            assertTrue(newerEmployee.getCurp().equals(curp));
-            assertTrue(newerEmployee.getImss().equals(imss));
-            assertTrue(newerEmployee.getName().equals(name));
-            assertTrue(newerEmployee.getSurname().equals(surname));
-            assertTrue(newerEmployee.getOptionalSurname().equals(optionalSurname));
+            assertTrue(newerEmployee.getIdentifier().equals(req.getIdentifier()));
+            assertTrue(newerEmployee.getCurp().equals(req.getCurp()));
+            assertTrue(newerEmployee.getImss().equals(req.getImss()));
+            assertTrue(newerEmployee.getName().equals(req.getName()));
+            assertTrue(newerEmployee.getSurname().equals(req.getSurname()));
+            assertTrue(newerEmployee.getOptionalSurname().equals(req.getOptionalSurname()));
 
             // Verification of the full name's formation
             {
                 assertTrue(newerEmployee.getFullName().equals(new StringSubstitutor(
-                        ImmutableMap.of("v0", name, "v1", surname, "v2", optionalSurname))
+                        ImmutableMap.of(
+                                "v0", req.getName(),
+                                "v1", req.getSurname(),
+                                "v2", req.getOptionalSurname()))
                         .replace("${v0} #${v1} #${v2}")));
             }
         }
