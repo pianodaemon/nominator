@@ -16,6 +16,7 @@ import mx.gob.sat.sitio_internet.cfd.catalogos.CUsoCFDI;
 
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import javax.xml.datatype.DatatypeFactory;
@@ -30,8 +31,10 @@ import lombok.NonNull;
 @Getter
 public class FacturaXml {
 
-    private final @NonNull Request cfdiReq;
-    private final @NonNull IStorage st;
+    private final @NonNull
+    Request cfdiReq;
+    private final @NonNull
+    IStorage st;
 
     private static final String NATIONAL_CURRENCY = "MXN";
     private static final String NO_CURRENCY = "XXX";
@@ -55,6 +58,7 @@ public class FacturaXml {
 
         Comprobante comprobante = cfdiFactory.createComprobante();
         comprobante.setVersion("4.0");
+        comprobante.setTipoDeComprobante(CTipoDeComprobante.I);
         comprobante.setLugarExpedicion(emizip);
         CMetodoPago metpagVal = CMetodoPago.fromValue(metpag);
         comprobante.setMetodoPago(metpagVal);
@@ -101,13 +105,30 @@ public class FacturaXml {
             final String cterfc,
             final String ctenom,
             CUsoCFDI uso) {
-        
-            Comprobante.Receptor rec = cfdiFactory.createComprobanteReceptor();
-            rec.setRfc(cterfc);
-            rec.setNombre(ctenom);
-            rec.setUsoCFDI(uso);
-            
-            return rec;
+
+        Comprobante.Receptor rec = cfdiFactory.createComprobanteReceptor();
+        rec.setRfc(cterfc);
+        rec.setNombre(ctenom);
+        rec.setUsoCFDI(uso);
+
+        return rec;
+    }
+
+    private Comprobante.Conceptos.Concepto shapeConceptoTag(PseudoConcepto c) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private Comprobante.Conceptos shapeConceptosTag(
+            ObjectFactory cfdiFactory,
+            List<PseudoConcepto> listPscs) {
+
+        Comprobante.Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
+
+        for (PseudoConcepto psc : listPscs) {
+            conceptos.getConcepto().add(shapeConceptoTag(psc));
+        }
+
+        return conceptos;
     }
 
     public static String render(Request cfdiReq, IStorage st) throws FormatError, StorageError {
@@ -123,10 +144,13 @@ public class FacturaXml {
         StringWriter sw = new StringWriter();
 
         ObjectFactory cfdiFactory = new ObjectFactory();
-        var cfdi = cfdiFactory.createComprobante();
-        cfdi.setVersion("4.0");
-        cfdi.setTipoDeComprobante(CTipoDeComprobante.I);
 
         return sw;
+    }
+
+    private static class PseudoConcepto {
+
+        public PseudoConcepto() {
+        }
     }
 }
