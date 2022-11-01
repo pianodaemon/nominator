@@ -5,9 +5,8 @@ import com.immortalcrab.cfdi.error.FormatError;
 import com.immortalcrab.cfdi.pipeline.Request;
 import com.immortalcrab.cfdi.pipeline.IStorage;
 
-import javax.xml.datatype.DatatypeFactory;
-
 import mx.gob.sat.cfd._4.ObjectFactory;
+import mx.gob.sat.cfd._4.Comprobante;
 import mx.gob.sat.sitio_internet.cfd.catalogos.CMetodoPago;
 import mx.gob.sat.sitio_internet.cfd.catalogos.CMoneda;
 import mx.gob.sat.sitio_internet.cfd.catalogos.CPais;
@@ -18,12 +17,13 @@ import mx.gob.sat.sitio_internet.cfd.catalogos.CUsoCFDI;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.util.Optional;
+
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import mx.gob.sat.cfd._4.Comprobante;
 
 @AllArgsConstructor
 @Getter
