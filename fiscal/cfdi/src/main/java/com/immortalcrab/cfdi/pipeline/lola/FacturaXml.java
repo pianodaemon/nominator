@@ -115,23 +115,6 @@ public class FacturaXml {
         return rec;
     }
 
-    private Comprobante.Conceptos.Concepto shapeConceptoTag(
-            ObjectFactory cfdiFactory,
-            PseudoConcepto psc) {
-
-        Comprobante.Conceptos.Concepto c = cfdiFactory.createComprobanteConceptosConcepto();
-
-        c.setClaveProdServ(c.getClaveProdServ());
-        c.setCantidad(c.getCantidad());
-        c.setClaveUnidad(c.getClaveUnidad());
-        c.setUnidad(c.getUnidad());
-        c.setDescripcion(c.getDescripcion());
-        c.setValorUnitario(c.getValorUnitario());
-        c.setImporte(c.getImporte());
-
-        return c;
-    }
-
     private Comprobante.Conceptos shapeConceptosTag(
             ObjectFactory cfdiFactory,
             List<PseudoConcepto> listPscs) {
@@ -139,7 +122,7 @@ public class FacturaXml {
         Comprobante.Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
 
         for (PseudoConcepto psc : listPscs) {
-            conceptos.getConcepto().add(shapeConceptoTag(cfdiFactory, psc));
+            conceptos.getConcepto().add(psc.shapeConceptoTag(cfdiFactory));
         }
 
         return conceptos;
@@ -177,5 +160,20 @@ public class FacturaXml {
         public PseudoConcepto() {
         }
 
+        public Comprobante.Conceptos.Concepto shapeConceptoTag(
+                ObjectFactory cfdiFactory) {
+
+            Comprobante.Conceptos.Concepto c = cfdiFactory.createComprobanteConceptosConcepto();
+
+            c.setClaveProdServ(this.getClaveProdServ());
+            c.setCantidad(this.getCantidad());
+            c.setClaveUnidad(this.getClaveUnidad());
+            c.setUnidad(this.getUnidad());
+            c.setDescripcion(this.getDescripcion());
+            c.setValorUnitario(this.getValorUnitario());
+            c.setImporte(this.getImporte());
+
+            return c;
+        }
     }
 }
