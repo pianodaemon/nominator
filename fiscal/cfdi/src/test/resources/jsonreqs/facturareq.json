@@ -1,0 +1,68 @@
+{
+    "time_stamp": "2022-10-11T18:14:20",
+    "control": {
+        "serie": "RRM",
+        "folio": "5457"
+    },
+    "emisor": {
+        "rfc": "RRM031001QE7",
+        "razon_social": "RR MEDICA S.A. DE C.V.",
+        "regimen_fiscal": "601"
+    },
+    "numero_certificado": "00001000000505709200",
+    "receptor": {
+        "rfc": "IMS421231I45",
+        "razon_social": "INSTITUTO MEXICANO DEL SEGURO SOCIAL/ HOSPITAL GENERAL DE ZONA #12",
+        "uso_cfdi": "G01"
+    },
+    "metodo_pago": "PUE",
+    "moneda": {
+        "iso_4217": "MXN",
+        "simbolo": "$",
+        "tipo_de_cambio": 18.8539
+    },
+    "forma_pago": {
+        "clave": "03",
+        "cuenta": "0119"
+    },
+    "lugar_expedicion": "67100",
+    "conceptos": [
+        {
+            "sku": "379.107.0109.00.01",
+            "descripcion": "379.107.0109.00.01 BRAZALETE ADULTO ESTANDAR. PARA SU USO EN EL EQUIPO: EQUIPO DE ANESTESIA INTERMEDIO PARA SEGUNDO NIVEL. CLAVE: 531.053.0109. MARCA: DATEX-OHMEDA. MODELO: AESTIVA. NUMERO DE CATALOGO: 572435.",
+            "unidad": "H87",
+            "prodserv": "42181606",
+            "cantidad": 1.0,
+            "precio_unitario": 100.0,
+            "importe": 100.0,
+            "descto": 0.0,
+            "importe_ieps": 0.0,
+            "importe_impuesto": 16.0,
+            "importe_ret": 0.0,
+            "tasa_ieps": 0.0,
+            "tasa_impuesto": 16.0,
+            "tasa_ret": 0.0,
+            "ieps_id": 0,
+            "impuesto_id": 1,
+            "ret_id": 0,
+            "prod_alias": ""
+        }
+    ],
+    "traslados": [
+        {
+            "impuesto": "IVA",
+            "clave": "002",
+            "importe": 16.0,
+            "tasa": 16.0
+        }
+    ],
+    "retenciones": [],
+    "totales": {
+        "monto_total": 116.0,
+        "importe_sum": 100.0,
+        "importe_sum_impuesto": 16.0,
+        "importe_sum_ieps": 0.0,
+        "importe_sum_ret": 0.0,
+        "descto_sum": 0.0
+    }
+}
