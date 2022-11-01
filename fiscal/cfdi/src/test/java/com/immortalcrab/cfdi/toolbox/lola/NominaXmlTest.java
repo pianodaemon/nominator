@@ -21,8 +21,12 @@ import com.immortalcrab.cfdi.pipeline.lola.NominaXml;
 @TestInstance(Lifecycle.PER_CLASS)
 public class NominaXmlTest {
 
+    private ClassLoader _cloader;
+
     @BeforeAll
     public void setUpClass() {
+
+        _cloader = getClass().getClassLoader();
     }
 
     @AfterAll
@@ -41,7 +45,7 @@ public class NominaXmlTest {
     void loadReqFromReader() {
 
         try {
-            InputStream is = getClass().getClassLoader().getResourceAsStream("jsonreqs");
+            InputStream is = _cloader.getResourceAsStream("jsonreqs/nominareq.json");
             InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
 
             NominaRequest.render(reader);
