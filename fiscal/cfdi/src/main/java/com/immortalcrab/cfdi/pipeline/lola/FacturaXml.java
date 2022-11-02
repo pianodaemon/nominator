@@ -70,9 +70,9 @@ public class FacturaXml {
             Map<String, Object> formaPagoDic = this.obtainFormaPagoMap();
             Optional<Object> clave = Optional.ofNullable(formaPagoDic.get("clave"));
 
-            Optional<Object> emizip = Optional.ofNullable(cfdiReq.getDs().get("lugar_expedicion"));
-            Optional<Object> nocert = Optional.ofNullable(cfdiReq.getDs().get("numero_certificado"));
-            Optional<Object> metpago = Optional.ofNullable(cfdiReq.getDs().get("metodo_pago"));
+            Optional<Object> emizip = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "lugar_expedicion");
+            Optional<Object> nocert = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "numero_certificado");
+            Optional<Object> metpago = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(),"metodo_pago");
 
             comprobante.setVersion("4.0");
             comprobante.setTipoDeComprobante(CTipoDeComprobante.I);
