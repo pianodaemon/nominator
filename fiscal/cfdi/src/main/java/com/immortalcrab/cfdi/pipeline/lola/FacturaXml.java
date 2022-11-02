@@ -47,6 +47,8 @@ public class FacturaXml {
 
     private Comprobante shapeComprobanteTag(Request cfdiReq, ObjectFactory cfdiFactory) throws FormatError {
 
+        Comprobante comprobante = cfdiFactory.createComprobante();
+
         try {
 
             Optional<Object> timeStamp = Optional.ofNullable(cfdiReq.getDs().get("time_stamp"));
@@ -72,21 +74,31 @@ public class FacturaXml {
             Optional<Object> nocert = Optional.ofNullable(cfdiReq.getDs().get("numero_certificado"));
             Optional<Object> metpago = Optional.ofNullable(cfdiReq.getDs().get("metodo_pago"));
 
-            return LegoTagAssembler.yieldComprobante(
-                    cfdiFactory,
-                    timeStampGregorianCalendar,
-                    (String) serie.orElseThrow(),
-                    (String) folio.orElseThrow(),
-                    (String) nocert.orElseThrow(),
-                    "",
-                    (String) emizip.orElseThrow(),
-                    (String) moneda.orElseThrow(),
-                    Optional.ofNullable(tpocam.isPresent() ? new BigDecimal((String) tpocam.get()) : null),
-                    new BigDecimal((String) subtot.orElseThrow()),
-                    new BigDecimal((String) total.orElseThrow()),
-                    (String) metpago.orElseThrow(),
-                    "",
-                    (String) clave.orElseThrow());
+            comprobante.setVersion("4.0");
+            comprobante.setTipoDeComprobante(CTipoDeComprobante.I);
+            comprobante.setLugarExpedicion((String) emizip.orElseThrow());
+            CMetodoPago metpagVal = CMetodoPago.fromValue((String) metpago.orElseThrow());
+            comprobante.setMetodoPago(metpagVal);
+            comprobante.setTipoDeComprobante(CTipoDeComprobante.I);
+            comprobante.setTotal(new BigDecimal((String) total.orElseThrow()));
+            comprobante.setMoneda(CMoneda.fromValue((String) moneda.orElseThrow()));
+
+            if (tpocam.isPresent()
+                    && !moneda.equals(FacturaXml.NATIONAL_CURRENCY)
+                    && !moneda.equals(FacturaXml.NO_CURRENCY)) {
+
+                comprobante.setTipoCambio(new BigDecimal((String) tpocam.get()));
+            }
+
+            comprobante.setCertificado("");
+            comprobante.setSubTotal(new BigDecimal((String) subtot.orElseThrow()));
+            comprobante.setCondicionesDePago("");
+            comprobante.setNoCertificado((String) nocert.orElseThrow());
+            comprobante.setFormaPago((String) clave.orElseThrow());
+            comprobante.setFecha(timeStampGregorianCalendar);
+            comprobante.setSerie((String) serie.orElseThrow());
+            comprobante.setFolio((String) folio.orElseThrow());
+
         } catch (DatatypeConfigurationException ex) {
             log.error("The time stamp is bad formated");
             throw new FormatError("time stamp incorrect format", ex);
@@ -94,6 +106,8 @@ public class FacturaXml {
             log.error("One or more of the mandatory elements is missing");
             throw new FormatError("mandatory element in request is missing", ex);
         }
+
+        return comprobante;
     }
 
     public static String render(Request cfdiReq, IStorage st) throws FormatError, StorageError {
