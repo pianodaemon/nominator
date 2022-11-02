@@ -49,6 +49,19 @@ public class FacturaXml {
     private static final String NATIONAL_CURRENCY = "MXN";
     private static final String NO_CURRENCY = "XXX";
 
+    private Comprobante.Conceptos shapeConceptosTag(
+            ObjectFactory cfdiFactory,
+            List<PseudoConcepto> listPscs) {
+
+        Comprobante.Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
+
+        for (PseudoConcepto psc : listPscs) {
+            conceptos.getConcepto().add(psc.shapeConceptoTag(cfdiFactory));
+        }
+
+        return conceptos;
+    }
+
     private Comprobante.Receptor shapeReceptorTag(ObjectFactory cfdiFactory) throws FormatError {
 
         Comprobante.Receptor rec = cfdiFactory.createComprobanteReceptor();
