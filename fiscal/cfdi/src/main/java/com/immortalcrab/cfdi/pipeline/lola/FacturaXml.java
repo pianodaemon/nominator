@@ -176,6 +176,10 @@ public class FacturaXml {
             Optional<Object> dict = Optional.ofNullable(m.get(k));
             return (Map<String, Object>) dict.orElseThrow();
         }
+       
+        private static Optional<Object> obtainObjFromKey(Map<String, Object> m, final String k){
+            return Optional.ofNullable(m.get(k));
+        }
     }
 
     private static Comprobante.Receptor yieldReceptor(
