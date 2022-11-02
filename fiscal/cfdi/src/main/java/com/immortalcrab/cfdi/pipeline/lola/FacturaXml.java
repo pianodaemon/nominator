@@ -49,6 +49,27 @@ public class FacturaXml {
     private static final String NATIONAL_CURRENCY = "MXN";
     private static final String NO_CURRENCY = "XXX";
 
+    private List<PseudoConcepto> shapePcs() throws FormatError {
+
+        Optional<Object> cs = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "conceptos");
+        List<PseudoConcepto> pcs = new LinkedList<PseudoConcepto>();
+        List<Map<String, Object>> items = (List<Map<String, Object>>) cs.orElseThrow();
+        for (Map<String, Object> i : items) {
+
+            PseudoConcepto psc = new PseudoConcepto();
+
+            psc.setClaveProdServ((String) LegoTagAssembler.obtainObjFromKey(i, "prodserv").orElseThrow());
+            psc.setDescripcion((String) LegoTagAssembler.obtainObjFromKey(i, "descripcion").orElseThrow());
+            psc.setUnidad((String) LegoTagAssembler.obtainObjFromKey(i, "unidad").orElseThrow());
+
+            psc.setSku((String) LegoTagAssembler.obtainObjFromKey(i, "sku").orElseThrow());
+
+            pcs.add(psc);
+        }
+
+        return pcs;
+    }
+
     private Comprobante.Conceptos shapeConceptosTag(
             ObjectFactory cfdiFactory,
             List<PseudoConcepto> listPscs) {
@@ -205,6 +226,9 @@ public class FacturaXml {
         private BigDecimal valorUnitario;
         private BigDecimal importe;
 
+        // The optional one out of gob regulations
+        private String sku;
+  
         public Comprobante.Conceptos.Concepto shapeConceptoTag(
                 ObjectFactory cfdiFactory) {
 
