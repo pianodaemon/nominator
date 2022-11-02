@@ -16,6 +16,7 @@ import mx.gob.sat.sitio_internet.cfd.catalogos.CUsoCFDI;
 
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
