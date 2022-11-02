@@ -79,7 +79,7 @@ public class FacturaXml {
             rec.setNombre((String) ctenom.orElseThrow());
             rec.setUsoCFDI(uso);
         } catch (NoSuchElementException ex) {
-            log.error("One or more of the mandatory elements is missing");
+            log.error("One or more of the mandatory elements of Receptor tag is missing");
             throw new FormatError("mandatory element in request is missing", ex);
         }
         return rec;
@@ -100,7 +100,7 @@ public class FacturaXml {
             emisor.setNombre((String) eminom.orElseThrow());
             emisor.setRegimenFiscal((String) regimen.orElseThrow());
         } catch (NoSuchElementException ex) {
-            log.error("One or more of the mandatory elements is missing");
+            log.error("One or more of the mandatory elements of Emisor tag is missing");
             throw new FormatError("mandatory element in request is missing", ex);
         }
 
@@ -161,10 +161,10 @@ public class FacturaXml {
             comprobante.setFolio((String) folio.orElseThrow());
 
         } catch (DatatypeConfigurationException ex) {
-            log.error("The time stamp is bad formated");
+            log.error("Comprobante tag can not include a time stamp badly formated");
             throw new FormatError("time stamp incorrect format", ex);
         } catch (NoSuchElementException ex) {
-            log.error("One or more of the mandatory elements is missing");
+            log.error("One or more of the mandatory elements of Comprobante tag is missing");
             throw new FormatError("mandatory element in request is missing", ex);
         }
 
