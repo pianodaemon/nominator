@@ -51,10 +51,6 @@ public class FacturaXml {
 
         try {
 
-            Optional<Object> timeStamp = Optional.ofNullable(cfdiReq.getDs().get("time_stamp"));
-            XMLGregorianCalendar timeStampGregorianCalendar = DatatypeFactory.
-                    newInstance().newXMLGregorianCalendar((String) timeStamp.orElseThrow());
-
             Map<String, Object> controlDic = this.obtainControlMap();
             Optional<Object> serie = Optional.ofNullable(controlDic.get("serie"));
             Optional<Object> folio = Optional.ofNullable(controlDic.get("folio"));
@@ -73,6 +69,9 @@ public class FacturaXml {
             Optional<Object> emizip = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "lugar_expedicion");
             Optional<Object> nocert = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "numero_certificado");
             Optional<Object> metpago = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(),"metodo_pago");
+            Optional<Object> timeStamp = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(),"time_stamp");
+            XMLGregorianCalendar timeStampGregorianCalendar = DatatypeFactory.
+                    newInstance().newXMLGregorianCalendar((String) timeStamp.orElseThrow());
 
             comprobante.setVersion("4.0");
             comprobante.setTipoDeComprobante(CTipoDeComprobante.I);
