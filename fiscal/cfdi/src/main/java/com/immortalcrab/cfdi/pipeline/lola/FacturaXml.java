@@ -200,7 +200,7 @@ public class FacturaXml {
         Comprobante comprobante = this.shapeComprobanteTag(cfdiFactory);
         Comprobante.Emisor emisor = this.shapeEmisorTag(cfdiFactory);
         Comprobante.Receptor receptor = shapeReceptorTag( cfdiFactory);
-
+        Comprobante.Conceptos conceptos = this.shapeConceptosTag(cfdiFactory, shapePcs());
         return sw;
     }
 
