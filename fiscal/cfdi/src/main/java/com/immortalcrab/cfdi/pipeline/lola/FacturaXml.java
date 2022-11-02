@@ -49,6 +49,28 @@ public class FacturaXml {
     private static final String NATIONAL_CURRENCY = "MXN";
     private static final String NO_CURRENCY = "XXX";
 
+    private Comprobante.Emisor shapeEmisorTag(ObjectFactory cfdiFactory) throws FormatError {
+
+        Comprobante.Emisor emisor = cfdiFactory.createComprobanteEmisor();
+
+        try {
+
+            Map<String, Object> controlDic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "emisor");
+            Optional<Object> emirfc = Optional.ofNullable(controlDic.get("rfc"));
+            Optional<Object> eminom = Optional.ofNullable(controlDic.get("razon_social"));
+            Optional<Object> regimen = Optional.ofNullable(controlDic.get("regimen_fiscal"));
+
+            emisor.setRfc((String) emirfc.orElseThrow());
+            emisor.setNombre((String) eminom.orElseThrow());
+            emisor.setRegimenFiscal((String) regimen.orElseThrow());
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements is missing");
+            throw new FormatError("mandatory element in request is missing", ex);
+        }
+
+        return emisor;
+    }
+
     private Comprobante shapeComprobanteTag(ObjectFactory cfdiFactory) throws FormatError {
 
         Comprobante comprobante = cfdiFactory.createComprobante();
@@ -119,6 +141,7 @@ public class FacturaXml {
         ObjectFactory cfdiFactory = new ObjectFactory();
 
         Comprobante comprobante = this.shapeComprobanteTag(cfdiFactory);
+        Comprobante.Emisor emisor = this.shapeEmisorTag(cfdiFactory);
 
         return sw;
     }
@@ -187,21 +210,6 @@ public class FacturaXml {
         rec.setUsoCFDI(uso);
 
         return rec;
-    }
-
-    private static Comprobante.Emisor yieldEmisor(
-            ObjectFactory cfdiFactory,
-            final String emirfc,
-            final String eminom,
-            final String regimen) {
-
-        Comprobante.Emisor emisor = cfdiFactory.createComprobanteEmisor();
-
-        emisor.setRfc(emirfc);
-        emisor.setNombre(eminom);
-        emisor.setRegimenFiscal(regimen);
-
-        return emisor;
     }
 
     public static Comprobante.Conceptos yieldConceptos(
