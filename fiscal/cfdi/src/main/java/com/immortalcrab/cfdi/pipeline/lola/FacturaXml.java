@@ -176,52 +176,6 @@ public class FacturaXml {
             Optional<Object> dict = Optional.ofNullable(m.get(k));
             return (Map<String, Object>) dict.orElseThrow();
         }
-
-        private static Comprobante yieldComprobante(
-                ObjectFactory cfdiFactory,
-                final XMLGregorianCalendar fechor,
-                final String serie,
-                final String folio,
-                final String nocert,
-                final String certb64,
-                final String emizip,
-                final String moneda,
-                final Optional<BigDecimal> tpocam,
-                final BigDecimal subtot,
-                final BigDecimal total,
-                final String metpag,
-                final String conpag,
-                final String forpag
-        ) {
-
-            Comprobante comprobante = cfdiFactory.createComprobante();
-            comprobante.setVersion("4.0");
-            comprobante.setTipoDeComprobante(CTipoDeComprobante.I);
-            comprobante.setLugarExpedicion(emizip);
-            CMetodoPago metpagVal = CMetodoPago.fromValue(metpag);
-            comprobante.setMetodoPago(metpagVal);
-            comprobante.setTipoDeComprobante(CTipoDeComprobante.I);
-            comprobante.setTotal(total);
-            comprobante.setMoneda(CMoneda.fromValue(moneda));
-
-            if (tpocam.isPresent()
-                    && !moneda.equals(FacturaXml.NATIONAL_CURRENCY)
-                    && !moneda.equals(FacturaXml.NO_CURRENCY)) {
-
-                comprobante.setTipoCambio(tpocam.get());
-            }
-
-            comprobante.setCertificado(certb64);
-            comprobante.setSubTotal(subtot);
-            comprobante.setCondicionesDePago(conpag);
-            comprobante.setNoCertificado(nocert);
-            comprobante.setFormaPago(forpag);
-            comprobante.setFecha(fechor);
-            comprobante.setSerie(serie);
-            comprobante.setFolio(folio);
-
-            return comprobante;
-        }
     }
 
     private static Comprobante.Receptor yieldReceptor(
