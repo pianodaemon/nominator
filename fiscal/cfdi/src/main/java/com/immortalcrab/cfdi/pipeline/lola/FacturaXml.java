@@ -42,12 +42,12 @@ public class FacturaXml {
     private final @NonNull
     IStorage st;
 
-    private static final String CFDI_PREFIX       = "cfdi";
-    private static final String CFDI_URI          = "http://www.sat.gob.mx/cfd/4";
-    private static final String schemaLocation    = "http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd";
+    private static final String CFDI_PREFIX = "cfdi";
+    private static final String CFDI_URI = "http://www.sat.gob.mx/cfd/4";
+    private static final String schemaLocation = "http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd";
 
     private static final String NATIONAL_CURRENCY = "MXN";
-    private static final String NO_CURRENCY       = "XXX";
+    private static final String NO_CURRENCY = "XXX";
 
     private Comprobante shapeComprobanteTag(ObjectFactory cfdiFactory) throws FormatError {
 
@@ -72,8 +72,8 @@ public class FacturaXml {
 
             Optional<Object> emizip = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "lugar_expedicion");
             Optional<Object> nocert = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "numero_certificado");
-            Optional<Object> metpago = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(),"metodo_pago");
-            Optional<Object> timeStamp = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(),"time_stamp");
+            Optional<Object> metpago = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "metodo_pago");
+            Optional<Object> timeStamp = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "time_stamp");
             XMLGregorianCalendar timeStampGregorianCalendar = DatatypeFactory.
                     newInstance().newXMLGregorianCalendar((String) timeStamp.orElseThrow());
 
@@ -113,14 +113,21 @@ public class FacturaXml {
         return comprobante;
     }
 
+    private StringWriter shape() throws FormatError {
+
+        StringWriter sw = new StringWriter();
+        ObjectFactory cfdiFactory = new ObjectFactory();
+
+        Comprobante comprobante = this.shapeComprobanteTag(cfdiFactory);
+
+        return sw;
+    }
+
     public static String render(Request cfdiReq, IStorage st) throws FormatError, StorageError {
 
         FacturaXml ic = new FacturaXml(cfdiReq, st);
-        ObjectFactory cfdiFactory = new ObjectFactory();
 
-        Comprobante comprobante = ic.shapeComprobanteTag(cfdiFactory);
-
-        StringWriter sw = new StringWriter();
+        StringWriter cfdi = ic.shape();
 
         return "It must be slightly implemented as it was in lola";
     }
@@ -162,8 +169,8 @@ public class FacturaXml {
             Optional<Object> dict = Optional.ofNullable(m.get(k));
             return (Map<String, Object>) dict.orElseThrow();
         }
-       
-        private static Optional<Object> obtainObjFromKey(Map<String, Object> m, final String k){
+
+        private static Optional<Object> obtainObjFromKey(Map<String, Object> m, final String k) {
             return Optional.ofNullable(m.get(k));
         }
     }
