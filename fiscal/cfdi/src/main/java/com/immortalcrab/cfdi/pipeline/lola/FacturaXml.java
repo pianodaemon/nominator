@@ -49,16 +49,39 @@ public class FacturaXml {
     private static final String NATIONAL_CURRENCY = "MXN";
     private static final String NO_CURRENCY = "XXX";
 
+    private Comprobante.Receptor shapeReceptorTag(ObjectFactory cfdiFactory) throws FormatError {
+
+        Comprobante.Receptor rec = cfdiFactory.createComprobanteReceptor();
+
+        try {
+
+            Map<String, Object> dic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "receptor");
+            Optional<Object> cterfc = Optional.ofNullable(dic.get("rfc"));
+            Optional<Object> ctenom = Optional.ofNullable(dic.get("razon_social"));
+            Optional<Object> proposito = Optional.ofNullable(dic.get("uso_cfdi"));
+
+            CUsoCFDI uso = CUsoCFDI.fromValue((String) proposito.orElseThrow());
+
+            rec.setRfc((String) cterfc.orElseThrow());
+            rec.setNombre((String) ctenom.orElseThrow());
+            rec.setUsoCFDI(uso);
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements is missing");
+            throw new FormatError("mandatory element in request is missing", ex);
+        }
+        return rec;
+    }
+
     private Comprobante.Emisor shapeEmisorTag(ObjectFactory cfdiFactory) throws FormatError {
 
         Comprobante.Emisor emisor = cfdiFactory.createComprobanteEmisor();
 
         try {
 
-            Map<String, Object> controlDic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "emisor");
-            Optional<Object> emirfc = Optional.ofNullable(controlDic.get("rfc"));
-            Optional<Object> eminom = Optional.ofNullable(controlDic.get("razon_social"));
-            Optional<Object> regimen = Optional.ofNullable(controlDic.get("regimen_fiscal"));
+            Map<String, Object> dic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "emisor");
+            Optional<Object> emirfc = Optional.ofNullable(dic.get("rfc"));
+            Optional<Object> eminom = Optional.ofNullable(dic.get("razon_social"));
+            Optional<Object> regimen = Optional.ofNullable(dic.get("regimen_fiscal"));
 
             emisor.setRfc((String) emirfc.orElseThrow());
             emisor.setNombre((String) eminom.orElseThrow());
@@ -196,20 +219,6 @@ public class FacturaXml {
         private static Optional<Object> obtainObjFromKey(Map<String, Object> m, final String k) {
             return Optional.ofNullable(m.get(k));
         }
-    }
-
-    private static Comprobante.Receptor yieldReceptor(
-            ObjectFactory cfdiFactory,
-            final String cterfc,
-            final String ctenom,
-            CUsoCFDI uso) {
-
-        Comprobante.Receptor rec = cfdiFactory.createComprobanteReceptor();
-        rec.setRfc(cterfc);
-        rec.setNombre(ctenom);
-        rec.setUsoCFDI(uso);
-
-        return rec;
     }
 
     public static Comprobante.Conceptos yieldConceptos(
