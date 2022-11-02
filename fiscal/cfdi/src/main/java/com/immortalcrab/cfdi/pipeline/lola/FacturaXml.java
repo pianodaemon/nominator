@@ -42,6 +42,9 @@ public class FacturaXml {
     private final @NonNull
     IStorage st;
 
+    private static final String CFDI_PREFIX       = "cfdi";
+    private static final String CFDI_URI          = "http://www.sat.gob.mx/cfd/4";
+
     private static final String NATIONAL_CURRENCY = "MXN";
     private static final String NO_CURRENCY = "XXX";
 
