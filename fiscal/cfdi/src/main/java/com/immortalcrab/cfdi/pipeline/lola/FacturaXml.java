@@ -51,19 +51,19 @@ public class FacturaXml {
 
         try {
 
-            Map<String, Object> controlDic = this.obtainControlMap();
+            Map<String, Object> controlDic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "control");
             Optional<Object> serie = Optional.ofNullable(controlDic.get("serie"));
             Optional<Object> folio = Optional.ofNullable(controlDic.get("folio"));
 
-            Map<String, Object> monedaDic = this.obtainMonedaMap();
+            Map<String, Object> monedaDic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "moneda");
             Optional<Object> moneda = Optional.ofNullable(monedaDic.get("iso_4217"));
             Optional<Object> tpocam = Optional.ofNullable(monedaDic.get("tipo_de_cambio"));
 
-            Map<String, Object> totalesDic = this.obtainTotalesMap();
+            Map<String, Object> totalesDic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "totales");
             Optional<Object> subtot = Optional.ofNullable(totalesDic.get("importe_sum"));
             Optional<Object> total = Optional.ofNullable(totalesDic.get("monto_total"));
 
-            Map<String, Object> formaPagoDic = this.obtainFormaPagoMap();
+            Map<String, Object> formaPagoDic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "forma_pago");
             Optional<Object> clave = Optional.ofNullable(formaPagoDic.get("clave"));
 
             Optional<Object> emizip = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "lugar_expedicion");
@@ -119,23 +119,6 @@ public class FacturaXml {
         StringWriter sw = new StringWriter();
 
         return "It must be slightly implemented as it was in lola";
-    }
-
-    private Map<String, Object> obtainControlMap() throws NoSuchElementException {
-        return LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "control");
-    }
-
-    private Map<String, Object> obtainMonedaMap() throws NoSuchElementException {
-
-        return LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "moneda");
-    }
-
-    private Map<String, Object> obtainTotalesMap() throws NoSuchElementException {
-        return LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "totales");
-    }
-
-    private Map<String, Object> obtainFormaPagoMap() throws NoSuchElementException {
-        return LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "forma_pago");
     }
 
     @NoArgsConstructor
