@@ -234,17 +234,4 @@ public class FacturaXml {
             return Optional.ofNullable(m.get(k));
         }
     }
-
-    public static Comprobante.Conceptos yieldConceptos(
-            ObjectFactory cfdiFactory,
-            List<PseudoConcepto> listPscs) {
-
-        Comprobante.Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
-
-        for (PseudoConcepto psc : listPscs) {
-            conceptos.getConcepto().add(psc.shapeConceptoTag(cfdiFactory));
-        }
-
-        return conceptos;
-    }
 }
