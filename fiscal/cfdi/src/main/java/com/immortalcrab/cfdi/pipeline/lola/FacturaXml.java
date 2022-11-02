@@ -48,7 +48,7 @@ public class FacturaXml {
     private static final String NATIONAL_CURRENCY = "MXN";
     private static final String NO_CURRENCY = "XXX";
 
-    private Comprobante shapeComprobanteTag(Request cfdiReq, ObjectFactory cfdiFactory) throws FormatError {
+    private Comprobante shapeComprobanteTag(ObjectFactory cfdiFactory) throws FormatError {
 
         Comprobante comprobante = cfdiFactory.createComprobante();
 
@@ -117,7 +117,7 @@ public class FacturaXml {
         FacturaXml ic = new FacturaXml(cfdiReq, st);
         ObjectFactory cfdiFactory = new ObjectFactory();
 
-        Comprobante comprobante = ic.shapeComprobanteTag(cfdiReq, cfdiFactory);
+        Comprobante comprobante = ic.shapeComprobanteTag(cfdiFactory);
 
         StringWriter sw = new StringWriter();
 
