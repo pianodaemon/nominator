@@ -44,9 +44,10 @@ public class FacturaXml {
 
     private static final String CFDI_PREFIX       = "cfdi";
     private static final String CFDI_URI          = "http://www.sat.gob.mx/cfd/4";
+    private static final String schemaLocation    = "http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd";
 
     private static final String NATIONAL_CURRENCY = "MXN";
-    private static final String NO_CURRENCY = "XXX";
+    private static final String NO_CURRENCY       = "XXX";
 
     private Comprobante shapeComprobanteTag(ObjectFactory cfdiFactory) throws FormatError {
 
