@@ -18,6 +18,12 @@ Resources:
     Properties:
       Name: !Sub cfdi-eventbus-${AWS::StackName}
 
+  CfdiInQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      FifoQueue: true
+      QueueName: !Sub cfdi-inqueue-${AWS::StackName}
+
   CfdiDataLake:
     Type: AWS::S3::Bucket
     Properties:
@@ -34,7 +40,7 @@ Resources:
       LoginProfile:
         Password: !Ref SubscriptorPwd
       Policies:
-        - PolicyName: !Sub cfdi-warehouse-access-${AWS::StackName}
+        - PolicyName: !Sub cfdi-datalake-access-${AWS::StackName}
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
