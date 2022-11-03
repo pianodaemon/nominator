@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create AWS Infra required for this proyect
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Subscriptor's configuration"
+        Parameters:
+          - SubscriptorPwd
+    ParameterLabels:
+      SubscriptorPwd:
+        default: "Password for this subscriptor account"
+
+Resources:
+  CfdiEventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: !Sub cfdi-eventbus-${AWS::StackName}
+
+  CfdiDataLake:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub cfdi-datalake-${AWS::StackName}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  Subscriptor:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: !Sub ${AWS::StackName}
+      LoginProfile:
+        Password: !Ref SubscriptorPwd
+      Policies:
+        - PolicyName: !Sub cfdi-warehouse-access-${AWS::StackName}
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - s3:*
+              Resource:
+                - !Sub arn:aws:s3:::${CfdiDataLake}
+                - !Sub arn:aws:s3:::${CfdiDataLake}/*
+
+  CfdiFactoryRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub cfdi-factoryrole-${AWS::StackName}
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+
+  CfdiFactoryFunc:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub cfdi-factoryfunc-${AWS::StackName}
+      Environment:
+        Variables:
+          ENV: !Ref SubscriptorEnv
+      Role: !GetAtt CfdiFactoryRole.Arn
+      Runtime: python3.7
+      Handler: index.my_handler
+      Code:
+        ZipFile: |
+          def my_handler(event, context):
+            print(event)
+            message = 'Hello Lambda World!'
+            return message
+
+
+Parameters:
+  SubscriptorPwd:
+    NoEcho: true
+    Description: The subscriptor account password
+    Type: String
+    MinLength: 1
+    MaxLength: 41
+
+  SubscriptorEnv:
+    Type: String
+    AllowedValues:
+      - dev
+      - test
+      - prod
+    Description: Environment in which the application will be deployed. Allowed values [dev, test, prod]

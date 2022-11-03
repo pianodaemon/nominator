@@ -46,7 +46,7 @@ __deploy_stack() {
         __prompt_env
         __prompt_passwd
 
-        local temp="subscriptor_stack.yaml"
+        local temp="infra-stack.yaml"
 
         # Verification of presence
         if [[ ! -f $temp ]]; then
