@@ -1,5 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Create AWS Infra required for this proyect
+Description: Create AWS Infra required for this project
+
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -78,7 +79,8 @@ Resources:
             print(event)
             message = 'Hello Lambda World!'
             return message
-
+    DependsOn:
+       - Subscriptor
 
   CfdiFactorySqs:
     Type: AWS::Lambda::EventSourceMapping
