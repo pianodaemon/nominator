@@ -80,6 +80,13 @@ Resources:
             return message
 
 
+  CfdiFactorySqs:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      Enabled: true
+      EventSourceArn: !GetAtt CfdiInQueue.Arn
+      FunctionName: !GetAtt CfdiFactoryFunc.Arn
+
 Parameters:
   SubscriptorPwd:
     NoEcho: true
