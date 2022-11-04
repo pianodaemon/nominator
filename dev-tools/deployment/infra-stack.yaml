@@ -13,7 +13,6 @@ Metadata:
         default: "Password for this subscriptor account"
 
 Resources:
-
   CfdiEventBus:
     Type: AWS::Events::EventBus
     Properties:
@@ -62,6 +61,15 @@ Resources:
                 - !Sub arn:aws:s3:::${CfdiDataRes}/*
                 - !Sub arn:aws:s3:::${CfdiDataLake}
                 - !Sub arn:aws:s3:::${CfdiDataLake}/*
+        - PolicyName: !Sub cfdi-inqueue-access-${AWS::StackName}
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - sqs:*
+              Resource:
+                - !Sub arn:aws:sqs:::${CfdiInQueue}
 
   CfdiFactoryRole:
     Type: AWS::IAM::Role
