@@ -1,7 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Create AWS Infra required for this project
 
-
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -14,6 +13,7 @@ Metadata:
         default: "Password for this subscriptor account"
 
 Resources:
+
   CfdiEventBus:
     Type: AWS::Events::EventBus
     Properties:
@@ -34,6 +34,15 @@ Resources:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
 
+  CfdiDataRes:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub cfdi-datares-${AWS::StackName}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
   Subscriptor:
     Type: AWS::IAM::User
     Properties:
@@ -41,7 +50,7 @@ Resources:
       LoginProfile:
         Password: !Ref SubscriptorPwd
       Policies:
-        - PolicyName: !Sub cfdi-datalake-access-${AWS::StackName}
+        - PolicyName: !Sub cfdi-data-access-${AWS::StackName}
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
@@ -49,6 +58,8 @@ Resources:
               Action:
               - s3:*
               Resource:
+                - !Sub arn:aws:s3:::${CfdiDataRes}
+                - !Sub arn:aws:s3:::${CfdiDataRes}/*
                 - !Sub arn:aws:s3:::${CfdiDataLake}
                 - !Sub arn:aws:s3:::${CfdiDataLake}/*
 
