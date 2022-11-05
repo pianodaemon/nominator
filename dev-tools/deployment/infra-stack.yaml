@@ -70,6 +70,15 @@ Resources:
               - sqs:*
               Resource:
                 - !Sub arn:aws:sqs:::${CfdiInQueue}
+        - PolicyName: !Sub cfdi-factory-logs-${AWS::StackName}
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - logs:*
+              Resource:
+                - !Sub arn:aws:logs:*:*:*
 
   CfdiFactoryRole:
     Type: AWS::IAM::Role
