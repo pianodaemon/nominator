@@ -70,15 +70,6 @@ Resources:
               - sqs:*
               Resource:
                 - !Sub arn:aws:sqs:::${CfdiInQueue}
-        - PolicyName: !Sub cfdi-factory-logs-${AWS::StackName}
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-            - Effect: Allow
-              Action:
-              - logs:*
-              Resource:
-                - !Sub arn:aws:logs:*:*:*
 
   CfdiFactoryRole:
     Type: AWS::IAM::Role
@@ -90,6 +81,28 @@ Resources:
             Principal:
               Service: lambda.amazonaws.com
             Action: sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub cfdi-factory-logs-${AWS::StackName}
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - logs:*
+              Resource:
+                - !Sub arn:aws:logs:*:*:*
+        - PolicyName: !Sub cfdi-inqueue-access-${AWS::StackName}
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - sqs:ReceiveMessage
+              - sqs:DeleteMessage
+              - sqs:GetQueueAttributes
+              - sqs:ChangeMessageVisibility
+              Resource:
+                - !Sub arn:aws:sqs:::${CfdiInQueue}
 
   CfdiFactoryFunc:
     Type: AWS::Lambda::Function
