@@ -123,6 +123,14 @@ Resources:
     DependsOn:
        - Subscriptor
 
+  CfdiFactoryFuncPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: CfdiFactoryFunc.Arn
+      Action: lambda:InvokeFunction
+      Principal: sqs.amazonaws.com
+      SourceArn: !GetAtt CfdiInQueue.Arn
+
   CfdiFactorySqs:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
