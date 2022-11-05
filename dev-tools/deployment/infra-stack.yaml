@@ -118,7 +118,7 @@ Resources:
       Name: !Sub cfdi-factoryrule-${AWS::StackName}
       State: ENABLED
       Targets:
-        - Arn: !GetAtt CfdiFactorySqs.Arn
+        - Arn: !GetAtt CfdiInQueue.Arn
           Id: "factoryrule"
 
 Parameters:
