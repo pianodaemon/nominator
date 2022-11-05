@@ -108,6 +108,19 @@ Resources:
       EventSourceArn: !GetAtt CfdiInQueue.Arn
       FunctionName: !GetAtt CfdiFactoryFunc.Arn
 
+  CfdiFactoryRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Factory function rule
+      EventBusName: !Ref CfdiEventBus
+      EventPattern:
+        account: [!Ref AWS::AccountId]
+      Name: !Sub cfdi-factoryrule-${AWS::StackName}
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt CfdiFactorySqs.Arn
+          Id: "factoryrule"
+
 Parameters:
   SubscriptorPwd:
     NoEcho: true
