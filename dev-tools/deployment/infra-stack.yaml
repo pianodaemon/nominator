@@ -21,7 +21,7 @@ Resources:
   CfdiInQueue:
     Type: AWS::SQS::Queue
     Properties:
-      FifoQueue: true
+      FifoQueue: false
       QueueName: !Sub cfdi-inqueue-${AWS::StackName}
 
   CfdiDataLake:
