@@ -7,7 +7,7 @@ import com.immortalcrab.cfdi.error.RequestError;
 import com.immortalcrab.cfdi.error.StorageError;
 import java.io.InputStreamReader;
 
-public interface IIssuer {
+interface IIssuer {
 
     public String doIssue(final String kind, InputStreamReader isr)
             throws DecodeError, RequestError, PipelineError, StorageError, FormatError;
