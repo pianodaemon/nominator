@@ -1,4 +1,4 @@
-package com.immortalcrab.cfdi.toolbox.lola;
+package com.immortalcrab.cfdi.toolbox;
 
 import com.immortalcrab.cfdi.toolbox.IToolbox;
 import java.io.BufferedReader;
