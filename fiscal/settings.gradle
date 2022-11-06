@@ -2,3 +2,4 @@ rootProject.name = 'fiscal'
 
 include ':cfdi'
 include ':engine'
+include ':factory'
