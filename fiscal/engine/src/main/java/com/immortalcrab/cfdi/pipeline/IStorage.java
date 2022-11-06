@@ -4,7 +4,7 @@ import com.immortalcrab.cfdi.error.StorageError;
 import java.io.InputStream;
 
 @FunctionalInterface
-public interface IStorage {
+interface IStorage {
 
     public void upload(final String cType,
             final long len,
