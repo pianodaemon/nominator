@@ -53,6 +53,8 @@ dependencies {
 
     implementation project(':engine')
 
+    implementation 'com.amazonaws:aws-java-sdk:1.12.336'
+
     implementation "com.google.zxing:core:3.5.0"
     implementation "com.google.zxing:javase:3.5.0"
 
