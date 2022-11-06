@@ -2,7 +2,7 @@ package com.immortalcrab.cfdi.toolbox.lola;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
-import com.immortalcrab.cfdi.pipeline.lola.NominaRequest;
+import com.immortalcrab.cfdi.pipeline.NominaRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 
-import com.immortalcrab.cfdi.pipeline.lola.NominaXml;
+import com.immortalcrab.cfdi.pipeline.NominaXml;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class NominaXmlTest {

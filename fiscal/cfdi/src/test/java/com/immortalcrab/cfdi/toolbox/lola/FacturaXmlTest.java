@@ -2,7 +2,7 @@ package com.immortalcrab.cfdi.toolbox.lola;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
-import com.immortalcrab.cfdi.pipeline.lola.FacturaRequest;
+import com.immortalcrab.cfdi.pipeline.FacturaRequest;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-import com.immortalcrab.cfdi.pipeline.lola.FacturaXml;
+import com.immortalcrab.cfdi.pipeline.FacturaXml;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class FacturaXmlTest {

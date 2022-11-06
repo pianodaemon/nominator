@@ -1,4 +1,4 @@
-package com.immortalcrab.cfdi.pipeline.lola;
+package com.immortalcrab.cfdi.pipeline;
 
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
