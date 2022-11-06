@@ -8,7 +8,7 @@ import lombok.NonNull;
 
 @AllArgsConstructor
 @Getter
-public abstract class Request {
+abstract class Request {
 
     private final @NonNull Map<String, Object> ds;
 
