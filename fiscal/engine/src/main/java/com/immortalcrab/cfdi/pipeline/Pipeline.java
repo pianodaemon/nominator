@@ -18,7 +18,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @AllArgsConstructor
 @Getter
-public class Pipeline implements IIssuer {
+public class Pipeline {
 
     private final @NonNull
     IStorage storage;
@@ -26,8 +26,7 @@ public class Pipeline implements IIssuer {
     private final @NonNull
     ImmutableMap<String, Pair<IDecodeStep, IXmlStep>> scenarios;
 
-    @Override
-    public String doIssue(final String kind, InputStreamReader isr)
+    public String issue(final String kind, InputStreamReader isr)
             throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
 
         Optional<Pair<IDecodeStep, IXmlStep>> stages = Optional.ofNullable(this.getScenarios().get(kind));
