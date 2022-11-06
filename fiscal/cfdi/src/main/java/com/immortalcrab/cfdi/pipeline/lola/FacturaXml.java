@@ -31,10 +31,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NonNull;
-import lombok.extern.apachecommons.CommonsLog;
+import lombok.extern.log4j.Log4j;
 
 @AllArgsConstructor
-@CommonsLog
+@Log4j
 @Getter
 public class FacturaXml {
 

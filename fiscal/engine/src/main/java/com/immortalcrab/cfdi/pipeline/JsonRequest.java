@@ -7,9 +7,9 @@ import com.immortalcrab.cfdi.error.RequestError;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
-import lombok.extern.apachecommons.CommonsLog;
+import lombok.extern.log4j.Log4j;
 
-@CommonsLog
+@Log4j
 public class JsonRequest extends Request {
 
     protected JsonRequest(InputStreamReader reader) throws RequestError, DecodeError {
