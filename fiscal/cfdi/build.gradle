@@ -39,7 +39,7 @@ task genJaxb {
                 fileset(dir: sourcesDir, erroronmissingdir: false) {
                     exclude(name: '**/*.java')
                 }
-            }     
+            }
         }
     }
 }

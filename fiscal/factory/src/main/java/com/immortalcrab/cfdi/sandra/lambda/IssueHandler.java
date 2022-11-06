@@ -1,4 +1,4 @@
-package com.immortalcrab.cfdi.lambda;
+package com.immortalcrab.cfdi.sandra.lambda;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
