@@ -1,4 +1,4 @@
-package com.immortalcrab.cfdi.sandra.lambda;
+package com.immortalcrab.cfdi.serverless;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
