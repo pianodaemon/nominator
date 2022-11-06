@@ -16,9 +16,9 @@ import com.immortalcrab.cfdi.pipeline.S3BucketStorage;
 import java.io.InputStreamReader;
 import org.javatuples.Pair;
 
-class XmlProducer extends Pipeline implements IIssuer {
+class Producer extends Pipeline implements IIssuer {
 
-    public XmlProducer() throws StorageError {
+    public Producer() throws StorageError {
 
         super(
                 S3BucketStorage.setupWithEnv(),
