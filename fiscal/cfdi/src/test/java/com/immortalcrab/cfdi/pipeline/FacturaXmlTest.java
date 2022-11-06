@@ -1,25 +1,26 @@
-package com.immortalcrab.cfdi.toolbox.lola;
+package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
-import com.immortalcrab.cfdi.pipeline.NominaRequest;
+import com.immortalcrab.cfdi.pipeline.FacturaRequest;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import org.junit.jupiter.api.Test;
 
-import com.immortalcrab.cfdi.pipeline.NominaXml;
+import com.immortalcrab.cfdi.pipeline.FacturaXml;
 
 @TestInstance(Lifecycle.PER_CLASS)
-public class NominaXmlTest {
+public class FacturaXmlTest {
 
     private ClassLoader _cloader;
 
@@ -42,17 +43,17 @@ public class NominaXmlTest {
     }
 
     @Test
-    void loadReqFromReader() {
+    public void loadReqFromReader() {
 
         try {
-            InputStream is = _cloader.getResourceAsStream("jsonreqs/nominareq.json");
+
+            InputStream is = _cloader.getResourceAsStream("jsonreqs/facturareq.json");
             InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
 
-            NominaRequest.render(reader);
+            FacturaRequest.render(reader);
 
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);
         }
     }
-
 }

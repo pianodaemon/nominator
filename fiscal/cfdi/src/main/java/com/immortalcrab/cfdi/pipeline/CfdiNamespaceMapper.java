@@ -2,7 +2,7 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
-public class CfdiNamespaceMapper extends NamespacePrefixMapper {
+class CfdiNamespaceMapper extends NamespacePrefixMapper {
 
     private static final String CFDI_PREFIX       = "cfdi";
     private static final String CFDI_URI          = "http://www.sat.gob.mx/cfd/4";

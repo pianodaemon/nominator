@@ -5,7 +5,7 @@ import com.immortalcrab.cfdi.error.RequestError;
 import com.immortalcrab.cfdi.pipeline.JsonRequest;
 import java.io.InputStreamReader;
 
-public class NominaRequest extends JsonRequest {
+class NominaRequest extends JsonRequest {
 
     private NominaRequest(InputStreamReader reader) throws RequestError, DecodeError {
         super(reader);

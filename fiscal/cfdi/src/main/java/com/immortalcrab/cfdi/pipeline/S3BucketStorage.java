@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Log4j
 @AllArgsConstructor
-public class S3BucketStorage implements IStorage {
+class S3BucketStorage implements IStorage {
 
     private final @NonNull
     AmazonS3 amazonS3;

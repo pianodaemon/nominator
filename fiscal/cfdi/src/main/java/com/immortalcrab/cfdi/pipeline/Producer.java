@@ -1,4 +1,4 @@
-package com.immortalcrab.cfdi.serverless;
+package com.immortalcrab.cfdi.pipeline;
 
 import com.google.common.collect.ImmutableMap;
 import com.immortalcrab.cfdi.error.DecodeError;
@@ -6,17 +6,10 @@ import com.immortalcrab.cfdi.error.FormatError;
 import com.immortalcrab.cfdi.error.PipelineError;
 import com.immortalcrab.cfdi.error.RequestError;
 import com.immortalcrab.cfdi.error.StorageError;
-import com.immortalcrab.cfdi.pipeline.Pipeline;
-import com.immortalcrab.cfdi.pipeline.FacturaRequest;
-import com.immortalcrab.cfdi.pipeline.FacturaXml;
-import com.immortalcrab.cfdi.pipeline.IIssuer;
-import com.immortalcrab.cfdi.pipeline.NominaRequest;
-import com.immortalcrab.cfdi.pipeline.NominaXml;
-import com.immortalcrab.cfdi.pipeline.S3BucketStorage;
 import java.io.InputStreamReader;
 import org.javatuples.Pair;
 
-class Producer extends Pipeline implements IIssuer {
+public class Producer extends Pipeline implements IIssuer {
 
     public Producer() throws StorageError {
 

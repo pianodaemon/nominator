@@ -36,7 +36,7 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 @Log4j
 @Getter
-public class FacturaXml {
+class FacturaXml {
 
     private final @NonNull
     Request cfdiReq;

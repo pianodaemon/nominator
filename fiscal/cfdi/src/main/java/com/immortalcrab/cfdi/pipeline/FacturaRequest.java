@@ -5,7 +5,7 @@ import com.immortalcrab.cfdi.error.RequestError;
 import com.immortalcrab.cfdi.pipeline.JsonRequest;
 import java.io.InputStreamReader;
 
-public class FacturaRequest extends JsonRequest {
+class FacturaRequest extends JsonRequest {
 
     private FacturaRequest(InputStreamReader reader) throws RequestError, DecodeError {
         super(reader);

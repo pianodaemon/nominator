@@ -37,7 +37,7 @@ import lombok.NonNull;
 
 @AllArgsConstructor
 @Getter
-public class NominaXml {
+class NominaXml {
 
     private final @NonNull Request cfdiReq;
     private final @NonNull IStorage st;
