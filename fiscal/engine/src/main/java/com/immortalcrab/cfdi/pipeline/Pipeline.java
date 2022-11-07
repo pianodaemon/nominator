@@ -21,6 +21,9 @@ import lombok.extern.log4j.Log4j;
 class Pipeline {
 
     private final @NonNull
+    IStamp stamper;
+
+    private final @NonNull
     IStorage storage;
 
     private final @NonNull
