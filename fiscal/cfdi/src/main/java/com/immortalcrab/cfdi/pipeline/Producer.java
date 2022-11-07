@@ -14,6 +14,7 @@ public class Producer extends Pipeline implements IIssuer {
     public Producer() throws StorageError {
 
         super(
+                PacRegularStamp.setupWithEnv(),
                 S3BucketStorage.setupWithEnv(),
                 ImmutableMap.of(
                         "fac", new Pair<>(FacturaRequest::render, FacturaXml::render),
