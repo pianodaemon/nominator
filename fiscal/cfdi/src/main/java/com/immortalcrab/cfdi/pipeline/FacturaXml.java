@@ -53,19 +53,29 @@ class FacturaXml {
     private List<PseudoConcepto> shapePcs() throws FormatError {
 
         Optional<Object> cs = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "conceptos");
-        List<PseudoConcepto> pcs = new LinkedList<PseudoConcepto>();
-        List<Map<String, Object>> items = (List<Map<String, Object>>) cs.orElseThrow();
-        for (Map<String, Object> i : items) {
+        List<PseudoConcepto> pcs = new LinkedList<>();
 
-            PseudoConcepto psc = new PseudoConcepto();
+        try {
 
-            psc.setClaveProdServ((String) LegoTagAssembler.obtainObjFromKey(i, "prodserv").orElseThrow());
-            psc.setDescripcion((String) LegoTagAssembler.obtainObjFromKey(i, "descripcion").orElseThrow());
-            psc.setUnidad((String) LegoTagAssembler.obtainObjFromKey(i, "unidad").orElseThrow());
+            List<Map<String, Object>> items = (List<Map<String, Object>>) cs.orElseThrow();
 
-            psc.setSku((String) LegoTagAssembler.obtainObjFromKey(i, "sku").orElseThrow());
+            items.stream().map(i -> {
 
-            pcs.add(psc);
+                PseudoConcepto psc = new PseudoConcepto();
+                psc.setClaveProdServ((String) LegoTagAssembler.obtainObjFromKey(i, "prodserv").orElseThrow());
+                psc.setDescripcion((String) LegoTagAssembler.obtainObjFromKey(i, "descripcion").orElseThrow());
+                psc.setUnidad((String) LegoTagAssembler.obtainObjFromKey(i, "unidad").orElseThrow());
+                psc.setSku((String) LegoTagAssembler.obtainObjFromKey(i, "sku").orElseThrow());
+
+                return psc;
+
+            }).forEachOrdered(psc -> {
+                pcs.add(psc);
+            });
+
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements of Concepto tag is missing");
+            throw new FormatError("mandatory element in request is missing", ex);
         }
 
         return pcs;
