@@ -1,5 +1,5 @@
 package com.immortalcrab.cfdi.pipeline;
 
-class PacRegularResponse {
+class PacRegularResponse extends PacRes {
 
 }
