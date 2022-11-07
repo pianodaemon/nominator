@@ -42,7 +42,7 @@ class NominaXml {
     private final @NonNull Request cfdiReq;
     private final @NonNull IStorage st;
 
-    public static String render(Request cfdiReq, IStorage st) throws FormatError, StorageError {
+    public static String render(Request cfdiReq, IStamp stamper, IStorage st) throws FormatError, StorageError {
 
         NominaXml ic = new NominaXml(cfdiReq, st);
         StringWriter cfdi = ic.shape();
