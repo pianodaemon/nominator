@@ -1,6 +1,5 @@
 package com.immortalcrab.cfdi.pipeline;
 
-import com.immortalcrab.cfdi.pipeline.IStorage;
 import com.immortalcrab.cfdi.error.StorageError;
 
 import com.amazonaws.auth.AWSCredentials;
@@ -32,12 +31,18 @@ class S3BucketStorage implements IStorage {
             final String fileName,
             InputStream inputStream) throws StorageError {
 
+        Optional<String> target = Optional.ofNullable(System.getenv("BUCKET_TARGET"));
+
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(cType);
         objectMetadata.setContentLength(len);
 
         try {
-            amazonS3.putObject(System.getenv("BUCKET_TARGET"), fileName, inputStream, objectMetadata);
+
+            amazonS3.putObject(
+                    target.orElseThrow(() -> new StorageError("aws bucket was not fed")),
+                    fileName, inputStream,
+                    objectMetadata);
 
         } catch (AmazonServiceException ex) {
             log.error(String.format("File %s can not be uploaded", fileName));
@@ -50,12 +55,10 @@ class S3BucketStorage implements IStorage {
         Optional<String> region = Optional.ofNullable(System.getenv("BUCKET_REGION"));
         Optional<String> key = Optional.ofNullable(System.getenv("BUCKET_KEY"));
         Optional<String> secret = Optional.ofNullable(System.getenv("BUCKET_SECRET"));
-        Optional<String> target = Optional.ofNullable(System.getenv("BUCKET_TARGET"));
 
         region.orElseThrow(() -> new StorageError("aws region was not fed"));
         key.orElseThrow(() -> new StorageError("aws key was not fed"));
         secret.orElseThrow(() -> new StorageError("aws secret was not fed"));
-        target.orElseThrow(() -> new StorageError("aws bucket was not fed"));
 
         AWSCredentials awsCredentials = new BasicAWSCredentials(key.get(), secret.get());
 
