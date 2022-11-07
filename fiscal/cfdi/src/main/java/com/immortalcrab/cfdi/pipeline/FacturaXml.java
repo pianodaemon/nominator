@@ -215,7 +215,7 @@ class FacturaXml {
         return sw;
     }
 
-    public static String render(Request cfdiReq, IStorage st) throws FormatError, StorageError {
+    public static String render(Request cfdiReq, IStamp stamper, IStorage st) throws FormatError, StorageError {
 
         FacturaXml ic = new FacturaXml(cfdiReq, st);
 
