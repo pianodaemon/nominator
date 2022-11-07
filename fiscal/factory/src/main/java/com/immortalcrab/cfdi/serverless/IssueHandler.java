@@ -12,10 +12,18 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
     @Override
     public Void handleRequest(SQSEvent event, Context context) {
 
-        event.getRecords().forEach(msg -> {
+        try {
 
-            log.info(msg.getBody());
-        });
+            event.getRecords().forEach(msg -> {
+
+                log.info(msg.getBody());
+                // Here we shall call 
+                // doIssue(final String kind, InputStreamReader isr)
+            });
+        } catch (Exception ex) {
+            log.error("Exception handling batch seed request.", ex);
+            throw ex;
+        }
         return null;
     }
 }
