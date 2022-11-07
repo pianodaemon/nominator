@@ -52,21 +52,10 @@ class S3BucketStorage implements IStorage {
         Optional<String> secret = Optional.ofNullable(System.getenv("BUCKET_SECRET"));
         Optional<String> target = Optional.ofNullable(System.getenv("BUCKET_TARGET"));
 
-        if (region.isEmpty()) {
-            throw new StorageError("aws region was not fed");
-        }
-
-        if (key.isEmpty()) {
-            throw new StorageError("aws key was not fed");
-        }
-
-        if (secret.isEmpty()) {
-            throw new StorageError("aws secret was not fed");
-        }
-
-        if (target.isEmpty()) {
-            throw new StorageError("aws bucket was not fed");
-        }
+        region.orElseThrow(() -> new StorageError("aws region was not fed"));
+        key.orElseThrow(() -> new StorageError("aws key was not fed"));
+        secret.orElseThrow(() -> new StorageError("aws secret was not fed"));
+        target.orElseThrow(() -> new StorageError("aws bucket was not fed"));
 
         AWSCredentials awsCredentials = new BasicAWSCredentials(key.get(), secret.get());
 
