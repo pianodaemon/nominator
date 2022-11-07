@@ -13,4 +13,7 @@ class PacReq {
     protected final @NonNull
     String xmlStr;
 
+    protected final @NonNull
+    String targetUri;
+
 }
