@@ -61,16 +61,16 @@ class FacturaXml {
 
             items.stream().map(i -> {
 
-                PseudoConcepto psc = new PseudoConcepto();
-                psc.setClaveProdServ((String) LegoTagAssembler.obtainObjFromKey(i, "prodserv").orElseThrow());
-                psc.setDescripcion((String) LegoTagAssembler.obtainObjFromKey(i, "descripcion").orElseThrow());
-                psc.setUnidad((String) LegoTagAssembler.obtainObjFromKey(i, "unidad").orElseThrow());
-                psc.setSku((String) LegoTagAssembler.obtainObjFromKey(i, "sku").orElseThrow());
+                PseudoConcepto p = new PseudoConcepto();
+                p.setClaveProdServ((String) LegoTagAssembler.obtainObjFromKey(i, "prodserv").orElseThrow());
+                p.setDescripcion((String) LegoTagAssembler.obtainObjFromKey(i, "descripcion").orElseThrow());
+                p.setUnidad((String) LegoTagAssembler.obtainObjFromKey(i, "unidad").orElseThrow());
+                p.setSku((String) LegoTagAssembler.obtainObjFromKey(i, "sku").orElseThrow());
 
-                return psc;
+                return p;
 
-            }).forEachOrdered(psc -> {
-                pcs.add(psc);
+            }).forEachOrdered(p -> {
+                pcs.add(p);
             });
 
         } catch (NoSuchElementException ex) {
