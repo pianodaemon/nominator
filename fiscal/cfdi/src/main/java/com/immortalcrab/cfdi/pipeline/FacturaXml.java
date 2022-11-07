@@ -215,12 +215,14 @@ class FacturaXml {
         return sw;
     }
 
-    public static String render(Request cfdiReq, IStamp stamper, IStorage st) throws FormatError, StorageError {
+   public static String render(Request cfdiReq, IStamp<PacRegularRequest, PacRegularResponse> stamper, IStorage st) throws FormatError, StorageError {
 
         FacturaXml ic = new FacturaXml(cfdiReq, st);
 
         StringWriter cfdi = ic.shape();
-
+        PacRegularRequest pacReq = new PacRegularRequest(cfdi.toString());
+        PacRegularResponse pacRes = stamper.impress(pacReq);
+ 
         return "It must be slightly implemented as it was in lola";
     }
 
