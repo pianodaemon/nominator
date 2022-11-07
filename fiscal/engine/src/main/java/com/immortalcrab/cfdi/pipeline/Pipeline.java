@@ -21,7 +21,7 @@ import lombok.extern.log4j.Log4j;
 class Pipeline {
 
     private final @NonNull
-    IStamp<?, ?> stamper;
+    IStamp<? extends PacReq, ? extends PacRes> stamper;
 
     private final @NonNull
     IStorage storage;
