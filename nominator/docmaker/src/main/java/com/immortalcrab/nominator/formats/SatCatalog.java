@@ -130,10 +130,9 @@ public class SatCatalog {
                 break;
 
             case "tipo_nomina":
-                m = ImmutableMap.<String, String>builder()
-                    .put("O", "Nómina ordinaria")
-                    .put("E", "Nómina extraordinaria")
-                    .build();
+                m = ImmutableMap.of(
+                    "O", "Nómina ordinaria",
+                    "E", "Nómina extraordinaria");
                 break;
 
             case "periodicidad_pago":
