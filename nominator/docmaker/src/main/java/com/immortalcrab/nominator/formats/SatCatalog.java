@@ -1,12 +1,14 @@
 package com.immortalcrab.nominator.formats;
 
+import java.util.Map;
+
 import com.google.common.collect.ImmutableMap;
 
 public class SatCatalog {
 
-    public static ImmutableMap<String, String> getCatalog(String field) throws Exception {
+    public static Map<String, String> getCatalog(String field) throws Exception {
 
-        ImmutableMap<String, String> m = null;
+        Map<String, String> m = null;
 
         switch (field) {
             case "clave_ent_fed":
