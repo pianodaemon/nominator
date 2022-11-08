@@ -153,16 +153,14 @@ public class SatCatalog {
                 break;
 
             case "clave_unidad":
-                m = ImmutableMap.<String, String>builder()
-                    .put("ACT", "Actividad")
-                    .put("E48", "Unidad de servicio")
-                    .build();
+                m = ImmutableMap.of(
+                    "ACT", "Actividad",
+                    "E48", "Unidad de servicio");
                 break;
 
             case "clave_prod_serv":
-                m = ImmutableMap.<String, String>builder()
-                    .put("84111505", "Servicios de contabilidad de sueldos y salarios")
-                    .build();
+                m = ImmutableMap.of(
+                    "84111505", "Servicios de contabilidad de sueldos y salarios");
                 break;
 
             case "tipo_percepcion":
