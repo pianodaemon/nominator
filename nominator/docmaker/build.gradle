@@ -1,0 +1,21 @@
+apply plugin: 'java'
+
+description = 'docmaker'
+
+dependencies {
+
+    implementation "com.amazonaws:aws-lambda-java-events:3.11.0"
+    implementation "com.amazonaws:aws-lambda-java-core:1.2.1"
+}
+
+// This build configuration produces a deployment package
+// within the build/distributions directory.
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtimeClasspath
+    }
+}
+
+build.dependsOn buildZip
