@@ -2,20 +2,16 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.StorageError;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import lombok.NonNull;
 
 import java.io.InputStream;
 import java.util.Optional;
+import lombok.NonNull;
 
 @Log4j
 @AllArgsConstructor
@@ -52,18 +48,6 @@ class S3BucketStorage implements IStorage {
 
     static public S3BucketStorage setupWithEnv() throws StorageError {
 
-        Optional<String> region = Optional.ofNullable(System.getenv("AWS_REGION"));
-        Optional<String> key = Optional.ofNullable(System.getenv("AWS_ACCESS_KEY_ID"));
-        Optional<String> secret = Optional.ofNullable(System.getenv("AWS_SECRET_ACCESS_KEY"));
-
-        region.orElseThrow(() -> new StorageError("aws region was not fed"));
-        key.orElseThrow(() -> new StorageError("aws key was not fed"));
-        secret.orElseThrow(() -> new StorageError("aws secret was not fed"));
-
-        AWSCredentials awsCredentials = new BasicAWSCredentials(key.get(), secret.get());
-
-        return new S3BucketStorage(
-                AmazonS3ClientBuilder.standard().withRegion(
-                        region.get()).withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).build());
+        return new S3BucketStorage(S3ClientHelper.setupWithEnv());
     }
 }
