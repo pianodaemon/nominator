@@ -22,19 +22,16 @@ class NominaParser {
     private String noCertificadoSAT;
     private String fechaTimbre;
 
-    private void read(InputStream url) {
-        try {
-            SAXParserFactory spf = SAXParserFactory.newInstance();
-            SAXParser sp = spf.newSAXParser();
-            sp.parse(url, new FormatHandler());
-        } catch (ParserConfigurationException e) {
-            System.err.println("error de  parseo " + e);
-        } catch (SAXException e2) {
-            System.err.println(e2);
-            System.err.println("error de  sax: " + e2.getStackTrace());
-        } catch (IOException e3) {
-            System.err.println("error de  io: " + e3.getMessage());
-        }
+    public NominaParser(InputStream is) throws ParserConfigurationException, SAXException, IOException {
+
+        read(is);
+    }
+
+    private void read(InputStream url) throws ParserConfigurationException, SAXException, IOException {
+
+        SAXParserFactory spf = SAXParserFactory.newInstance();
+        SAXParser sp = spf.newSAXParser();
+        sp.parse(url, new FormatHandler());
     }
 
     private class FormatHandler extends DefaultHandler {
