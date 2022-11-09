@@ -31,11 +31,6 @@ class S3BucketStorage implements IStorage {
         this(amazonS3, Optional.ofNullable(target));
     }
 
-    public S3BucketStorage(AmazonS3 amazonS3) {
-
-        this(amazonS3, Optional.ofNullable(System.getenv("BUCKET_TARGET")));
-    }
-
     @Override
     public void upload(
             final String cType,
