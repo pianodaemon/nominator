@@ -18,7 +18,7 @@ class NominaParser {
         try{
             SAXParserFactory spf = SAXParserFactory.newInstance();
             SAXParser sp = spf.newSAXParser();
-            sp.parse(url, new ParseaArchivoXmlOfCFDI() );
+            sp.parse(url, new FormatHandler() );
         }
         catch(ParserConfigurationException e){
             System.err.println("error de  parseo " + e);
@@ -32,4 +32,10 @@ class NominaParser {
         }
     }
 
+    private class FormatHandler extends DefaultHandler {
+
+        public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+            
+        }
+    }
 }
