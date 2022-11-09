@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
-public class SatCatalog {
+class SatCatalog {
 
     public static Map<String, String> getCatalog(String field) throws Exception {
 

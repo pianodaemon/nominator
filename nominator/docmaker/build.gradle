@@ -2,10 +2,21 @@ apply plugin: 'java'
 
 description = 'docmaker'
 
+repositories {
+    maven {
+        url "https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/"
+    }
+}
+
 dependencies {
 
     implementation "com.amazonaws:aws-lambda-java-events:3.11.0"
     implementation "com.amazonaws:aws-lambda-java-core:1.2.1"
+    implementation 'com.google.code.gson:gson:2.10'
+    implementation 'net.sf.jasperreports:jasperreports:6.20.0'
+    implementation 'net.sf.jasperreports:jasperreports-functions:6.20.0'
+    implementation 'com.google.zxing:core:3.5.1'
+    implementation 'com.google.zxing:javase:3.5.1'
 }
 
 // This build configuration produces a deployment package
