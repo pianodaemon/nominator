@@ -3,6 +3,7 @@ package com.immortalcrab.nominator.formats;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
@@ -26,16 +27,18 @@ public class NominaPdf {
 //        }
 //    }
 
-    public static BufferedInputStream render(String json, String xml) throws Exception {
+    public static BufferedInputStream render(String json, InputStream isXml) throws Exception {
+
+        final NominaParser nomParser = new NominaParser(isXml);
 
         Gson gson = new Gson();
         Map<String, Object> ds = gson.fromJson(json, HashMap.class);
         ds.put("no_certificado", "00001000000413586324");
-        ds.put("UUID", "EC8A65FB-ADE0-4497-9990-15FEB46BCCD5");
+        ds.put("UUID", nomParser.getUUID());
         ds.put("CDIGITAL_SAT", "00001000000413073350");
         ds.put("FECHSTAMP", "2021-11-22T10:04:05");
-        ds.put("SELLO_CFD", "PfKJXRxWxMMsClxmr5ROzrFLFlaXFmcq/3B5gzUZegxBXG8bs/1MkrKkxJXsmEVwEVfhM9vx17Fm5YnqrgbI7rv1gh+5lH+WlPa3lNzKupLBwAWTi493hRrUVKYvth97fc0+mPv6hzDmBSziSLiQQ2WCppKb2jANIqQplmE70BKTe5q3C0fUhjSRghWmgRAdyKZ9AMjGNrxZ3pkYE14yx7SxP6Xc2YNEnsTfBbbKkZGcGzMwLBzuG3uJtXR2JFFPdkEmZymEZCL3UejX6iIi6oDmjChmrryjWC8jSWGCHnp678sM456yoNz5uRfNb64iVvYWHP+h3VpKTFrlVZnDuA==");
-        ds.put("SELLO_SAT", "FvnxjzMd2GvokHuyNaHdhwWZOxF2rVspCSyUR9rFTdgwjWwD11/9Cd7tT7b7lQwBUGidT/VYTWqjZQ2JBxyj90gzbeWQIwYyVyeWDsyOVPYs6jrftpKVi9J2KFI/mEQOn+6d7yFJ0Z8aUQEtTPSL6D5DkjbyzxMWnJSlx6GHm/8eEGfkA3hV1G9iwy1iH9F3tlWoAVaZYWHSL2rtZK/d1qfl5YEuJrB7iXTbO/LgsOHGEKEZTRZCHjS7WqinRMXyOVatXNUQXPxvMNe5VfPw6r5PGlYKqacjasuBOpo6V4J5KPtg0tAGxWPlAbeQPRDN3RIGKaz5aNT/ueB2ZRdDrg==");
+        ds.put("SELLO_CFD", nomParser.getSelloCfd());
+        ds.put("SELLO_SAT", nomParser.getSelloSat());
         ds.put("CADENA_ORIGINAL_TFD", "||1.1|63D91EE9-FAFC-4F9F-B69F-A3D65F8C0261|2021-08-25T22:54:52|SVT110323827|PfKJXRxWxMMsClxmr5ROzrFLFlaXFmcq/3B5gzUZegxBXG8bs/1MkrKkxJXsmEVwEVfhM9vx17Fm5YnqrgbI7rv1gh+5lH+WlPa3lNzKupLBwAWTi493hRrUVKYvth97fc0+mPv6hzDmBSziSLiQQ2WCppKb2jANIqQplmE70BKTe5q3C0fUhjSRghWmgRAdyKZ9AMjGNrxZ3pkYE14yx7SxP6Xc2YNEnsTfBbbKkZGcGzMwLBzuG3uJtXR2JFFPdkEmZymEZCL3UejX6iIi6oDmjChmrryjWC8jSWGCHnp678sM456yoNz5uRfNb64iVvYWHP+h3VpKTFrlVZnDuA==|00001000000413073350||");
 
         byte[] pdfBytes = null;
