@@ -24,11 +24,6 @@ class NominaParser {
 
     public NominaParser(InputStream is) throws ParserConfigurationException, SAXException, IOException {
 
-        read(is);
-    }
-
-    private void read(InputStream url) throws ParserConfigurationException, SAXException, IOException {
-
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
         sp.parse(url, new FormatHandler());
