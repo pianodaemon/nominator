@@ -4,11 +4,14 @@ import com.immortalcrab.cfdi.error.StorageError;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.S3Object;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
+import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.util.Optional;
 import lombok.NonNull;
@@ -50,5 +53,13 @@ class S3BucketStorage implements IStorage {
             log.error(String.format("File %s can not be uploaded", fileName));
             throw new StorageError("A failure detected when attempting to write upon the bucket storage", ex);
         }
+    }
+    
+    public BufferedInputStream download(final String fileName) throws StorageError {
+
+        GetObjectRequest gobj = new GetObjectRequest(target.orElseThrow(() -> new StorageError("aws bucket was not fed")), fileName);
+        S3Object object = amazonS3.getObject(gobj);
+
+        return new BufferedInputStream(object.getObjectContent());
     }
 }
