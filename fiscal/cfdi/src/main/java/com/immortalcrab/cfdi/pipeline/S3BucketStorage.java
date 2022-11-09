@@ -54,7 +54,8 @@ class S3BucketStorage implements IStorage {
             throw new StorageError("A failure detected when attempting to write upon the bucket storage", ex);
         }
     }
-    
+
+    @Override
     public BufferedInputStream download(final String fileName) throws StorageError {
 
         GetObjectRequest gobj = new GetObjectRequest(target.orElseThrow(() -> new StorageError("aws bucket was not fed")), fileName);
