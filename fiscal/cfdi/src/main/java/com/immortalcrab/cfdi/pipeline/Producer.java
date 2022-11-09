@@ -15,7 +15,7 @@ public class Producer extends Pipeline implements IIssuer {
 
         super(
                 PacRegularStamp.setupWithEnv(),
-                S3BucketStorage.setupWithEnv(),
+                new S3BucketStorage(S3ClientHelper.setupWithEnv()),
                 ImmutableMap.of(
                         "fac", new Pair<>(FacturaRequest::render, FacturaXml::render),
                         "nom", new Pair<>(NominaRequest::render, NominaXml::render))
