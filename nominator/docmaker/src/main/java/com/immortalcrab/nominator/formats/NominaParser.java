@@ -16,6 +16,8 @@ import lombok.Setter;
 @Setter
 class NominaParser {
 
+    private static final String TFD_TIMBREFISCALDIGITAL = "tfd:TimbreFiscalDigital";
+
     private String UUID;
     private String selloSat;
     private String selloCfd;
@@ -33,7 +35,7 @@ class NominaParser {
 
         public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 
-            if (qName.equals("tfd:TimbreFiscalDigital")) {
+            if (qName.equals(TFD_TIMBREFISCALDIGITAL)) {
 
                 for (int i = 0; i < atts.getLength(); i++) {
 
