@@ -45,9 +45,4 @@ class S3BucketStorage implements IStorage {
             throw new StorageError("A failure detected when attempting to write upon the bucket storage", ex);
         }
     }
-
-    static public S3BucketStorage setupWithEnv() throws StorageError {
-
-        return new S3BucketStorage(S3ClientHelper.setupWithEnv());
-    }
 }
