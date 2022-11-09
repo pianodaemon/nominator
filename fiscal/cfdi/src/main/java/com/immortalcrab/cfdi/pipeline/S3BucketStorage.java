@@ -13,12 +13,20 @@ import java.io.InputStream;
 import java.util.Optional;
 import lombok.NonNull;
 
-@Log4j
 @AllArgsConstructor
+@Log4j
 class S3BucketStorage implements IStorage {
 
     private final @NonNull
     AmazonS3 amazonS3;
+
+    private final @NonNull
+    Optional<String> target;
+
+    public S3BucketStorage(AmazonS3 amazonS3) {
+
+        this(amazonS3, Optional.ofNullable(System.getenv("BUCKET_TARGET")));
+    }
 
     @Override
     public void upload(
@@ -26,8 +34,6 @@ class S3BucketStorage implements IStorage {
             final long len,
             final String fileName,
             InputStream inputStream) throws StorageError {
-
-        Optional<String> target = Optional.ofNullable(System.getenv("BUCKET_TARGET"));
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(cType);
