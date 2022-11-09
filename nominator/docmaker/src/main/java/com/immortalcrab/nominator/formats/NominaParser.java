@@ -26,7 +26,7 @@ class NominaParser {
 
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
-        sp.parse(url, new FormatHandler());
+        sp.parse(is, new FormatHandler());
     }
 
     private class FormatHandler extends DefaultHandler {
