@@ -17,6 +17,10 @@ import lombok.Setter;
 class NominaParser {
 
     private String UUID;
+    private String selloSat;
+    private String selloCfd;
+    private String noCertificadoSAT;
+    private String fechaTimbre;
 
     private void read(InputStream url) {
         try {
@@ -41,10 +45,29 @@ class NominaParser {
 
                 for (int i = 0; i < atts.getLength(); i++) {
 
-                    String name = atts.getQName(i);
-                    if (name.equals("UUID")) {
+                    String vn = atts.getQName(i);
+                    if (vn.equals("UUID")) {
 
                         setUUID(atts.getValue(i));
+                    }
+
+                    if (vn.equals("selloSAT")) {
+
+                        setSelloSat(atts.getValue(i));
+                    }
+
+                    if (vn.equals("selloCFD")) {
+
+                        setSelloCfd(atts.getValue(i));
+                    }
+
+                    if (vn.equals("noCertificadoSAT")) {
+
+                        setNoCertificadoSAT(atts.getValue(i));
+                    }
+
+                    if (vn.equals("FechaTimbrado")) {
+                        setFechaTimbre(atts.getValue(i));
                     }
                 }
             }
