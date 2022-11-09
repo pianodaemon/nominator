@@ -52,9 +52,9 @@ class S3BucketStorage implements IStorage {
 
     static public S3BucketStorage setupWithEnv() throws StorageError {
 
-        Optional<String> region = Optional.ofNullable(System.getenv("BUCKET_REGION"));
-        Optional<String> key = Optional.ofNullable(System.getenv("BUCKET_KEY"));
-        Optional<String> secret = Optional.ofNullable(System.getenv("BUCKET_SECRET"));
+        Optional<String> region = Optional.ofNullable(System.getenv("AWS_REGION"));
+        Optional<String> key = Optional.ofNullable(System.getenv("AWS_ACCESS_KEY_ID"));
+        Optional<String> secret = Optional.ofNullable(System.getenv("AWS_SECRET_ACCESS_KEY"));
 
         region.orElseThrow(() -> new StorageError("aws region was not fed"));
         key.orElseThrow(() -> new StorageError("aws key was not fed"));
