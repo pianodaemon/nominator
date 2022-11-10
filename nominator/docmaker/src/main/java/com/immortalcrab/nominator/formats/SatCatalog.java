@@ -167,57 +167,55 @@ class SatCatalog {
             }
             break;
 
-            case "tipo_percepcion":
-                m = ImmutableMap.<String, String>builder()
-                        .put("001", "Sueldos, Salarios  Rayas y Jornales")
-                        .put("002", "Gratificación Anual (Aguinaldo)")
-                        .put("003", "Participación de los Trabajadores en las Utilidades PTU")
-                        .put("004", "Reembolso de Gastos Médicos Dentales y Hospitalarios")
-                        .put("005", "Fondo de Ahorro")
-                        .put("006", "Caja de ahorro")
-                        .put("009", "Contribuciones a Cargo del Trabajador Pagadas por el Patrón")
-                        .put("010", "Premios por puntualidad")
-                        .put("011", "Prima de Seguro de vida")
-                        .put("012", "Seguro de Gastos Médicos Mayores")
-                        .put("013", "Cuotas Sindicales Pagadas por el Patrón")
-                        .put("014", "Subsidios por incapacidad")
-                        .put("015", "Becas para trabajadores y/o hijos")
-                        .put("019", "Horas extra")
-                        .put("020", "Prima dominical")
-                        .put("021", "Prima vacacional")
-                        .put("022", "Prima por antigüedad")
-                        .put("023", "Pagos por separación")
-                        .put("024", "Seguro de retiro")
-                        .put("025", "Indemnizaciones")
-                        .put("026", "Reembolso por funeral")
-                        .put("027", "Cuotas de seguridad social pagadas por el patrón")
-                        .put("028", "Comisiones")
-                        .put("029", "Vales de despensa")
-                        .put("030", "Vales de restaurante")
-                        .put("031", "Vales de gasolina")
-                        .put("032", "Vales de ropa")
-                        .put("033", "Ayuda para renta")
-                        .put("034", "Ayuda para artículos escolares")
-                        .put("035", "Ayuda para anteojos")
-                        .put("036", "Ayuda para transporte")
-                        .put("037", "Ayuda para gastos de funeral")
-                        .put("038", "Otros ingresos por salarios")
-                        .put("039", "Jubilaciones, pensiones o haberes de retiro")
-                        .put("044", "Jubilaciones, pensiones o haberes de retiro en parcialidades")
-                        .put("045", "Ingresos en acciones o títulos valor que representan bienes")
-                        .put("046", "Ingresos asimilados a salarios")
-                        .put("047", "Alimentación diferentes a los establecidos en el Art 94 último párrafo LISR")
-                        .put("048", "Habitación")
-                        .put("049", "Premios por asistencia")
-                        .put("050", "Viáticos")
-                        .put("051",
-                                "Pagos por gratificaciones, primas, compensaciones, recompensas u otros a extrabajadores derivados de jubilación en parcialidades")
-                        .put("052",
-                                "Pagos que se realicen a extrabajadores que obtengan una jubilación en parcialidades derivados de la ejecución de resoluciones judicial o de un laudo")
-                        .put("053",
-                                "Pagos que se realicen a extrabajadores que obtengan una jubilación en una sola exhibición derivados de la ejecución de resoluciones judicial o de un laudo")
-                        .build();
-                break;
+            case "tipo_percepcion": {
+                m = Stream.of(new String[][]{
+                        {"001", "Sueldos, Salarios  Rayas y Jornales"},
+                        {"002", "Gratificación Anual (Aguinaldo)"},
+                        {"003", "Participación de los Trabajadores en las Utilidades PTU"},
+                        {"004", "Reembolso de Gastos Médicos Dentales y Hospitalarios"},
+                        {"005", "Fondo de Ahorro"},
+                        {"006", "Caja de ahorro"},
+                        {"009", "Contribuciones a Cargo del Trabajador Pagadas por el Patrón"},
+                        {"010", "Premios por puntualidad"},
+                        {"011", "Prima de Seguro de vida"},
+                        {"012", "Seguro de Gastos Médicos Mayores"},
+                        {"013", "Cuotas Sindicales Pagadas por el Patrón"},
+                        {"014", "Subsidios por incapacidad"},
+                        {"015", "Becas para trabajadores y/o hijos"},
+                        {"019", "Horas extra"},
+                        {"020", "Prima dominical"},
+                        {"021", "Prima vacacional"},
+                        {"022", "Prima por antigüedad"},
+                        {"023", "Pagos por separación"},
+                        {"024", "Seguro de retiro"},
+                        {"025", "Indemnizaciones"},
+                        {"026", "Reembolso por funeral"},
+                        {"027", "Cuotas de seguridad social pagadas por el patrón"},
+                        {"028", "Comisiones"},
+                        {"029", "Vales de despensa"},
+                        {"030", "Vales de restaurante"},
+                        {"031", "Vales de gasolina"},
+                        {"032", "Vales de ropa"},
+                        {"033", "Ayuda para renta"},
+                        {"034", "Ayuda para artículos escolares"},
+                        {"035", "Ayuda para anteojos"},
+                        {"036", "Ayuda para transporte"},
+                        {"037", "Ayuda para gastos de funeral"},
+                        {"038", "Otros ingresos por salarios"},
+                        {"039", "Jubilaciones, pensiones o haberes de retiro"},
+                        {"044", "Jubilaciones, pensiones o haberes de retiro en parcialidades"},
+                        {"045", "Ingresos en acciones o títulos valor que representan bienes"},
+                        {"046", "Ingresos asimilados a salarios"},
+                        {"047", "Alimentación diferentes a los establecidos en el Art 94 último párrafo LISR"},
+                        {"048", "Habitación"},
+                        {"049", "Premios por asistencia"},
+                        {"050", "Viáticos"},
+                        {"051", "Pagos por gratificaciones, primas, compensaciones, recompensas u otros a extrabajadores derivados de jubilación en parcialidades"},
+                        {"052", "Pagos que se realicen a extrabajadores que obtengan una jubilación en parcialidades derivados de la ejecución de resoluciones judicial o de un laudo"},
+                        {"053", "Pagos que se realicen a extrabajadores que obtengan una jubilación en una sola exhibición derivados de la ejecución de resoluciones judicial o de un laudo"}
+                    }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
+            }
+            break;
 
             case "tipo_deduccion": {
                 m = Stream.of(new String[][]{
