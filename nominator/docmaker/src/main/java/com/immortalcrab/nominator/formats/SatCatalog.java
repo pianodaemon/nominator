@@ -1,7 +1,8 @@
 package com.immortalcrab.nominator.formats;
 
 import java.util.Map;
-
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import com.google.common.collect.ImmutableMap;
 
 class SatCatalog {
@@ -48,28 +49,29 @@ class SatCatalog {
                     .build();
                 break;
 
-            case "regimen_fiscal":
-                m = ImmutableMap.<String, String>builder()
-                    .put("601", "General de Ley Personas Morales")
-                    .put("603", "Personas Morales con Fines no Lucrativos")
-                    .put("605", "Sueldos y Salarios e Ingresos Asimilados a Salarios")
-                    .put("606", "Arrendamiento")
-                    .put("607", "Régimen de Enajenación o Adquisición de Bienes")
-                    .put("608", "Demás ingresos")
-                    .put("610", "Residentes en el Extranjero sin Establecimiento Permanente en México")
-                    .put("611", "Ingresos por Dividendos (socios y accionistas)")
-                    .put("612", "Personas Físicas con Actividades Empresariales y Profesionales")
-                    .put("614", "Ingresos por intereses")
-                    .put("615", "Régimen de los ingresos por obtención de premios")
-                    .put("616", "Sin obligaciones fiscales")
-                    .put("620", "Sociedades Cooperativas de Producción que optan por diferir sus ingresos")
-                    .put("621", "Incorporación Fiscal")
-                    .put("622", "Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras")
-                    .put("623", "Opcional para Grupos de Sociedades")
-                    .put("624", "Coordinados")
-                    .put("625", "Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas")
-                    .put("626", "Régimen Simplificado de Confianza")
-                    .build();
+            case "regimen_fiscal": {
+                m = Stream.of(new String[][] {
+                    {"601", "General de Ley Personas Morales"},
+                    {"603", "Personas Morales con Fines no Lucrativos"},
+                    {"605", "Sueldos y Salarios e Ingresos Asimilados a Salarios"},
+                    {"606", "Arrendamiento"},
+                    {"607", "Régimen de Enajenación o Adquisición de Bienes"},
+                    {"608", "Demás ingresos"},
+                    {"610", "Residentes en el Extranjero sin Establecimiento Permanente en México"},
+                    {"611", "Ingresos por Dividendos (socios y accionistas)"},
+                    {"612", "Personas Físicas con Actividades Empresariales y Profesionales"},
+                    {"614", "Ingresos por intereses"},
+                    {"615", "Régimen de los ingresos por obtención de premios"},
+                    {"616", "Sin obligaciones fiscales"},
+                    {"620", "Sociedades Cooperativas de Producción que optan por diferir sus ingresos"},
+                    {"621", "Incorporación Fiscal"},
+                    {"622", "Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras"},
+                    {"623", "Opcional para Grupos de Sociedades"},
+                    {"624", "Coordinados"},
+                    {"625", "Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas"},
+                    {"626", "Régimen Simplificado de Confianza"},
+                   }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
+                }
                 break;
 
             case "tipo_jornada":
