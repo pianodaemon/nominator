@@ -135,10 +135,12 @@ class SatCatalog {
                     .build();
                 break;
 
-            case "tipo_nomina":
-                m = ImmutableMap.of(
-                    "O", "Nómina ordinaria",
-                    "E", "Nómina extraordinaria");
+            case "tipo_nomina": {
+                    m = Map.of(
+                        "O", "Nómina ordinaria",
+                        "E", "Nómina extraordinaria"
+                    );
+                }
                 break;
 
             case "periodicidad_pago":
