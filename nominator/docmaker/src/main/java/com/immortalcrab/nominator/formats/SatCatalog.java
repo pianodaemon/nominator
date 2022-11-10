@@ -160,15 +160,17 @@ class SatCatalog {
                     .build();
                 break;
 
-            case "clave_unidad":
-                m = Map.of(
-                    "ACT", "Actividad",
-                    "E48", "Unidad de servicio");
+            case "clave_unidad": {
+                    m = Map.of(
+                        "ACT", "Actividad",
+                        "E48", "Unidad de servicio");
+                }
                 break;
 
-            case "clave_prod_serv":
-                m = ImmutableMap.of(
+            case "clave_prod_serv": {
+                    m = Map.of(
                     "84111505", "Servicios de contabilidad de sueldos y salarios");
+                }
                 break;
 
             case "tipo_percepcion":
