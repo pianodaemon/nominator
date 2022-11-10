@@ -9,7 +9,7 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public class DocHandler implements RequestStreamHandler {
+public class DocHandler extends DocMaker implements RequestStreamHandler {
 
     public void handleRequest(InputStream iStream, OutputStream oStream, Context ctx) {
 
