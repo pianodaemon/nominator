@@ -115,21 +115,20 @@ class SatCatalog {
             break;
 
             case "tipo_regimen":
-                m = ImmutableMap.<String, String>builder()
-                        .put("02", "Sueldos (Incluye ingresos señalados en la fracción I del artículo 94 de LISR)")
-                        .put("03", "Jubilados")
-                        .put("04", "Pensionados")
-                        .put("05", "Asimilados Miembros Sociedades Cooperativas Produccion")
-                        .put("06", "Asimilados Integrantes Sociedades Asociaciones Civiles")
-                        .put("07", "Asimilados Miembros consejos")
-                        .put("08", "Asimilados comisionistas")
-                        .put("09", "Asimilados Honorarios")
-                        .put("10", "Asimilados acciones")
-                        .put("11", "Asimilados otros")
-                        .put("12", "Jubilados o Pensionados")
-                        .put("13", "Indemnización o Separación")
-                        .put("99", "Otro Regimen")
-                        .build();
+                m = Stream.of(new String[][]{
+                        {"02", "Sueldos (Incluye ingresos señalados en la fracción I del artículo 94 de LISR)"},
+                        {"03", "Jubilados"},
+                        {"04", "Pensionados"},
+                        {"05", "Asimilados Miembros Sociedades Cooperativas Produccion"},
+                        {"06", "Asimilados Integrantes Sociedades Asociaciones Civiles"},
+                        {"07", "Asimilados Miembros consejos"},
+                        {"08", "Asimilados comisionistas"},
+                        {"09", "Asimilados Honorarios"},
+                        {"10", "Asimilados acciones"},
+                        {"11", "Asimilados otros"},
+                        {"12", "Jubilados o Pensionados"},
+                        {"13", "Indemnización o Separación"},
+                        {"99", "Otro Regimen"}}).collect(Collectors.toMap(data -> data[0], data -> data[1]));
                 break;
 
             case "tipo_nomina": {
