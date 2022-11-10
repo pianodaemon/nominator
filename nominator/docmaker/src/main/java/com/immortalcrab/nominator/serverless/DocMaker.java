@@ -2,6 +2,7 @@ package com.immortalcrab.nominator.serverless;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -27,7 +28,7 @@ class DocMaker {
         );
     }
 
-    public void flushBuffer(Map<String, Object> responseMap, OutputStream oStream) {
+    public void flushBuffer(Map<String, Object> responseMap, OutputStream oStream) throws IOException {
 
         Gson gsonObj = new Gson();
 
