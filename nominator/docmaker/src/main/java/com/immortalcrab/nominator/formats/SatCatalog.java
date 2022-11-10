@@ -103,7 +103,7 @@ class SatCatalog {
 
             case "tipo_contrato": {
                 m = Stream.of(new String[][] {
-                    {"01", "Contrato de trabajo por tiempo indeterminado"}.
+                    {"01", "Contrato de trabajo por tiempo indeterminado"},
                     {"02", "Contrato de trabajo para obra determinada"},
                     {"03", "Contrato de trabajo por tiempo determinado"},
                     {"04", "Contrato de trabajo por temporada"},
@@ -161,7 +161,7 @@ class SatCatalog {
                 break;
 
             case "clave_unidad":
-                m = ImmutableMap.of(
+                m = Map.of(
                     "ACT", "Actividad",
                     "E48", "Unidad de servicio");
                 break;
