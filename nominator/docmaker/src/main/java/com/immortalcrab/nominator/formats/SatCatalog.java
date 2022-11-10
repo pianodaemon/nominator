@@ -13,82 +13,80 @@ class SatCatalog {
 
         switch (field) {
             case "clave_ent_fed": {
-                m = Stream.of(new String[][] {
-                        { "AGU", "Aguascalientes" },
-                        { "BCN", "Baja California" },
-                        { "BCS", "Baja California Sur" },
-                        { "CAM", "Campeche" },
-                        { "CHP", "Chiapas" },
-                        { "CHH", "Chihuahua" },
-                        { "COA", "Coahuila" },
-                        { "COL", "Colima" },
-                        { "CMX", "Ciudad de México" },
-                        { "DUR", "Durango" },
-                        { "GUA", "Guanajuato" },
-                        { "GRO", "Guerrero" },
-                        { "HID", "Hidalgo" },
-                        { "JAL", "Jalisco" },
-                        { "MEX", "Estado de México" },
-                        { "MIC", "Michoacán" },
-                        { "MOR", "Morelos" },
-                        { "NAY", "Nayarit" },
-                        { "NLE", "Nuevo León" },
-                        { "OAX", "Oaxaca" },
-                        { "PUE", "Puebla" },
-                        { "QUE", "Querétaro" },
-                        { "ROO", "Quintana Roo" },
-                        { "SLP", "San Luis Potosí" },
-                        { "SIN", "Sinaloa" },
-                        { "SON", "Sonora" },
-                        { "TAB", "Tabasco" },
-                        { "TAM", "Tamaulipas" },
-                        { "TLA", "Tlaxcala" },
-                        { "VER", "Veracruz" },
-                        { "YUC", "Yucatán" },
-                        { "ZAC", "Zacatecas" }
+                m = Stream.of(new String[][]{
+                    {"AGU", "Aguascalientes"},
+                    {"BCN", "Baja California"},
+                    {"BCS", "Baja California Sur"},
+                    {"CAM", "Campeche"},
+                    {"CHP", "Chiapas"},
+                    {"CHH", "Chihuahua"},
+                    {"COA", "Coahuila"},
+                    {"COL", "Colima"},
+                    {"CMX", "Ciudad de México"},
+                    {"DUR", "Durango"},
+                    {"GUA", "Guanajuato"},
+                    {"GRO", "Guerrero"},
+                    {"HID", "Hidalgo"},
+                    {"JAL", "Jalisco"},
+                    {"MEX", "Estado de México"},
+                    {"MIC", "Michoacán"},
+                    {"MOR", "Morelos"},
+                    {"NAY", "Nayarit"},
+                    {"NLE", "Nuevo León"},
+                    {"OAX", "Oaxaca"},
+                    {"PUE", "Puebla"},
+                    {"QUE", "Querétaro"},
+                    {"ROO", "Quintana Roo"},
+                    {"SLP", "San Luis Potosí"},
+                    {"SIN", "Sinaloa"},
+                    {"SON", "Sonora"},
+                    {"TAB", "Tabasco"},
+                    {"TAM", "Tamaulipas"},
+                    {"TLA", "Tlaxcala"},
+                    {"VER", "Veracruz"},
+                    {"YUC", "Yucatán"},
+                    {"ZAC", "Zacatecas"}
                 }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
             }
-                break;
+            break;
 
             case "regimen_fiscal": {
-                m = Stream.of(new String[][] {
-                        { "601", "General de Ley Personas Morales" },
-                        { "603", "Personas Morales con Fines no Lucrativos" },
-                        { "605", "Sueldos y Salarios e Ingresos Asimilados a Salarios" },
-                        { "606", "Arrendamiento" },
-                        { "607", "Régimen de Enajenación o Adquisición de Bienes" },
-                        { "608", "Demás ingresos" },
-                        { "610", "Residentes en el Extranjero sin Establecimiento Permanente en México" },
-                        { "611", "Ingresos por Dividendos (socios y accionistas)" },
-                        { "612", "Personas Físicas con Actividades Empresariales y Profesionales" },
-                        { "614", "Ingresos por intereses" },
-                        { "615", "Régimen de los ingresos por obtención de premios" },
-                        { "616", "Sin obligaciones fiscales" },
-                        { "620", "Sociedades Cooperativas de Producción que optan por diferir sus ingresos" },
-                        { "621", "Incorporación Fiscal" },
-                        { "622", "Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras" },
-                        { "623", "Opcional para Grupos de Sociedades" },
-                        { "624", "Coordinados" },
-                        { "625", "Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas" },
-                        { "626", "Régimen Simplificado de Confianza" },
-                }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
+                m = Stream.of(new String[][]{
+                    {"601", "General de Ley Personas Morales"},
+                    {"603", "Personas Morales con Fines no Lucrativos"},
+                    {"605", "Sueldos y Salarios e Ingresos Asimilados a Salarios"},
+                    {"606", "Arrendamiento"},
+                    {"607", "Régimen de Enajenación o Adquisición de Bienes"},
+                    {"608", "Demás ingresos"},
+                    {"610", "Residentes en el Extranjero sin Establecimiento Permanente en México"},
+                    {"611", "Ingresos por Dividendos (socios y accionistas)"},
+                    {"612", "Personas Físicas con Actividades Empresariales y Profesionales"},
+                    {"614", "Ingresos por intereses"},
+                    {"615", "Régimen de los ingresos por obtención de premios"},
+                    {"616", "Sin obligaciones fiscales"},
+                    {"620", "Sociedades Cooperativas de Producción que optan por diferir sus ingresos"},
+                    {"621", "Incorporación Fiscal"},
+                    {"622", "Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras"},
+                    {"623", "Opcional para Grupos de Sociedades"},
+                    {"624", "Coordinados"},
+                    {"625", "Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas"},
+                    {"626", "Régimen Simplificado de Confianza"},}).collect(Collectors.toMap(data -> data[0], data -> data[1]));
             }
-                break;
+            break;
 
             case "tipo_jornada": {
-                m = Stream.of(new String[][] {
-                        { "01", "Diurna" },
-                        { "02", "Nocturna" },
-                        { "03", "Mixta" },
-                        { "04", "Por hora" },
-                        { "05", "Reducida" },
-                        { "06", "Continuada" },
-                        { "07", "Partida" },
-                        { "08", "Por turnos" },
-                        { "99", "Otra Jornada" },
-                }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
+                m = Stream.of(new String[][]{
+                    {"01", "Diurna"},
+                    {"02", "Nocturna"},
+                    {"03", "Mixta"},
+                    {"04", "Por hora"},
+                    {"05", "Reducida"},
+                    {"06", "Continuada"},
+                    {"07", "Partida"},
+                    {"08", "Por turnos"},
+                    {"99", "Otra Jornada"},}).collect(Collectors.toMap(data -> data[0], data -> data[1]));
             }
-                break;
+            break;
 
             case "riesgo_puesto":
                 m = Map.of(
@@ -101,21 +99,20 @@ class SatCatalog {
                 break;
 
             case "tipo_contrato": {
-                m = Stream.of(new String[][] {
-                        { "01", "Contrato de trabajo por tiempo indeterminado" },
-                        { "02", "Contrato de trabajo para obra determinada" },
-                        { "03", "Contrato de trabajo por tiempo determinado" },
-                        { "04", "Contrato de trabajo por temporada" },
-                        { "05", "Contrato de trabajo sujeto a prueba" },
-                        { "06", "Contrato de trabajo con capacitación inicial" },
-                        { "07", "Modalidad de contratación por pago de hora laborada" },
-                        { "08", "Modalidad de trabajo por comisión laboral" },
-                        { "09", "Modalidades de contratación donde no existe relación de trabajo" },
-                        { "10", "Jubilación, pensión, retiro." },
-                        { "99", "Otro contrato" },
-                }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
+                m = Stream.of(new String[][]{
+                    {"01", "Contrato de trabajo por tiempo indeterminado"},
+                    {"02", "Contrato de trabajo para obra determinada"},
+                    {"03", "Contrato de trabajo por tiempo determinado"},
+                    {"04", "Contrato de trabajo por temporada"},
+                    {"05", "Contrato de trabajo sujeto a prueba"},
+                    {"06", "Contrato de trabajo con capacitación inicial"},
+                    {"07", "Modalidad de contratación por pago de hora laborada"},
+                    {"08", "Modalidad de trabajo por comisión laboral"},
+                    {"09", "Modalidades de contratación donde no existe relación de trabajo"},
+                    {"10", "Jubilación, pensión, retiro."},
+                    {"99", "Otro contrato"},}).collect(Collectors.toMap(data -> data[0], data -> data[1]));
             }
-                break;
+            break;
 
             case "tipo_regimen":
                 m = ImmutableMap.<String, String>builder()
@@ -140,7 +137,7 @@ class SatCatalog {
                         "O", "Nómina ordinaria",
                         "E", "Nómina extraordinaria");
             }
-                break;
+            break;
 
             case "periodicidad_pago":
                 m = ImmutableMap.<String, String>builder()
@@ -163,13 +160,13 @@ class SatCatalog {
                         "ACT", "Actividad",
                         "E48", "Unidad de servicio");
             }
-                break;
+            break;
 
             case "clave_prod_serv": {
                 m = Map.of(
                         "84111505", "Servicios de contabilidad de sueldos y salarios");
             }
-                break;
+            break;
 
             case "tipo_percepcion":
                 m = ImmutableMap.<String, String>builder()
@@ -345,20 +342,20 @@ class SatCatalog {
                 break;
 
             case "tipo_otro_pago": {
-                    m = Stream.of(new String[][] {
-                        {"001", "Reintegro de ISR pagado en exceso (siempre que no haya sido enterado al SAT)."},
-                        {"002", "Subsidio para el empleo (efectivamente entregado al trabajador)."},
-                        {"003", "Viáticos (entregados al trabajador)."},
-                        {"004", "Aplicación de saldo a favor por compensación anual."},
-                        {"005", "Reintegro de ISR retenido en exceso de ejercicio anterior (siempre que no haya sido enterado al SAT)."},
-                        {"006", "Alimentos en bienes (Servicios de comedor y comida) Art 94 último párrafo LISR."},
-                        {"007", "ISR ajustado por subsidio."},
-                        {"008", "Subsidio efectivamente entregado que no correspondía (Aplica sólo cuando haya ajuste al cierre de mes en relación con el Apéndice 7 de la guía de llenado de nómina)."},
-                        {"009", "Reembolso de descuentos efectuados para el crédito de vivienda."},
-                        {"999", "Pagos distintos a los listados y que no deben considerarse como ingreso por sueldos, salarios o ingresos asimilados."}
-                    }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
-                }
-                break;
+                m = Stream.of(new String[][]{
+                    {"001", "Reintegro de ISR pagado en exceso (siempre que no haya sido enterado al SAT)."},
+                    {"002", "Subsidio para el empleo (efectivamente entregado al trabajador)."},
+                    {"003", "Viáticos (entregados al trabajador)."},
+                    {"004", "Aplicación de saldo a favor por compensación anual."},
+                    {"005", "Reintegro de ISR retenido en exceso de ejercicio anterior (siempre que no haya sido enterado al SAT)."},
+                    {"006", "Alimentos en bienes (Servicios de comedor y comida) Art 94 último párrafo LISR."},
+                    {"007", "ISR ajustado por subsidio."},
+                    {"008", "Subsidio efectivamente entregado que no correspondía (Aplica sólo cuando haya ajuste al cierre de mes en relación con el Apéndice 7 de la guía de llenado de nómina)."},
+                    {"009", "Reembolso de descuentos efectuados para el crédito de vivienda."},
+                    {"999", "Pagos distintos a los listados y que no deben considerarse como ingreso por sueldos, salarios o ingresos asimilados."}
+                }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
+            }
+            break;
 
             default:
                 throw new Exception(String.format("Field %s is not found in SAT catalog.", field));
