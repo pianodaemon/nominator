@@ -2,4 +2,5 @@ description = 'dal'
 
 dependencies {
 
+    implementation "com.google.inject:guice:${guice_version}"
 }

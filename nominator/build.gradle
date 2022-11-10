@@ -13,7 +13,6 @@ subprojects {
 
     dependencies {
 
-        implementation "com.google.inject:guice:${guice_version}"
         implementation "com.amazonaws:aws-lambda-java-log4j:1.0.1"
 
         compileOnly "org.projectlombok:lombok:${lombok_version}"
