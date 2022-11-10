@@ -91,14 +91,13 @@ class SatCatalog {
                 break;
 
             case "riesgo_puesto":
-                m = ImmutableMap.<String, String>builder()
-                        .put("1", "Clase I")
-                        .put("2", "Clase II")
-                        .put("3", "Clase III")
-                        .put("4", "Clase IV")
-                        .put("5", "Clase V")
-                        .put("99", "No aplica")
-                        .build();
+                m = Map.of(
+                        "1", "Clase I",
+                        "2", "Clase II",
+                        "3", "Clase III",
+                        "4", "Clase IV",
+                        "5", "Clase V",
+                        "99", "No aplica");
                 break;
 
             case "tipo_contrato": {
