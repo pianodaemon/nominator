@@ -1,6 +1,5 @@
 package com.immortalcrab.nominator.formats;
 
-
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
