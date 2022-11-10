@@ -138,21 +138,21 @@ class SatCatalog {
             }
             break;
 
-            case "periodicidad_pago":
-                m = ImmutableMap.<String, String>builder()
-                        .put("01", "Diario")
-                        .put("02", "Semanal")
-                        .put("03", "Catorcenal")
-                        .put("04", "Quincenal")
-                        .put("05", "Mensual")
-                        .put("06", "Bimestral")
-                        .put("07", "Unidad obra")
-                        .put("08", "Comisión")
-                        .put("09", "Precio alzado")
-                        .put("10", "Decenal")
-                        .put("99", "Otra Periodicidad")
-                        .build();
-                break;
+            case "periodicidad_pago": {
+                m = Stream.of(new String[][]{
+                        {"01", "Diario"},
+                        {"02", "Semanal"},
+                        {"03", "Catorcenal"},
+                        {"04", "Quincenal"},
+                        {"05", "Mensual"},
+                        {"06", "Bimestral"},
+                        {"07", "Unidad obra"},
+                        {"08", "Comisión"},
+                        {"09", "Precio alzado"},
+                        {"10", "Decenal"},
+                        {"99", "Otra Periodicidad"}}).collect(Collectors.toMap(data -> data[0], data -> data[1]));
+            }
+            break;
 
             case "clave_unidad": {
                 m = Map.of(
