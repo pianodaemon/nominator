@@ -344,22 +344,20 @@ class SatCatalog {
                         .build();
                 break;
 
-            case "tipo_otro_pago":
-                m = ImmutableMap.<String, String>builder()
-                        .put("001", "Reintegro de ISR pagado en exceso (siempre que no haya sido enterado al SAT).")
-                        .put("002", "Subsidio para el empleo (efectivamente entregado al trabajador).")
-                        .put("003", "Viáticos (entregados al trabajador).")
-                        .put("004", "Aplicación de saldo a favor por compensación anual.")
-                        .put("005",
-                                "Reintegro de ISR retenido en exceso de ejercicio anterior (siempre que no haya sido enterado al SAT).")
-                        .put("006", "Alimentos en bienes (Servicios de comedor y comida) Art 94 último párrafo LISR.")
-                        .put("007", "ISR ajustado por subsidio.")
-                        .put("008",
-                                "Subsidio efectivamente entregado que no correspondía (Aplica sólo cuando haya ajuste al cierre de mes en relación con el Apéndice 7 de la guía de llenado de nómina).")
-                        .put("009", "Reembolso de descuentos efectuados para el crédito de vivienda.")
-                        .put("999",
-                                "Pagos distintos a los listados y que no deben considerarse como ingreso por sueldos, salarios o ingresos asimilados.")
-                        .build();
+            case "tipo_otro_pago": {
+                    m = Stream.of(new String[][] {
+                        {"001", "Reintegro de ISR pagado en exceso (siempre que no haya sido enterado al SAT)."},
+                        {"002", "Subsidio para el empleo (efectivamente entregado al trabajador)."},
+                        {"003", "Viáticos (entregados al trabajador)."},
+                        {"004", "Aplicación de saldo a favor por compensación anual."},
+                        {"005", "Reintegro de ISR retenido en exceso de ejercicio anterior (siempre que no haya sido enterado al SAT)."},
+                        {"006", "Alimentos en bienes (Servicios de comedor y comida) Art 94 último párrafo LISR."},
+                        {"007", "ISR ajustado por subsidio."},
+                        {"008", "Subsidio efectivamente entregado que no correspondía (Aplica sólo cuando haya ajuste al cierre de mes en relación con el Apéndice 7 de la guía de llenado de nómina)."},
+                        {"009", "Reembolso de descuentos efectuados para el crédito de vivienda."},
+                        {"999", "Pagos distintos a los listados y que no deben considerarse como ingreso por sueldos, salarios o ingresos asimilados."}
+                    }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
+                }
                 break;
 
             default:
