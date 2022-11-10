@@ -12,41 +12,42 @@ class SatCatalog {
         Map<String, String> m = null;
 
         switch (field) {
-            case "clave_ent_fed":
-                m = ImmutableMap.<String, String>builder()
-                    .put("AGU", "Aguascalientes")
-                    .put("BCN", "Baja California")
-                    .put("BCS", "Baja California Sur")
-                    .put("CAM", "Campeche")
-                    .put("CHP", "Chiapas")
-                    .put("CHH", "Chihuahua")
-                    .put("COA", "Coahuila")
-                    .put("COL", "Colima")
-                    .put("CMX", "Ciudad de México")
-                    .put("DUR", "Durango")
-                    .put("GUA", "Guanajuato")
-                    .put("GRO", "Guerrero")
-                    .put("HID", "Hidalgo")
-                    .put("JAL", "Jalisco")
-                    .put("MEX", "Estado de México")
-                    .put("MIC", "Michoacán")
-                    .put("MOR", "Morelos")
-                    .put("NAY", "Nayarit")
-                    .put("NLE", "Nuevo León")
-                    .put("OAX", "Oaxaca")
-                    .put("PUE", "Puebla")
-                    .put("QUE", "Querétaro")
-                    .put("ROO", "Quintana Roo")
-                    .put("SLP", "San Luis Potosí")
-                    .put("SIN", "Sinaloa")
-                    .put("SON", "Sonora")
-                    .put("TAB", "Tabasco")
-                    .put("TAM", "Tamaulipas")
-                    .put("TLA", "Tlaxcala")
-                    .put("VER", "Veracruz")
-                    .put("YUC", "Yucatán")
-                    .put("ZAC", "Zacatecas")
-                    .build();
+            case "clave_ent_fed": {
+                m = Stream.of(new String[][] {
+                    {"AGU", "Aguascalientes"},
+                    {"BCN", "Baja California"},
+                    {"BCS", "Baja California Sur"},
+                    {"CAM", "Campeche"},
+                    {"CHP", "Chiapas"},
+                    {"CHH", "Chihuahua"},
+                    {"COA", "Coahuila"},
+                    {"COL", "Colima"},
+                    {"CMX", "Ciudad de México"},
+                    {"DUR", "Durango"},
+                    {"GUA", "Guanajuato"},
+                    {"GRO", "Guerrero"},
+                    {"HID", "Hidalgo"},
+                    {"JAL", "Jalisco"},
+                    {"MEX", "Estado de México"},
+                    {"MIC", "Michoacán"},
+                    {"MOR", "Morelos"},
+                    {"NAY", "Nayarit"},
+                    {"NLE", "Nuevo León"},
+                    {"OAX", "Oaxaca"},
+                    {"PUE", "Puebla"},
+                    {"QUE", "Querétaro"},
+                    {"ROO", "Quintana Roo"},
+                    {"SLP", "San Luis Potosí"},
+                    {"SIN", "Sinaloa"},
+                    {"SON", "Sonora"},
+                    {"TAB", "Tabasco"},
+                    {"TAM", "Tamaulipas"},
+                    {"TLA", "Tlaxcala"},
+                    {"VER", "Veracruz"},
+                    {"YUC", "Yucatán"},
+                    {"ZAC", "Zacatecas"}
+                   }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
+                }
                 break;
 
             case "regimen_fiscal": {
