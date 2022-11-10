@@ -3,7 +3,6 @@ package com.immortalcrab.nominator.formats;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import com.google.common.collect.ImmutableMap;
 
 class SatCatalog {
 
