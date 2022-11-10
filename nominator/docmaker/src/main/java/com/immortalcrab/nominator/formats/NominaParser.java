@@ -16,13 +16,17 @@ import lombok.Setter;
 @Setter
 class NominaParser {
 
+    private static final String CFDI_COMPROBANTE = "cfdi:Comprobante";
     private static final String TFD_TIMBREFISCALDIGITAL = "tfd:TimbreFiscalDigital";
 
     private String UUID;
-    private String selloSat;
-    private String selloCfd;
+    private String selloSAT;
+    private String selloCFD;
     private String noCertificadoSAT;
-    private String fechaTimbre;
+    private String fechaTimbrado;
+    private String rfcProvCertif;
+    private String version;
+    private String noCertificado;
 
     public NominaParser(InputStream is) throws ParserConfigurationException, SAXException, IOException {
 
@@ -45,23 +49,46 @@ class NominaParser {
                         setUUID(atts.getValue(i));
                     }
 
-                    if (vn.equals("selloSAT")) {
+                    if (vn.equals("SelloSAT")) {
 
-                        setSelloSat(atts.getValue(i));
+                        setSelloSAT(atts.getValue(i));
                     }
 
-                    if (vn.equals("selloCFD")) {
+                    if (vn.equals("SelloCFD")) {
 
-                        setSelloCfd(atts.getValue(i));
+                        setSelloCFD(atts.getValue(i));
                     }
 
-                    if (vn.equals("noCertificadoSAT")) {
+                    if (vn.equals("NoCertificadoSAT")) {
 
                         setNoCertificadoSAT(atts.getValue(i));
                     }
 
                     if (vn.equals("FechaTimbrado")) {
-                        setFechaTimbre(atts.getValue(i));
+
+                        setFechaTimbrado(atts.getValue(i));
+                    }
+
+                    if (vn.equals("Version")) {
+
+                        setVersion(atts.getValue(i));
+                    }
+
+                    if (vn.equals("RfcProvCertif")) {
+
+                        setRfcProvCertif(atts.getValue(i));
+                    }
+                }
+            }
+
+            if (qName.equals(CFDI_COMPROBANTE)) {
+
+                for (int i = 0; i < atts.getLength(); i++) {
+
+                    String vn = atts.getQName(i);
+                    if (vn.equals("NoCertificado")) {
+
+                        setNoCertificado(atts.getValue(i));
                     }
                 }
             }

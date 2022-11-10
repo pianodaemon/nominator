@@ -20,7 +20,8 @@ public class NominaPdf {
 //    public static void main(String[] args) {
 //        try {
 //            String fileContent = Files.readString(Paths.get("/home/userd/dev/lola4/DOS/cfdi/service/formats/sample5.json"));
-//            render(fileContent, "");
+//            byte[] xmlContent = Files.readAllBytes(Paths.get("/home/userd/dev/lola4/DOS/cfdi/service/formats/sample5.xml"));
+//            render(fileContent, new BufferedInputStream(new ByteArrayInputStream(xmlContent)));
 //
 //        } catch (Exception ex) {
 //            ex.printStackTrace();
@@ -33,13 +34,20 @@ public class NominaPdf {
 
         Gson gson = new Gson();
         Map<String, Object> ds = gson.fromJson(json, HashMap.class);
-        ds.put("no_certificado", "00001000000413586324");
-        ds.put("UUID", nomParser.getUUID());
-        ds.put("CDIGITAL_SAT", "00001000000413073350");
-        ds.put("FECHSTAMP", "2021-11-22T10:04:05");
-        ds.put("SELLO_CFD", nomParser.getSelloCfd());
-        ds.put("SELLO_SAT", nomParser.getSelloSat());
-        ds.put("CADENA_ORIGINAL_TFD", "||1.1|63D91EE9-FAFC-4F9F-B69F-A3D65F8C0261|2021-08-25T22:54:52|SVT110323827|PfKJXRxWxMMsClxmr5ROzrFLFlaXFmcq/3B5gzUZegxBXG8bs/1MkrKkxJXsmEVwEVfhM9vx17Fm5YnqrgbI7rv1gh+5lH+WlPa3lNzKupLBwAWTi493hRrUVKYvth97fc0+mPv6hzDmBSziSLiQQ2WCppKb2jANIqQplmE70BKTe5q3C0fUhjSRghWmgRAdyKZ9AMjGNrxZ3pkYE14yx7SxP6Xc2YNEnsTfBbbKkZGcGzMwLBzuG3uJtXR2JFFPdkEmZymEZCL3UejX6iIi6oDmjChmrryjWC8jSWGCHnp678sM456yoNz5uRfNb64iVvYWHP+h3VpKTFrlVZnDuA==|00001000000413073350||");
+
+        ds.put("no_certificado", nomParser.getNoCertificado());
+        ds.put("uuid", nomParser.getUUID());
+        ds.put("cdigital_sat", nomParser.getNoCertificadoSAT());
+        ds.put("fecha_timbrado", nomParser.getFechaTimbrado());
+        ds.put("sello_cfd", nomParser.getSelloCFD());
+        ds.put("sello_sat", nomParser.getSelloSAT());
+        ds.put("cadena_original_tfd", String.format("||%s|%s|%s|%s|%s|%s||",
+                nomParser.getVersion(),
+                nomParser.getUUID(),
+                nomParser.getFechaTimbrado(),
+                nomParser.getRfcProvCertif(),
+                nomParser.getSelloCFD(),
+                nomParser.getNoCertificadoSAT()));
 
         byte[] pdfBytes = null;
         try {
@@ -75,11 +83,7 @@ public class NominaPdf {
 
             ds.put("descuento", df.format((Double) ds.get("descuento")));
             ds.put("subtotal", df.format((Double) ds.get("subtotal")));
-            Double totalDouble = (Double) ds.get("total");
 
-
-
-            // Continuar dando formato -------------------------------------
             dsEmisor.put("regimen_fiscal_descr", regimenFiscalCat.get(dsEmisor.get("regimen_fiscal")));
 
             for (Map<String, Object> c : dsConceptos) {
@@ -132,6 +136,7 @@ public class NominaPdf {
             }
 
             // Translating importe total to Spanish
+            Double totalDouble = (Double) ds.get("total");
             String totalStr = df.format(totalDouble);
             String[] totalArr = totalStr.split("\\.");
             String centavoStr = " PESOS 00/100 MXN";
@@ -143,21 +148,21 @@ public class NominaPdf {
 
             // QR Code generation ------------------------------------------------------------------------------
             String verificaCfdiUrl = String.format("https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=%s&re=%s&rr=%s",
-                    ds.get("UUID"),
+                    ds.get("uuid"),
                     dsEmisor.get("rfc"),
                     dsReceptor.get("rfc")
             );
             var qrCodeBais = QRCode.generateByteStream(verificaCfdiUrl, 400, 400);
-            ds.put("QRCODE", qrCodeBais);
+            ds.put("qrcode", qrCodeBais);
 
             // logo selection ---------------------------------------------------------------
             var empresa = "TIR";
 
             if (empresa.equals("TQ")) {
-                ds.put("LOGO_FILENAME", "/logo.jpg");
+                ds.put("logo_filename", "/logo.jpg");
 
             } else if (empresa.equals("TIR")) {
-                ds.put("LOGO_FILENAME", "/tir_logo.jpg");
+                ds.put("logo_filename", "/tir_logo.jpg");
 
             } else {
                 throw new Exception("EMPRESA desconocida: " + empresa);
