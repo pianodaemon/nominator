@@ -1,9 +1,13 @@
 package com.immortalcrab.nominator.serverless;
 
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-abstract class DocMaker {
+import com.google.gson.Gson;
+
+class DocMaker {
 
 	static final String PDF_MIME_TYPE = "application/pdf";
 
@@ -28,4 +32,15 @@ abstract class DocMaker {
 		);
 	}
 
+	public void flushBuffer(Map<String, Object> responseMap, OutputStream oStream){
+
+		Gson gsonObj = new Gson();
+
+		String responseJSON = gsonObj.toJson(responseMap);
+
+		OutputStreamWriter writer = new OutputStreamWriter(oStream, StandardCharsets.UTF_8.name());
+		writer.write(responseJSON);
+		writer.close();
+	}
+}
 }
