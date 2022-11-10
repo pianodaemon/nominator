@@ -32,7 +32,7 @@ class DocMaker {
 		);
 	}
 
-	public void flushBuffer(Map<String, Object> responseMap, OutputStream oStream){
+	public void flushBuffer(Map<String, Object> responseMap, OutputStream oStream) throws IOException {
 
 		Gson gsonObj = new Gson();
 
