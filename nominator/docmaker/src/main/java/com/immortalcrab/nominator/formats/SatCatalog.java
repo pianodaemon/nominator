@@ -101,20 +101,21 @@ class SatCatalog {
                     .build();
                 break;
 
-            case "tipo_contrato":
-                m = ImmutableMap.<String, String>builder()
-                    .put("01", "Contrato de trabajo por tiempo indeterminado")
-                    .put("02", "Contrato de trabajo para obra determinada")
-                    .put("03", "Contrato de trabajo por tiempo determinado")
-                    .put("04", "Contrato de trabajo por temporada")
-                    .put("05", "Contrato de trabajo sujeto a prueba")
-                    .put("06", "Contrato de trabajo con capacitación inicial")
-                    .put("07", "Modalidad de contratación por pago de hora laborada")
-                    .put("08", "Modalidad de trabajo por comisión laboral")
-                    .put("09", "Modalidades de contratación donde no existe relación de trabajo")
-                    .put("10", "Jubilación, pensión, retiro.")
-                    .put("99", "Otro contrato")
-                    .build();
+            case "tipo_contrato": {
+                m = Stream.of(new String[][] {
+                    {"01", "Contrato de trabajo por tiempo indeterminado"}.
+                    {"02", "Contrato de trabajo para obra determinada"},
+                    {"03", "Contrato de trabajo por tiempo determinado"},
+                    {"04", "Contrato de trabajo por temporada"},
+                    {"05", "Contrato de trabajo sujeto a prueba"},
+                    {"06", "Contrato de trabajo con capacitación inicial"},
+                    {"07", "Modalidad de contratación por pago de hora laborada"},
+                    {"08", "Modalidad de trabajo por comisión laboral"},
+                    {"09", "Modalidades de contratación donde no existe relación de trabajo"},
+                    {"10", "Jubilación, pensión, retiro."},
+                    {"99", "Otro contrato"},
+                    }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
+                }
                 break;
 
             case "tipo_regimen":
