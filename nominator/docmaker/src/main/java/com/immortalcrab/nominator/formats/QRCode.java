@@ -7,8 +7,6 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 
 public class QRCode {
 
