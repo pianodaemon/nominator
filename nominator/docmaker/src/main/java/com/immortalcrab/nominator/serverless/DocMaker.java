@@ -11,7 +11,7 @@ class DocMaker {
 
     static final String PDF_MIME_TYPE = "application/pdf";
 
-    private Map<String, Object> setupResponse(Map<String, String> headers, final byte[] docEncB64, final String fName) {
+    private Map<String, Object> setupResponse(final byte[] docEncB64, final String fName) {
 
         final String body = new String(docEncB64, StandardCharsets.UTF_8);
 
