@@ -75,18 +75,19 @@ class SatCatalog {
                 }
                 break;
 
-            case "tipo_jornada":
-                m = ImmutableMap.<String, String>builder()
-                    .put("01", "Diurna")
-                    .put("02", "Nocturna")
-                    .put("03", "Mixta")
-                    .put("04", "Por hora")
-                    .put("05", "Reducida")
-                    .put("06", "Continuada")
-                    .put("07", "Partida")
-                    .put("08", "Por turnos")
-                    .put("99", "Otra Jornada")
-                    .build();
+            case "tipo_jornada": {
+                m = Stream.of(new String[][] {
+                    {"01", "Diurna"},
+                    {"02", "Nocturna"},
+                    {"03", "Mixta"},
+                    {"04", "Por hora"},
+                    {"05", "Reducida"},
+                    {"06", "Continuada"},
+                    {"07", "Partida"},
+                    {"08", "Por turnos"},
+                    {"99", "Otra Jornada"},
+                   }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
+                }
                 break;
 
             case "riesgo_puesto":
