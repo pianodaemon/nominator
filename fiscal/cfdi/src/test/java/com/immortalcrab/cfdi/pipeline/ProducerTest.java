@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 public class ProducerTest {
 
-    static final String DEFAULT_BUCKET = "PACE8001104V2/defaultbucket";
+    static final String DEFAULT_BUCKET = "datalake-cfdi-subscriber";
 
     FakeBucketService _fbs;
     FakeStorage _storage;
