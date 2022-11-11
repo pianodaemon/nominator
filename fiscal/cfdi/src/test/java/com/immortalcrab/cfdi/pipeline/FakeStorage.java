@@ -9,14 +9,14 @@ import java.util.Optional;
 
 public class FakeStorage implements IStorage {
 
-    private final AmazonS3 amazonS3;
+    private final AmazonS3 _amazonS3;
 
-    private final Optional<String> target;
+    private final Optional<String> _target;
 
     public FakeStorage(AmazonS3 amazonS3, Optional<String> target) {
 
-        this.amazonS3 = amazonS3;
-        this.target = target;
+        _amazonS3 = amazonS3;
+        _target = target;
     }
 
     public FakeStorage(AmazonS3 amazonS3, final String target) {
@@ -33,5 +33,4 @@ public class FakeStorage implements IStorage {
     public BufferedInputStream download(String fileName) throws StorageError {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
 }
