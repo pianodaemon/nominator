@@ -13,14 +13,14 @@ public class ProducerTest {
     static final String DEFAULT_BUCKET = "datalake-cfdi-subscriber";
 
     FakeBucketService _fbs;
-    FakeStorage _storage;
-    FakeStamp _stamper;
+    IStorage _storage;
+    IStamp _stamper;
 
     @BeforeEach
     void setup() throws StorageError {
 
         _fbs = new FakeBucketService();
-        _storage = new FakeStorage(_fbs.engage(), DEFAULT_BUCKET);
+        _storage = new S3BucketStorage(_fbs.engage(), DEFAULT_BUCKET);
     }
 
     @AfterEach
