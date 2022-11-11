@@ -5,15 +5,19 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.AnonymousAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.immortalcrab.cfdi.error.StorageError;
+
 import io.findify.s3mock.S3Mock;
+import java.util.Optional;
+
+import com.immortalcrab.cfdi.error.StorageError;
 
 class FakeBucketService {
 
     private static final String FAKE_SERVICE_IP = "127.0.0.1";
     private static final Integer FAKE_SERVICE_LOCAL_PORT = 8001;
 
-    final S3Mock _api;
+    private final S3Mock _api;
+    private AmazonS3 _client;
 
     public FakeBucketService() {
 
@@ -22,14 +26,15 @@ class FakeBucketService {
 
     public AmazonS3 engage() throws StorageError {
         _api.start();
-        return this.setup();
+        _client = this.setupClient();
+        return _client;
     }
 
     public void shutdown() {
         _api.stop();
     }
 
-    private AmazonS3 setup() throws StorageError {
+    private AmazonS3 setupClient() throws StorageError {
 
         EndpointConfiguration endpoint = new EndpointConfiguration(
                 String.format("http://%s:%d", FAKE_SERVICE_IP, FAKE_SERVICE_LOCAL_PORT),
@@ -42,5 +47,9 @@ class FakeBucketService {
                 .withCredentials(new AWSStaticCredentialsProvider(new AnonymousAWSCredentials()))
                 .build();
 
+    }
+
+    Optional<AmazonS3> getClient() {
+        return Optional.ofNullable(_client);
     }
 }
