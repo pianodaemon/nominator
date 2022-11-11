@@ -15,24 +15,21 @@ class FakeBucketService {
 
     final S3Mock _api;
 
-    public FakeBucketService(boolean engage) {
+    public FakeBucketService() {
 
         this._api = new S3Mock.Builder().withPort(FAKE_SERVICE_LOCAL_PORT).withInMemoryBackend().build();
-
-        if (engage) {
-            _api.start();
-        }
     }
 
-    public void engage() {
+    public AmazonS3 engage() throws StorageError {
         _api.start();
+        return this.setup();
     }
 
     public void shutdown() {
         _api.stop();
     }
 
-    public AmazonS3 setup() throws StorageError {
+    private AmazonS3 setup() throws StorageError {
 
         EndpointConfiguration endpoint = new EndpointConfiguration(
                 String.format("http://%s:%d", FAKE_SERVICE_IP, FAKE_SERVICE_LOCAL_PORT),
@@ -46,5 +43,4 @@ class FakeBucketService {
                 .build();
 
     }
-
 }
