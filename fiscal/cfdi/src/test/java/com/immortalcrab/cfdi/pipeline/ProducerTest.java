@@ -2,8 +2,6 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.immortalcrab.cfdi.error.StorageError;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
