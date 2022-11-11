@@ -21,10 +21,10 @@ import lombok.NonNull;
 class S3BucketStorage implements IStorage {
 
     private final @NonNull
-    AmazonS3 amazonS3;
+    AmazonS3 _amazonS3;
 
     private final @NonNull
-    Optional<String> target;
+    Optional<String> _target;
 
     public S3BucketStorage(AmazonS3 amazonS3, final String target) {
 
@@ -44,8 +44,8 @@ class S3BucketStorage implements IStorage {
 
         try {
 
-            amazonS3.putObject(
-                    target.orElseThrow(() -> new StorageError("aws bucket was not fed")),
+            _amazonS3.putObject(
+                    _target.orElseThrow(() -> new StorageError("aws bucket was not fed")),
                     fileName, inputStream,
                     objectMetadata);
 
@@ -58,8 +58,8 @@ class S3BucketStorage implements IStorage {
     @Override
     public BufferedInputStream download(final String fileName) throws StorageError {
 
-        GetObjectRequest gobj = new GetObjectRequest(target.orElseThrow(() -> new StorageError("aws bucket was not fed")), fileName);
-        S3Object object = amazonS3.getObject(gobj);
+        GetObjectRequest gobj = new GetObjectRequest(_target.orElseThrow(() -> new StorageError("aws bucket was not fed")), fileName);
+        S3Object object = _amazonS3.getObject(gobj);
 
         return new BufferedInputStream(object.getObjectContent());
     }
