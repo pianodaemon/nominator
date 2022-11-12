@@ -120,11 +120,11 @@ class NominaRequestDTO extends JsonRequest {
         try {
 
             Map<String, Object> dic = LegoTagAssembler.obtainMapFromKey(this.getDs(), "receptor");
-            Optional<Object> cterfc = Optional.ofNullable(dic.get("rfc"));
-            Optional<Object> ctenom = Optional.ofNullable(dic.get("nombre"));
-            Optional<Object> proposito = Optional.ofNullable(dic.get("uso_cfdi"));
-            Optional<Object> df = Optional.ofNullable(dic.get("domicilio_fiscal_receptor"));
-            Optional<Object> rf = Optional.ofNullable(dic.get("regimen_fiscal_receptor"));
+            Optional<Object> cterfc = LegoTagAssembler.obtainObjFromKey(dic, "rfc");
+            Optional<Object> ctenom = LegoTagAssembler.obtainObjFromKey(dic, "nombre");
+            Optional<Object> proposito = LegoTagAssembler.obtainObjFromKey(dic, "uso_cfdi");
+            Optional<Object> df = LegoTagAssembler.obtainObjFromKey(dic, "domicilio_fiscal_receptor");
+            Optional<Object> rf = LegoTagAssembler.obtainObjFromKey(dic, "regimen_fiscal_receptor");
 
             _pr.setRfc((String) cterfc.orElseThrow());
             _pr.setNombre((String) ctenom.orElseThrow());
@@ -135,7 +135,6 @@ class NominaRequestDTO extends JsonRequest {
             log.error("One or more of the mandatory elements of Receptor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
         }
-
     }
 
     @NoArgsConstructor
