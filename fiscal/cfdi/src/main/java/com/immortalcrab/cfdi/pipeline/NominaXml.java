@@ -39,11 +39,9 @@ import lombok.NonNull;
 @Getter
 class NominaXml {
 
-    private final @NonNull
-    NominaRequestDTO cfdiReq;
+    private final @NonNull NominaRequestDTO cfdiReq;
 
-    private final @NonNull
-    IStorage st;
+    private final @NonNull IStorage st;
 
     public static String render(Request cfdiReq, IStamp<PacRegularRequest, PacRegularResponse> stamper, IStorage st) throws FormatError, StorageError {
 
@@ -82,7 +80,6 @@ class NominaXml {
 
             // Emisor
             Emisor emisor = cfdiFactory.createComprobanteEmisor();
-            var dsEmisor = (Map<String,String>) ds.get("emisor");
             emisor.setRfc(cfdiReq.getPseudoEmisor().getRfc());
             emisor.setNombre(cfdiReq.getPseudoEmisor().getNombre());
             emisor.setRegimenFiscal(cfdiReq.getPseudoEmisor().getRegimenFiscal());
