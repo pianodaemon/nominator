@@ -18,11 +18,20 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 class NominaRequestDTO extends JsonRequest {
 
-    List<PseudoConcepto> _pcs = new LinkedList<>();
+    PseudoEmisor _pe;
+    List<PseudoConcepto> _pcs;
 
     private NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
+
         super(reader);
-        this.shapePcs();
+        _pe = new PseudoEmisor();
+        _pcs = new LinkedList<>();
+        shapeEp();
+        shapePcs();
+    }
+
+    public PseudoEmisor getPseudoEmisor() {
+        return _pe;
     }
 
     public List<PseudoConcepto> getPseudoConceptos() {
@@ -34,7 +43,7 @@ class NominaRequestDTO extends JsonRequest {
         return req;
     }
 
-    private List<PseudoConcepto> shapePcs() throws RequestError {
+    private void shapePcs() throws RequestError {
 
         Optional<Object> cs = NominaRequestDTO.LegoTagAssembler.obtainObjFromKey(this.getDs(), "conceptos");
 
@@ -80,8 +89,35 @@ class NominaRequestDTO extends JsonRequest {
             log.error("One or more of the mandatory elements of Concepto tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
         }
+    }
 
-        return _pcs;
+    private void shapeEp() throws RequestError {
+
+        try {
+
+            Map<String, Object> dic = LegoTagAssembler.obtainMapFromKey(this.getDs(), "emisor");
+            Optional<Object> emirfc = Optional.ofNullable(dic.get("rfc"));
+            Optional<Object> eminom = Optional.ofNullable(dic.get("nombre"));
+            Optional<Object> regimen = Optional.ofNullable(dic.get("regimen_fiscal"));
+
+            _pe.setRfc((String) emirfc.orElseThrow());
+            _pe.setNombre((String) eminom.orElseThrow());
+            _pe.setRegimenFiscal((String) regimen.orElseThrow());
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements of Emisor tag is missing");
+            throw new RequestError("mandatory element in request is missing", ex);
+        }
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class PseudoEmisor {
+
+        private String emisor;
+        private String rfc;
+        private String nombre;
+        private String regimenFiscal;
     }
 
     @NoArgsConstructor
