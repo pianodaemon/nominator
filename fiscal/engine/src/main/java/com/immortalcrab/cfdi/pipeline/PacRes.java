@@ -1,5 +1,6 @@
 package com.immortalcrab.cfdi.pipeline;
 
+import java.io.StringWriter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,4 +10,6 @@ import lombok.Setter;
 @Setter
 public class PacRes {
 
+    StringWriter content;
+    String reply;
 }
