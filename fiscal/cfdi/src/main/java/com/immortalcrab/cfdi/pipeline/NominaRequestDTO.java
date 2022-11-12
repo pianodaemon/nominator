@@ -18,16 +18,23 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 class NominaRequestDTO extends JsonRequest {
 
+    PseudoReceptor _pr;
     PseudoEmisor _pe;
     List<PseudoConcepto> _pcs;
 
     private NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
 
         super(reader);
+        _pr = new PseudoReceptor();
         _pe = new PseudoEmisor();
         _pcs = new LinkedList<>();
+        shapeRp();
         shapeEp();
         shapePcs();
+    }
+
+    public PseudoReceptor getPseudoReceptor() {
+        return _pr;
     }
 
     public PseudoEmisor getPseudoEmisor() {
@@ -106,6 +113,35 @@ class NominaRequestDTO extends JsonRequest {
             log.error("One or more of the mandatory elements of Emisor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
         }
+    }
+
+    private void shapeRp() throws RequestError {
+
+        try {
+
+            Map<String, Object> dic = LegoTagAssembler.obtainMapFromKey(this.getDs(), "receptor");
+            Optional<Object> cterfc = Optional.ofNullable(dic.get("rfc"));
+            Optional<Object> ctenom = Optional.ofNullable(dic.get("nombre"));
+            Optional<Object> proposito = Optional.ofNullable(dic.get("uso_cfdi"));
+
+            _pr.setRfc((String) cterfc.orElseThrow());
+            _pr.setNombre((String) ctenom.orElseThrow());
+            _pr.setProposito((String) proposito.orElseThrow());
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements of Receptor tag is missing");
+            throw new RequestError("mandatory element in request is missing", ex);
+        }
+
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class PseudoReceptor {
+
+        private String rfc;
+        private String nombre;
+        private String proposito;
     }
 
     @NoArgsConstructor
