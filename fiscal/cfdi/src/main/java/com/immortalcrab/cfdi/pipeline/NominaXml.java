@@ -90,7 +90,7 @@ class NominaXml {
             var dsReceptor = (Map<String, String>) ds.get("receptor");
             receptor.setRfc(cfdiReq.getPseudoReceptor().getRfc());
             receptor.setNombre(cfdiReq.getPseudoReceptor().getNombre());
-            receptor.setDomicilioFiscalReceptor(dsReceptor.get("domicilio_fiscal_receptor"));
+            receptor.setDomicilioFiscalReceptor(cfdiReq.getPseudoReceptor().getDomicilioFiscal());
             receptor.setRegimenFiscalReceptor(dsReceptor.get("regimen_fiscal_receptor"));
             receptor.setUsoCFDI(CUsoCFDI.fromValue((dsReceptor.get("uso_cfdi"))));
             cfdi.setReceptor(receptor);
