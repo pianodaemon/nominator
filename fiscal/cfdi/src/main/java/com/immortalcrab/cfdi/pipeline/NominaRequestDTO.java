@@ -102,9 +102,9 @@ class NominaRequestDTO extends JsonRequest {
         try {
 
             Map<String, Object> dic = LegoTagAssembler.obtainMapFromKey(this.getDs(), "emisor");
-            Optional<Object> emirfc = Optional.ofNullable(dic.get("rfc"));
-            Optional<Object> eminom = Optional.ofNullable(dic.get("nombre"));
-            Optional<Object> regimen = Optional.ofNullable(dic.get("regimen_fiscal"));
+            Optional<Object> emirfc = LegoTagAssembler.obtainObjFromKey(dic, "rfc");
+            Optional<Object> eminom = LegoTagAssembler.obtainObjFromKey(dic, "nombre");
+            Optional<Object> regimen = LegoTagAssembler.obtainObjFromKey(dic, "regimen_fiscal");
 
             _pe.setRfc((String) emirfc.orElseThrow());
             _pe.setNombre((String) eminom.orElseThrow());
