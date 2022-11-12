@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 
 public class FakeXml {
 
+    static final String DEFAULT_BUCKET = "datalake-cfdi-subscriber";
+
     private final Request cfdiReq;
     private final IStorage st;
 
@@ -19,9 +21,9 @@ public class FakeXml {
         PacReqChild pacReq = ((FakeStamp) stamper).createPacReq(cfdi.toString(), "nowhere");
         PacResChild pacRes = stamper.impress(pacReq);
 
-        ic.save(pacRes.getContent(), (String) cfdiReq.getDs().get("SERIE"), (String) cfdiReq.getDs().get("FOLIO"));
+        ic.save(pacRes.getContent(), (String) cfdiReq.getDs().get("serie"), (String) cfdiReq.getDs().get("folio"));
 
-        return pacRes.getID();
+        return pacRes.getReply();
     }
 
     public FakeXml(Request cfdiReq, IStorage st) {
@@ -34,11 +36,15 @@ public class FakeXml {
         StringBuffer buf = sw.getBuffer();
         byte[] in = buf.toString().getBytes(StandardCharsets.UTF_8);
 
-        this.st.upload("text/xml", in.length, String.format("%s%s.xml", serie, folio), new ByteArrayInputStream(in));
+        this.st.upload("text/xml", in.length, String.format("%s/%s%s.xml", DEFAULT_BUCKET ,serie, folio), new ByteArrayInputStream(in));
 
     }
 
     private StringWriter shape() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        StringWriter sw = new StringWriter();
+
+        sw.write("Content to get stamped");
+        return sw;
     }
 }

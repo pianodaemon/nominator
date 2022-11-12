@@ -19,13 +19,17 @@ public class Producer extends Pipeline implements IIssuer {
 
     Producer(final IStamp stamper, final IStorage storage) throws StorageError {
 
-        super(
+        this(
                 stamper,
                 storage,
                 ImmutableMap.of(
                         "fac", new Pair<>(FacturaRequest::render, FacturaXml::render),
                         "nom", new Pair<>(NominaRequest::render, NominaXml::render))
         );
+    }
+
+    Producer(final IStamp stamper, final IStorage storage, ImmutableMap<String, Pair<IDecodeStep, IXmlStep>> scenarios) throws StorageError {
+        super(stamper, storage, scenarios);
     }
 
     @Override

@@ -55,7 +55,7 @@ public class ProducerTest {
 
     @Test
     void verifyProduction() {
-/*
+
         try {
 
             AmazonS3 client = _fbs.getClient().orElseThrow(() -> new StorageError("aws client was never initialized"));
@@ -67,14 +67,14 @@ public class ProducerTest {
             Pair<IDecodeStep, IXmlStep> pair = new Pair<>(FakeRequest::render, FakeXml::render);
             Producer producer = new Producer(_stamper, _storage, ImmutableMap.of("fake", pair));
 
-            producer.doIssue("nom", isr);
+            producer.doIssue("fake", isr);
 
-            BufferedInputStream buff = _storage.download(DEFAULT_BUCKET);
+            BufferedInputStream buff = _storage.download(DEFAULT_BUCKET + "/RRM" + "5457" + ".xml");
             assertTrue(buff.readAllBytes().length > 0);
 
         } catch (StorageError | PipelineError | RequestError | FormatError | DecodeError | IOException ex) {
             assertNotNull(ex);
-        }*/
+        }
     }
 
 }
