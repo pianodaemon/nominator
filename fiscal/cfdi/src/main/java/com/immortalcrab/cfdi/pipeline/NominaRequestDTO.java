@@ -123,10 +123,12 @@ class NominaRequestDTO extends JsonRequest {
             Optional<Object> cterfc = Optional.ofNullable(dic.get("rfc"));
             Optional<Object> ctenom = Optional.ofNullable(dic.get("nombre"));
             Optional<Object> proposito = Optional.ofNullable(dic.get("uso_cfdi"));
+            Optional<Object> df = Optional.ofNullable(dic.get("domicilio_fiscal_receptor"));
 
             _pr.setRfc((String) cterfc.orElseThrow());
             _pr.setNombre((String) ctenom.orElseThrow());
             _pr.setProposito((String) proposito.orElseThrow());
+            _pr.setDomicilioFiscal((String) df.orElseThrow());
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Receptor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -142,6 +144,7 @@ class NominaRequestDTO extends JsonRequest {
         private String rfc;
         private String nombre;
         private String proposito;
+        private String domicilioFiscal;
     }
 
     @NoArgsConstructor
