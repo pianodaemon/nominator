@@ -87,12 +87,11 @@ class NominaXml {
 
             // Receptor
             Receptor receptor = cfdiFactory.createComprobanteReceptor();
-            var dsReceptor = (Map<String, String>) ds.get("receptor");
             receptor.setRfc(cfdiReq.getPseudoReceptor().getRfc());
             receptor.setNombre(cfdiReq.getPseudoReceptor().getNombre());
             receptor.setDomicilioFiscalReceptor(cfdiReq.getPseudoReceptor().getDomicilioFiscal());
             receptor.setRegimenFiscalReceptor(cfdiReq.getPseudoReceptor().getRegimenFiscal());
-            receptor.setUsoCFDI(CUsoCFDI.fromValue((dsReceptor.get("uso_cfdi"))));
+            receptor.setUsoCFDI(CUsoCFDI.fromValue((cfdiReq.getPseudoReceptor().getProposito())));
             cfdi.setReceptor(receptor);
 
             // Conceptos
