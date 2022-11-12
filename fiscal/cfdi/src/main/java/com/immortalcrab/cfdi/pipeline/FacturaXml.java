@@ -14,13 +14,15 @@ import mx.gob.sat.sitio_internet.cfd.catalogos.CTipoDeComprobante;
 import mx.gob.sat.sitio_internet.cfd.catalogos.CTipoFactor;
 import mx.gob.sat.sitio_internet.cfd.catalogos.CUsoCFDI;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.math.BigDecimal;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Array;
+import java.util.*;
 
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -52,20 +54,55 @@ class FacturaXml {
 
     private List<PseudoConcepto> shapePcs() throws FormatError {
 
-        Optional<Object> cs = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "conceptos");
         List<PseudoConcepto> pcs = new LinkedList<>();
 
         try {
 
-            List<Map<String, Object>> items = (List<Map<String, Object>>) cs.orElseThrow();
+            List<Map<String, Object>> items = (List<Map<String, Object>>) LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "conceptos");
 
             items.stream().map(i -> {
 
                 PseudoConcepto p = new PseudoConcepto();
-                p.setClaveProdServ((String) LegoTagAssembler.obtainObjFromKey(i, "prodserv").orElseThrow());
-                p.setDescripcion((String) LegoTagAssembler.obtainObjFromKey(i, "descripcion").orElseThrow());
-                p.setUnidad((String) LegoTagAssembler.obtainObjFromKey(i, "unidad").orElseThrow());
-                p.setSku((String) LegoTagAssembler.obtainObjFromKey(i, "sku").orElseThrow());
+                p.setClaveProdServ((String) LegoTagAssembler.obtainObjFromKey(i, "clave_prod_serv"));
+                p.setNoIdentificacion((String) LegoTagAssembler.obtainObjFromKey(i, "no_identificacion"));
+                p.setCantidad((BigDecimal) LegoTagAssembler.obtainObjFromKey(i, "cantidad"));
+                p.setClaveUnidad((String) LegoTagAssembler.obtainObjFromKey(i, "clave_unidad"));
+                p.setUnidad((String) LegoTagAssembler.obtainObjFromKey(i, "unidad"));
+                p.setDescripcion((String) LegoTagAssembler.obtainObjFromKey(i, "descripcion"));
+                p.setValorUnitario((BigDecimal) LegoTagAssembler.obtainObjFromKey(i, "valor_unitario"));
+                p.setImporte((BigDecimal) LegoTagAssembler.obtainObjFromKey(i, "importe"));
+                p.setDescuento((BigDecimal) LegoTagAssembler.obtainObjFromKey(i, "descuento"));
+                p.setObjetoImp((String) LegoTagAssembler.obtainObjFromKey(i, "objeto_imp"));
+
+                List<PseudoConceptoTraslado> psTraslados = new LinkedList<>();
+                var traslados = (List<Map<String, Object>>) LegoTagAssembler.obtainObjFromKey(i, "traslados");
+                traslados.stream().map(j -> {
+                    PseudoConceptoTraslado psTraslado = new PseudoConceptoTraslado();
+                    psTraslado.setBase((BigDecimal) LegoTagAssembler.obtainObjFromKey(j, "base"));
+                    psTraslado.setImpuesto((String) LegoTagAssembler.obtainObjFromKey(j, "impuesto"));
+                    psTraslado.setTipoFactor((String) LegoTagAssembler.obtainObjFromKey(j, "tipo_factor"));
+                    psTraslado.setTasaOCuota((BigDecimal) LegoTagAssembler.obtainObjFromKey(j, "tasa_o_cuota"));
+                    psTraslado.setImporte((BigDecimal) LegoTagAssembler.obtainObjFromKey(j, "importe"));
+                    return psTraslado;
+                }).forEachOrdered(t -> {
+                    psTraslados.add(t);
+                });
+                p.setTraslados(psTraslados);
+
+                List<PseudoConceptoRetencion> psRetenciones = new LinkedList<>();
+                var retenciones = (List<Map<String, Object>>) LegoTagAssembler.obtainObjFromKey(i, "retenciones");
+                retenciones.stream().map(k -> {
+                    PseudoConceptoRetencion psRetencion = new PseudoConceptoRetencion();
+                    psRetencion.setBase((BigDecimal) LegoTagAssembler.obtainObjFromKey(k, "base"));
+                    psRetencion.setImpuesto((String) LegoTagAssembler.obtainObjFromKey(k, "impuesto"));
+                    psRetencion.setTipoFactor((String) LegoTagAssembler.obtainObjFromKey(k, "tipo_factor"));
+                    psRetencion.setTasaOCuota((BigDecimal) LegoTagAssembler.obtainObjFromKey(k, "tasa_o_cuota"));
+                    psRetencion.setImporte((BigDecimal) LegoTagAssembler.obtainObjFromKey(k, "importe"));
+                    return psRetencion;
+                }).forEachOrdered(r -> {
+                    psRetenciones.add(r);
+                });
+                p.setRetenciones(psRetenciones);
 
                 return p;
 
@@ -102,7 +139,7 @@ class FacturaXml {
 
             Map<String, Object> dic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "receptor");
             Optional<Object> cterfc = Optional.ofNullable(dic.get("rfc"));
-            Optional<Object> ctenom = Optional.ofNullable(dic.get("razon_social"));
+            Optional<Object> ctenom = Optional.ofNullable(dic.get("nombre"));
             Optional<Object> proposito = Optional.ofNullable(dic.get("uso_cfdi"));
 
             CUsoCFDI uso = CUsoCFDI.fromValue((String) proposito.orElseThrow());
@@ -125,7 +162,7 @@ class FacturaXml {
 
             Map<String, Object> dic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "emisor");
             Optional<Object> emirfc = Optional.ofNullable(dic.get("rfc"));
-            Optional<Object> eminom = Optional.ofNullable(dic.get("razon_social"));
+            Optional<Object> eminom = Optional.ofNullable(dic.get("nombre"));
             Optional<Object> regimen = Optional.ofNullable(dic.get("regimen_fiscal"));
 
             emisor.setRfc((String) emirfc.orElseThrow());
@@ -145,52 +182,43 @@ class FacturaXml {
 
         try {
 
-            Map<String, Object> controlDic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "control");
-            Optional<Object> serie = Optional.ofNullable(controlDic.get("serie"));
-            Optional<Object> folio = Optional.ofNullable(controlDic.get("folio"));
-
-            Map<String, Object> monedaDic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "moneda");
-            Optional<Object> moneda = Optional.ofNullable(monedaDic.get("iso_4217"));
-            Optional<Object> tpocam = Optional.ofNullable(monedaDic.get("tipo_de_cambio"));
-
-            Map<String, Object> totalesDic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "totales");
-            Optional<Object> subtot = Optional.ofNullable(totalesDic.get("importe_sum"));
-            Optional<Object> total = Optional.ofNullable(totalesDic.get("monto_total"));
-
-            Map<String, Object> formaPagoDic = LegoTagAssembler.obtainMapFromKey(cfdiReq.getDs(), "forma_pago");
-            Optional<Object> clave = Optional.ofNullable(formaPagoDic.get("clave"));
-
-            Optional<Object> emizip = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "lugar_expedicion");
-            Optional<Object> nocert = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "numero_certificado");
-            Optional<Object> metpago = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "metodo_pago");
-            Optional<Object> timeStamp = LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "time_stamp");
-            XMLGregorianCalendar timeStampGregorianCalendar = DatatypeFactory.
-                    newInstance().newXMLGregorianCalendar((String) timeStamp.orElseThrow());
+            var serie = (String) LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "serie");
+            var folio = (String) LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "folio");
+            var fecha = (String) LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "fecha");
+            var formaPago = (String) LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "forma_pago");
+            var noCertificado = (String) LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "no_certificado");
+            var subtotal = (BigDecimal) LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "subtotal");
+            var moneda = (String) LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "moneda");
+            var tipoCambio = (BigDecimal) LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "tipo_cambio");
+            var total = (BigDecimal) LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "total");
+            var metodoPago = (String) LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "metodo_pago");
+            var lugarExpedicion = (String) LegoTagAssembler.obtainObjFromKey(cfdiReq.getDs(), "lugar_expedicion");
+            XMLGregorianCalendar fechaGregorianCalendar = DatatypeFactory.
+                    newInstance().newXMLGregorianCalendar(fecha);
 
             comprobante.setVersion("4.0");
             comprobante.setTipoDeComprobante(CTipoDeComprobante.I);
-            comprobante.setLugarExpedicion((String) emizip.orElseThrow());
-            CMetodoPago metpagVal = CMetodoPago.fromValue((String) metpago.orElseThrow());
+            comprobante.setLugarExpedicion(lugarExpedicion);
+            CMetodoPago metpagVal = CMetodoPago.fromValue(metodoPago);
             comprobante.setMetodoPago(metpagVal);
             comprobante.setTipoDeComprobante(CTipoDeComprobante.I);
-            comprobante.setTotal(new BigDecimal((String) total.orElseThrow()));
-            comprobante.setMoneda(CMoneda.fromValue((String) moneda.orElseThrow()));
+            comprobante.setTotal(total);
+            comprobante.setMoneda(CMoneda.fromValue(moneda));
 
-            if (tpocam.isPresent()
-                    && !moneda.equals(FacturaXml.NATIONAL_CURRENCY)
-                    && !moneda.equals(FacturaXml.NO_CURRENCY)) {
+            if (!moneda.equals(FacturaXml.NATIONAL_CURRENCY)
+                && !moneda.equals(FacturaXml.NO_CURRENCY)) {
 
-                comprobante.setTipoCambio(new BigDecimal((String) tpocam.get()));
+                comprobante.setTipoCambio(tipoCambio);
             }
 
             comprobante.setCertificado("");
-            comprobante.setSubTotal(new BigDecimal((String) subtot.orElseThrow()));
+            comprobante.setSubTotal(subtotal);
             comprobante.setCondicionesDePago("");
-            comprobante.setNoCertificado((String) nocert.orElseThrow());
-            comprobante.setFormaPago((String) clave.orElseThrow());
-            comprobante.setFecha(timeStampGregorianCalendar);
-            comprobante.setSerie((String) serie.orElseThrow());
-            comprobante.setFolio((String) folio.orElseThrow());
+            comprobante.setNoCertificado(noCertificado);
+            comprobante.setFormaPago(formaPago);
+            comprobante.setFecha(fechaGregorianCalendar);
+            comprobante.setSerie(serie);
+            comprobante.setFolio(folio);
 
         } catch (DatatypeConfigurationException ex) {
             log.error("Comprobante tag can not include a time stamp badly formated");
@@ -232,15 +260,19 @@ class FacturaXml {
     public static class PseudoConcepto {
 
         private String claveProdServ;
-        private String claveUnidad;
-        private String unidad;
-        private String descripcion;
         private BigDecimal cantidad;
+        private String claveUnidad;
+        private String descripcion;
         private BigDecimal valorUnitario;
         private BigDecimal importe;
+        private BigDecimal descuento;
+        private String objetoImp;
+        private List<PseudoConceptoTraslado> traslados;
+        private List<PseudoConceptoRetencion> retenciones;
 
-        // The optional one out of gob regulations
-        private String sku;
+        // The optional ones, proper of issuer's operations
+        private String noIdentificacion;
+        private String unidad;
   
         public Comprobante.Conceptos.Concepto shapeConceptoTag(
                 ObjectFactory cfdiFactory) {
@@ -250,12 +282,86 @@ class FacturaXml {
             c.setClaveProdServ(this.getClaveProdServ());
             c.setCantidad(this.getCantidad());
             c.setClaveUnidad(this.getClaveUnidad());
-            c.setUnidad(this.getUnidad());
             c.setDescripcion(this.getDescripcion());
             c.setValorUnitario(this.getValorUnitario());
             c.setImporte(this.getImporte());
+            c.setDescuento(this.getDescuento());
+            c.setObjetoImp(this.getObjetoImp());
+            c.setNoIdentificacion(this.getNoIdentificacion());
+            c.setUnidad(this.getUnidad());
+
+            var traslados = cfdiFactory.createComprobanteConceptosConceptoImpuestosTraslados();
+            List<PseudoConceptoTraslado> psTraslados = this.getTraslados();
+            for (PseudoConceptoTraslado t: psTraslados) {
+                var cTraslado = t.shapeConceptoTrasladoTag(cfdiFactory);
+                traslados.getTraslado().add(cTraslado);
+            }
+
+            var retenciones = cfdiFactory.createComprobanteConceptosConceptoImpuestosRetenciones();
+            List<PseudoConceptoRetencion> psRetenciones = this.getRetenciones();
+            for (PseudoConceptoRetencion r: psRetenciones) {
+                var cRetencion = r.shapeConceptoRetencionTag(cfdiFactory);
+                retenciones.getRetencion().add(cRetencion);
+            }
+
+            var impuestos = cfdiFactory.createComprobanteConceptosConceptoImpuestos();
+            impuestos.setTraslados(traslados);
+            impuestos.setRetenciones(retenciones);
+            c.setImpuestos(impuestos);
 
             return c;
+        }
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class PseudoConceptoTraslado {
+
+        private BigDecimal base;
+        private String impuesto;
+        private String tipoFactor;
+        private BigDecimal tasaOCuota;
+        private BigDecimal importe;
+
+        public Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado shapeConceptoTrasladoTag(
+                ObjectFactory cfdiFactory) {
+
+            Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado t = cfdiFactory.createComprobanteConceptosConceptoImpuestosTrasladosTraslado();
+
+            t.setBase(base);
+            t.setImpuesto(impuesto);
+            t.setTipoFactor(CTipoFactor.fromValue(tipoFactor));
+            t.setTasaOCuota(tasaOCuota);
+            t.setImporte(importe);
+
+            return t;
+        }
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class PseudoConceptoRetencion {
+
+        private BigDecimal base;
+        private String impuesto;
+        private String tipoFactor;
+        private BigDecimal tasaOCuota;
+        private BigDecimal importe;
+
+        public Comprobante.Conceptos.Concepto.Impuestos.Retenciones.Retencion shapeConceptoRetencionTag(
+                ObjectFactory cfdiFactory) {
+
+            Comprobante.Conceptos.Concepto.Impuestos.Retenciones.Retencion r = cfdiFactory.createComprobanteConceptosConceptoImpuestosRetencionesRetencion();
+
+            r.setBase(base);
+            r.setImpuesto(impuesto);
+            r.setTipoFactor(CTipoFactor.fromValue(tipoFactor));
+            r.setTasaOCuota(tasaOCuota);
+            r.setImporte(importe);
+
+            return r;
         }
     }
 
@@ -267,7 +373,14 @@ class FacturaXml {
             return (Map<String, Object>) dict.orElseThrow();
         }
 
-        private static Optional<Object> obtainObjFromKey(Map<String, Object> m, final String k) {
+        private static Object obtainObjFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
+
+            Optional<Object> optObj = Optional.ofNullable(m.get(k));
+            return optObj.orElseThrow();
+        }
+
+        private static Optional<Object> obtainOptionalFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
+
             return Optional.ofNullable(m.get(k));
         }
     }
