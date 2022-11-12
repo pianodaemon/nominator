@@ -41,6 +41,7 @@ class NominaXml {
 
     private final @NonNull
     NominaRequestDTO cfdiReq;
+
     private final @NonNull
     IStorage st;
 
@@ -82,9 +83,9 @@ class NominaXml {
             // Emisor
             Emisor emisor = cfdiFactory.createComprobanteEmisor();
             var dsEmisor = (Map<String,String>) ds.get("emisor");
-            emisor.setRfc(dsEmisor.get("rfc"));
-            emisor.setNombre(dsEmisor.get("nombre"));
-            emisor.setRegimenFiscal(dsEmisor.get("regimen_fiscal"));
+            emisor.setRfc(cfdiReq.getPseudoEmisor().getRfc());
+            emisor.setNombre(cfdiReq.getPseudoEmisor().getNombre());
+            emisor.setRegimenFiscal(cfdiReq.getPseudoEmisor().getRegimenFiscal());
             cfdi.setEmisor(emisor);
 
             // Receptor
