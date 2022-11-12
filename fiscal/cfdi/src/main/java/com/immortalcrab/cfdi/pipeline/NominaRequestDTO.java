@@ -61,7 +61,7 @@ class NominaRequestDTO extends JsonRequest {
 
                 {
                     Double cantidad = (Double) LegoTagAssembler.obtainObjFromKey(i, "cantidad").orElseThrow();
-                    p.setCantidad(new BigDecimal(cantidad));
+                    p.setCantidad(new BigDecimal(cantidad.intValue()));
                 }
 
                 {
