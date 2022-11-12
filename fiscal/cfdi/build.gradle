@@ -60,7 +60,6 @@ dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter}"
 
-    testAnnotationProcessor "org.projectlombok:lombok:${lombok_version}"
     testImplementation "io.findify:s3mock_2.13:0.2.6"
 
     // JAX-B dependencies for JDK 9+
