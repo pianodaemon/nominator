@@ -2,7 +2,7 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
-import com.immortalcrab.cfdi.pipeline.NominaRequest;
+import com.immortalcrab.cfdi.pipeline.NominaRequestDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -48,7 +48,7 @@ public class NominaXmlTest {
             InputStream is = _cloader.getResourceAsStream("jsonreqs/nominareq.json");
             InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
 
-            NominaRequest.render(reader);
+            NominaRequestDTO.render(reader);
 
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);

@@ -1,9 +1,9 @@
 package com.immortalcrab.cfdi.pipeline;
 
+
 import com.immortalcrab.cfdi.error.StorageError;
 import com.immortalcrab.cfdi.error.FormatError;
-import com.immortalcrab.cfdi.pipeline.Request;
-import com.immortalcrab.cfdi.pipeline.IStorage;
+import com.immortalcrab.cfdi.pipeline.NominaRequestDTO.PseudoConcepto;
 
 import mx.gob.sat.cfd._4.Comprobante;
 import mx.gob.sat.cfd._4.ObjectFactory;
@@ -39,17 +39,18 @@ import lombok.NonNull;
 @Getter
 class NominaXml {
 
-    private final @NonNull Request cfdiReq;
+    private final @NonNull NominaRequestDTO cfdiReq;
+
     private final @NonNull IStorage st;
 
     public static String render(Request cfdiReq, IStamp<PacRegularRequest, PacRegularResponse> stamper, IStorage st) throws FormatError, StorageError {
 
-        NominaXml ic = new NominaXml(cfdiReq, st);
+        NominaXml ic = new NominaXml((NominaRequestDTO) cfdiReq, st);
 
         StringWriter cfdi = ic.shape();
         PacRegularRequest pacReq = new PacRegularRequest(cfdi.toString());
         PacRegularResponse pacRes = stamper.impress(pacReq);
- 
+
         return "It must be slightly implemented as it was in lola";
     }
 
@@ -79,36 +80,35 @@ class NominaXml {
 
             // Emisor
             Emisor emisor = cfdiFactory.createComprobanteEmisor();
-            var dsEmisor = (Map<String,String>) ds.get("emisor");
-            emisor.setRfc(dsEmisor.get("rfc"));
-            emisor.setNombre(dsEmisor.get("nombre"));
-            emisor.setRegimenFiscal(dsEmisor.get("regimen_fiscal"));
+            emisor.setRfc(cfdiReq.getPseudoEmisor().getRfc());
+            emisor.setNombre(cfdiReq.getPseudoEmisor().getNombre());
+            emisor.setRegimenFiscal(cfdiReq.getPseudoEmisor().getRegimenFiscal());
             cfdi.setEmisor(emisor);
 
             // Receptor
             Receptor receptor = cfdiFactory.createComprobanteReceptor();
-            var dsReceptor = (Map<String,String>) ds.get("receptor");
-            receptor.setRfc(dsReceptor.get("rfc"));
-            receptor.setNombre(dsReceptor.get("nombre"));
-            receptor.setDomicilioFiscalReceptor(dsReceptor.get("domicilio_fiscal_receptor"));
-            receptor.setRegimenFiscalReceptor(dsReceptor.get("regimen_fiscal_receptor"));
-            receptor.setUsoCFDI(CUsoCFDI.fromValue((dsReceptor.get("uso_cfdi"))));
+            receptor.setRfc(cfdiReq.getPseudoReceptor().getRfc());
+            receptor.setNombre(cfdiReq.getPseudoReceptor().getNombre());
+            receptor.setDomicilioFiscalReceptor(cfdiReq.getPseudoReceptor().getDomicilioFiscal());
+            receptor.setRegimenFiscalReceptor(cfdiReq.getPseudoReceptor().getRegimenFiscal());
+            receptor.setUsoCFDI(CUsoCFDI.fromValue((cfdiReq.getPseudoReceptor().getProposito())));
             cfdi.setReceptor(receptor);
 
             // Conceptos
             Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
 
-            for (var c : (List<Map<String,Object>>) ds.get("conceptos")) {
+            for (PseudoConcepto psc : cfdiReq.getPseudoConceptos()) {
 
                 var concepto = cfdiFactory.createComprobanteConceptosConcepto();
-                concepto.setClaveProdServ((String) c.get("clave_prod_serv"));
-                concepto.setCantidad(new BigDecimal(((Double) c.get("cantidad")).intValue()));
-                concepto.setClaveUnidad((String) c.get("clave_unidad"));
-                concepto.setDescripcion((String) c.get("descripcion"));
-                concepto.setValorUnitario(new BigDecimal(((Double) c.get("valor_unitario")).toString()));
-                concepto.setImporte(new BigDecimal(((Double) c.get("importe")).toString()));
-                concepto.setDescuento(new BigDecimal(((Double) c.get("descuento")).toString()));
-                concepto.setObjetoImp((String) c.get("objeto_imp"));
+
+                concepto.setClaveProdServ(psc.getClaveProdServ());
+                concepto.setCantidad(psc.getCantidad());
+                concepto.setClaveUnidad(psc.getClaveUnidad());
+                concepto.setDescripcion(psc.getDescripcion());
+                concepto.setValorUnitario(psc.getValorUnitario());
+                concepto.setImporte(psc.getImporte());
+                concepto.setDescuento(psc.getDescuento());
+                concepto.setObjetoImp(psc.getObjImp());
                 conceptos.getConcepto().add(concepto);
             }
             cfdi.setConceptos(conceptos);
