@@ -51,7 +51,7 @@ class NominaRequestDTO extends JsonRequest {
     }
     private void shapePcs() throws RequestError {
 
-        Optional<Object> cs = NominaRequestDTO.LegoTagAssembler.obtainObjFromKey(this.getDs(), "conceptos");
+        Optional<Object> cs = NominaRequestDTO.LegoAssembler.obtainObjFromKey(this.getDs(), "conceptos");
 
         try {
 
@@ -60,28 +60,28 @@ class NominaRequestDTO extends JsonRequest {
             items.stream().map(i -> {
 
                 PseudoConcepto p = new PseudoConcepto();
-                p.setClaveProdServ((String) LegoTagAssembler.obtainObjFromKey(i, "clave_prod_serv").orElseThrow());
-                p.setDescripcion((String) LegoTagAssembler.obtainObjFromKey(i, "descripcion").orElseThrow());
-                p.setClaveUnidad((String) LegoTagAssembler.obtainObjFromKey(i, "clave_unidad").orElseThrow());
-                p.setObjImp((String) LegoTagAssembler.obtainObjFromKey(i, "objeto_imp").orElseThrow());
+                p.setClaveProdServ((String) LegoAssembler.obtainObjFromKey(i, "clave_prod_serv").orElseThrow());
+                p.setDescripcion((String) LegoAssembler.obtainObjFromKey(i, "descripcion").orElseThrow());
+                p.setClaveUnidad((String) LegoAssembler.obtainObjFromKey(i, "clave_unidad").orElseThrow());
+                p.setObjImp((String) LegoAssembler.obtainObjFromKey(i, "objeto_imp").orElseThrow());
 
                 {
-                    Double cantidad = (Double) LegoTagAssembler.obtainObjFromKey(i, "cantidad").orElseThrow();
+                    Double cantidad = (Double) LegoAssembler.obtainObjFromKey(i, "cantidad").orElseThrow();
                     p.setCantidad(new BigDecimal(cantidad.intValue()));
                 }
 
                 {
-                    Double valorUnitario = (Double) LegoTagAssembler.obtainObjFromKey(i, "valor_unitario").orElseThrow();
+                    Double valorUnitario = (Double) LegoAssembler.obtainObjFromKey(i, "valor_unitario").orElseThrow();
                     p.setValorUnitario(new BigDecimal(valorUnitario.toString()));
                 }
 
                 {
-                    Double importe = (Double) LegoTagAssembler.obtainObjFromKey(i, "importe").orElseThrow();
+                    Double importe = (Double) LegoAssembler.obtainObjFromKey(i, "importe").orElseThrow();
                     p.setImporte(new BigDecimal(importe.toString()));
                 }
 
                 {
-                    Double descuento = (Double) LegoTagAssembler.obtainObjFromKey(i, "descuento").orElseThrow();
+                    Double descuento = (Double) LegoAssembler.obtainObjFromKey(i, "descuento").orElseThrow();
                     p.setDescuento(new BigDecimal(descuento.toString()));
                 }
 
@@ -101,10 +101,10 @@ class NominaRequestDTO extends JsonRequest {
 
         try {
 
-            Map<String, Object> dic = LegoTagAssembler.obtainMapFromKey(this.getDs(), "emisor");
-            Optional<Object> emirfc = LegoTagAssembler.obtainObjFromKey(dic, "rfc");
-            Optional<Object> eminom = LegoTagAssembler.obtainObjFromKey(dic, "nombre");
-            Optional<Object> regimen = LegoTagAssembler.obtainObjFromKey(dic, "regimen_fiscal");
+            Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "emisor");
+            Optional<Object> emirfc = LegoAssembler.obtainObjFromKey(dic, "rfc");
+            Optional<Object> eminom = LegoAssembler.obtainObjFromKey(dic, "nombre");
+            Optional<Object> regimen = LegoAssembler.obtainObjFromKey(dic, "regimen_fiscal");
 
             _pe.setRfc((String) emirfc.orElseThrow());
             _pe.setNombre((String) eminom.orElseThrow());
@@ -119,12 +119,12 @@ class NominaRequestDTO extends JsonRequest {
 
         try {
 
-            Map<String, Object> dic = LegoTagAssembler.obtainMapFromKey(this.getDs(), "receptor");
-            Optional<Object> cterfc = LegoTagAssembler.obtainObjFromKey(dic, "rfc");
-            Optional<Object> ctenom = LegoTagAssembler.obtainObjFromKey(dic, "nombre");
-            Optional<Object> proposito = LegoTagAssembler.obtainObjFromKey(dic, "uso_cfdi");
-            Optional<Object> df = LegoTagAssembler.obtainObjFromKey(dic, "domicilio_fiscal_receptor");
-            Optional<Object> rf = LegoTagAssembler.obtainObjFromKey(dic, "regimen_fiscal_receptor");
+            Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "receptor");
+            Optional<Object> cterfc = LegoAssembler.obtainObjFromKey(dic, "rfc");
+            Optional<Object> ctenom = LegoAssembler.obtainObjFromKey(dic, "nombre");
+            Optional<Object> proposito = LegoAssembler.obtainObjFromKey(dic, "uso_cfdi");
+            Optional<Object> df = LegoAssembler.obtainObjFromKey(dic, "domicilio_fiscal_receptor");
+            Optional<Object> rf = LegoAssembler.obtainObjFromKey(dic, "regimen_fiscal_receptor");
 
             _pr.setRfc((String) cterfc.orElseThrow());
             _pr.setNombre((String) ctenom.orElseThrow());
@@ -176,7 +176,7 @@ class NominaRequestDTO extends JsonRequest {
 
     }
 
-    private static class LegoTagAssembler {
+    private static class LegoAssembler {
 
         private static Map<String, Object> obtainMapFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
 
