@@ -91,7 +91,7 @@ class NominaXml {
             receptor.setRfc(cfdiReq.getPseudoReceptor().getRfc());
             receptor.setNombre(cfdiReq.getPseudoReceptor().getNombre());
             receptor.setDomicilioFiscalReceptor(cfdiReq.getPseudoReceptor().getDomicilioFiscal());
-            receptor.setRegimenFiscalReceptor(dsReceptor.get("regimen_fiscal_receptor"));
+            receptor.setRegimenFiscalReceptor(cfdiReq.getPseudoReceptor().getRegimenFiscal());
             receptor.setUsoCFDI(CUsoCFDI.fromValue((dsReceptor.get("uso_cfdi"))));
             cfdi.setReceptor(receptor);
 
