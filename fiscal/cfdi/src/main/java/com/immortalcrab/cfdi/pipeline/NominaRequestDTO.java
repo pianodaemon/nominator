@@ -42,7 +42,6 @@ class NominaRequestDTO extends JsonRequest {
         NominaRequestDTO req = new NominaRequestDTO(reader);
         return req;
     }
-
     private void shapePcs() throws RequestError {
 
         Optional<Object> cs = NominaRequestDTO.LegoTagAssembler.obtainObjFromKey(this.getDs(), "conceptos");
@@ -66,17 +65,17 @@ class NominaRequestDTO extends JsonRequest {
 
                 {
                     Double valorUnitario = (Double) LegoTagAssembler.obtainObjFromKey(i, "valor_unitario").orElseThrow();
-                    p.setValorUnitario(new BigDecimal(valorUnitario));
+                    p.setValorUnitario(new BigDecimal(valorUnitario.toString()));
                 }
 
                 {
                     Double importe = (Double) LegoTagAssembler.obtainObjFromKey(i, "importe").orElseThrow();
-                    p.setImporte(new BigDecimal(importe));
+                    p.setImporte(new BigDecimal(importe.toString()));
                 }
 
                 {
                     Double descuento = (Double) LegoTagAssembler.obtainObjFromKey(i, "descuento").orElseThrow();
-                    p.setDescuento(new BigDecimal(descuento));
+                    p.setDescuento(new BigDecimal(descuento.toString()));
                 }
 
                 return p;
