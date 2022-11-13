@@ -121,7 +121,7 @@ class NominaXml {
             var nominaFactory = new mx.gob.sat.nomina12.ObjectFactory();
             Nomina nomina = nominaFactory.createNomina();
             nomina.setVersion((String) dsNomina.get("version"));
-            nomina.setTipoNomina(CTipoNomina.fromValue((String) dsNomina.get("tipo_nomina")));
+            nomina.setTipoNomina(CTipoNomina.fromValue(cfdiReq.getNomAttributes().getTipoNomina()));
             nomina.setFechaPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaPago()));
             nomina.setFechaInicialPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaInicialPago()));
             nomina.setFechaFinalPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaFinalPago()));
