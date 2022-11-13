@@ -64,7 +64,7 @@ public class ProducerTest {
             InputStream is = _cloader.getResourceAsStream("jsonreqs/nominareq.json");
             InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
 
-            Pair<IDecodeStep, IXmlStep> pair = new Pair<>(FakeRequest::render, FakeXml::render);
+            Pair<IDecodeStep, IXmlStep> pair = new Pair<>(NominaRequestDTO::render, FakeXml::render);
             Producer producer = new Producer(_stamper, _storage, ImmutableMap.of("fake", pair));
 
             producer.doIssue("fake", isr);

@@ -154,7 +154,6 @@ class NominaRequestDTO extends JsonRequest {
     @Setter
     public static class PseudoEmisor {
 
-        private String emisor;
         private String rfc;
         private String nombre;
         private String regimenFiscal;
