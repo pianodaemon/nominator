@@ -25,6 +25,7 @@ class NominaRequestDTO extends JsonRequest {
     PseudoReceptor _pr;
     PseudoEmisor _pe;
     List<PseudoConcepto> _pcs;
+    NomPrincipalAttributes _nomAttribs;
 
     public NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
 
@@ -37,6 +38,12 @@ class NominaRequestDTO extends JsonRequest {
         shapeRp();
         shapeEp();
         shapePcs();
+        _nomAttribs = new NomPrincipalAttributes();
+        shapeNomAttribs();
+    }
+
+    public NomPrincipalAttributes getNomAttributes() {
+        return _nomAttribs;
     }
 
     public DocPrincipalAttributes getDocAttributes() {
@@ -183,6 +190,20 @@ class NominaRequestDTO extends JsonRequest {
         }
     }
 
+    private void shapeNomAttribs() throws RequestError {
+
+        try {
+
+            Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "nomina");
+            Optional<Object> fechaPago = LegoAssembler.obtainObjFromKey(dic, "fecha_pago");
+
+            _nomAttribs.setFechaPago((String) fechaPago.orElseThrow());
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements of Complemento:Nomina tag is missing");
+            throw new RequestError("mandatory element in request is missing", ex);
+        }
+    }
+
     @NoArgsConstructor
     @Getter
     @Setter
@@ -195,9 +216,9 @@ class NominaRequestDTO extends JsonRequest {
         private String moneda;
         private String exportacion;
         private String metodoPago;
-        private  BigDecimal descuento;
-        private  BigDecimal subtotal;
-        private  BigDecimal total;
+        private BigDecimal descuento;
+        private BigDecimal subtotal;
+        private BigDecimal total;
     }
 
     @NoArgsConstructor
@@ -236,6 +257,14 @@ class NominaRequestDTO extends JsonRequest {
         private BigDecimal importe;
         private BigDecimal descuento;
 
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class NomPrincipalAttributes {
+
+        private String fechaPago;
     }
 
     private static class LegoAssembler {
