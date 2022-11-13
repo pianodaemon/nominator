@@ -197,9 +197,11 @@ class NominaRequestDTO extends JsonRequest {
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "nomina");
             Optional<Object> fechaPago = LegoAssembler.obtainObjFromKey(dic, "fecha_pago");
             Optional<Object> fechaInicialPago = LegoAssembler.obtainObjFromKey(dic, "fecha_inicial_pago");
+            Optional<Object> fechaFinalPago = LegoAssembler.obtainObjFromKey(dic, "fecha_final_pago");
 
             _nomAttribs.setFechaPago((String) fechaPago.orElseThrow());
             _nomAttribs.setFechaInicialPago((String) fechaInicialPago.orElseThrow());
+            _nomAttribs.setFechaFinalPago((String) fechaFinalPago.orElseThrow());
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -268,6 +270,7 @@ class NominaRequestDTO extends JsonRequest {
 
         private String fechaPago;
         private String fechaInicialPago;
+        private String fechaFinalPago;
     }
 
     private static class LegoAssembler {
