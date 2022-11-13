@@ -230,7 +230,6 @@ class NominaRequestDTO extends JsonRequest {
     @Setter
     public static class DocPrincipalAttributes {
 
-        private String tipoNomina;
         private String fecha;
         private String lugarExpedicion;
         private String serie;
@@ -289,6 +288,7 @@ class NominaRequestDTO extends JsonRequest {
     @Setter
     public static class NomPrincipalAttributes {
 
+        private String tipoNomina;
         private String fechaPago;
         private String fechaInicialPago;
         private String fechaFinalPago;
