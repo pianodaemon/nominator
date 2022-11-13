@@ -2,9 +2,6 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -12,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 
@@ -28,18 +26,6 @@ public class NominaXmlTest {
         _cloader = getClass().getClassLoader();
     }
 
-    @AfterAll
-    public void tearDownClass() {
-    }
-
-    @BeforeEach
-    public void setUp() {
-    }
-
-    @AfterEach
-    public void tearDown() {
-    }
-
     @Test
     void loadReqFromReader() {
 
@@ -49,6 +35,7 @@ public class NominaXmlTest {
             NominaRequestDTO dto = new NominaRequestDTO(reader);
 
             // We verify the mandatory document attributes
+            assertTrue("01".equals(dto.getDocAttributes().getExportacion()));
             assertTrue("RRM".equals(dto.getDocAttributes().getSerie()));
             assertTrue("5457".equals(dto.getDocAttributes().getFolio()));
             assertTrue("2022-10-26T20:00:18".equals(dto.getDocAttributes().getFecha()));
@@ -56,6 +43,8 @@ public class NominaXmlTest {
             assertTrue(new BigDecimal("1185.82").equals(dto.getDocAttributes().getDescuento()));
             assertTrue(new BigDecimal("7185.82").equals(dto.getDocAttributes().getSubtotal()));
             assertTrue(new BigDecimal("6000.0").equals(dto.getDocAttributes().getTotal()));
+            assertTrue("PUE".equals(dto.getDocAttributes().getMetodoPago()));
+            assertTrue("67100".equals(dto.getDocAttributes().getLugarExpedicion()));
 
             // We verify the mandatory pseudo-emisor attributes
             assertTrue("RRM031001QE7".equals(dto.getPseudoEmisor().getRfc()));
