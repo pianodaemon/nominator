@@ -18,19 +18,29 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 class NominaRequestDTO extends JsonRequest {
 
+    public static final String VERSION = "4.0";
+    public static final String TIPO_COMPROBANTE = "N";
+
+    DocPrincipalAttributes _docAttribs;
     PseudoReceptor _pr;
     PseudoEmisor _pe;
     List<PseudoConcepto> _pcs;
 
-    private NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
+    public NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
 
         super(reader);
+        _docAttribs = new DocPrincipalAttributes();
         _pr = new PseudoReceptor();
         _pe = new PseudoEmisor();
         _pcs = new LinkedList<>();
+        shapeDocAttribs();
         shapeRp();
         shapeEp();
         shapePcs();
+    }
+
+    public DocPrincipalAttributes getDocAttributes() {
+        return _docAttribs;
     }
 
     public PseudoReceptor getPseudoReceptor() {
@@ -43,6 +53,50 @@ class NominaRequestDTO extends JsonRequest {
 
     public List<PseudoConcepto> getPseudoConceptos() {
         return _pcs;
+    }
+
+    public static NominaRequestDTO render(InputStreamReader reader) throws RequestError, DecodeError {
+        return new NominaRequestDTO(reader);
+    }
+
+    private void shapeDocAttribs() throws RequestError {
+
+        try {
+
+            Optional<Object> serie = LegoAssembler.obtainObjFromKey(this.getDs(), "serie");
+            Optional<Object> folio = LegoAssembler.obtainObjFromKey(this.getDs(), "folio");
+            Optional<Object> lugar = LegoAssembler.obtainObjFromKey(this.getDs(), "lugar_expedicion");
+            Optional<Object> fecha = LegoAssembler.obtainObjFromKey(this.getDs(), "fecha");
+            Optional<Object> moneda = LegoAssembler.obtainObjFromKey(this.getDs(), "moneda");
+            Optional<Object> exportacion = LegoAssembler.obtainObjFromKey(this.getDs(), "exportacion");
+            Optional<Object> metodoPago = LegoAssembler.obtainObjFromKey(this.getDs(), "metodo_pago");
+
+            {
+                Double total = (Double) LegoAssembler.obtainObjFromKey(this.getDs(), "total").orElseThrow();
+                _docAttribs.setTotal(new BigDecimal(total.toString()));
+            }
+
+            {
+                Double subtotal = (Double) LegoAssembler.obtainObjFromKey(this.getDs(), "subtotal").orElseThrow();
+                _docAttribs.setSubtotal(new BigDecimal(subtotal.toString()));
+            }
+
+            {
+                Double descuento = (Double) LegoAssembler.obtainObjFromKey(this.getDs(), "descuento").orElseThrow();
+                _docAttribs.setDescuento(new BigDecimal(descuento.toString()));
+            }
+
+            _docAttribs.setSerie((String) serie.orElseThrow());
+            _docAttribs.setFolio((String) folio.orElseThrow());
+            _docAttribs.setLugarExpedicion((String) lugar.orElseThrow());
+            _docAttribs.setFecha((String) fecha.orElseThrow());
+            _docAttribs.setMoneda((String) moneda.orElseThrow());
+            _docAttribs.setExportacion((String) exportacion.orElseThrow());
+            _docAttribs.setMetodoPago((String) metodoPago.orElseThrow());
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements of Comprobante tag is missing");
+            throw new RequestError("mandatory element in request is missing", ex);
+        }
     }
 
     private void shapePcs() throws RequestError {
@@ -136,6 +190,23 @@ class NominaRequestDTO extends JsonRequest {
     @NoArgsConstructor
     @Getter
     @Setter
+    public static class DocPrincipalAttributes {
+
+        private String fecha;
+        private String lugarExpedicion;
+        private String serie;
+        private String folio;
+        private String moneda;
+        private String exportacion;
+        private String metodoPago;
+        private  BigDecimal descuento;
+        private  BigDecimal subtotal;
+        private  BigDecimal total;
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
     public static class PseudoReceptor {
 
         private String rfc;
@@ -150,7 +221,6 @@ class NominaRequestDTO extends JsonRequest {
     @Setter
     public static class PseudoEmisor {
 
-        private String emisor;
         private String rfc;
         private String nombre;
         private String regimenFiscal;
