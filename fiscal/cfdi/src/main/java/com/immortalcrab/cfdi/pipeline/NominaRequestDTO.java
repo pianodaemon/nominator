@@ -20,6 +20,7 @@ class NominaRequestDTO extends JsonRequest {
 
     public static final String VERSION = "4.0";
 
+    DocPrincipalAttributes _docAttribs;
     PseudoReceptor _pr;
     PseudoEmisor _pe;
     List<PseudoConcepto> _pcs;
@@ -27,12 +28,17 @@ class NominaRequestDTO extends JsonRequest {
     private NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
 
         super(reader);
+        _docAttribs = new DocPrincipalAttributes();
         _pr = new PseudoReceptor();
         _pe = new PseudoEmisor();
         _pcs = new LinkedList<>();
         shapeRp();
         shapeEp();
         shapePcs();
+    }
+
+    public DocPrincipalAttributes getDocAttributes() {
+        return _docAttribs;
     }
 
     public PseudoReceptor getPseudoReceptor() {
@@ -48,9 +54,9 @@ class NominaRequestDTO extends JsonRequest {
     }
 
     public static NominaRequestDTO render(InputStreamReader reader) throws RequestError, DecodeError {
-        NominaRequestDTO req = new NominaRequestDTO(reader);
-        return req;
+        return new NominaRequestDTO(reader);
     }
+
     private void shapePcs() throws RequestError {
 
         Optional<Object> cs = NominaRequestDTO.LegoAssembler.obtainObjFromKey(this.getDs(), "conceptos");
@@ -137,6 +143,15 @@ class NominaRequestDTO extends JsonRequest {
             log.error("One or more of the mandatory elements of Receptor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
         }
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class DocPrincipalAttributes {
+
+        private String serie;
+        private String folio;
     }
 
     @NoArgsConstructor
