@@ -62,7 +62,7 @@ class NominaXml {
         try {
             ObjectFactory cfdiFactory = new ObjectFactory();
             Comprobante cfdi = cfdiFactory.createComprobante();
-            cfdi.setVersion("4.0");
+            cfdi.setVersion(NominaRequestDTO.VERSION);
             cfdi.setSerie((String) ds.get("serie"));
             cfdi.setFolio((String) ds.get("folio"));
             cfdi.setFecha(DatatypeFactory.newInstance().newXMLGregorianCalendar((String) ds.get("fecha")));
