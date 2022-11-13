@@ -45,10 +45,6 @@ class NominaRequestDTO extends JsonRequest {
         return _pcs;
     }
 
-    public static NominaRequestDTO render(InputStreamReader reader) throws RequestError, DecodeError {
-        NominaRequestDTO req = new NominaRequestDTO(reader);
-        return req;
-    }
     private void shapePcs() throws RequestError {
 
         Optional<Object> cs = NominaRequestDTO.LegoAssembler.obtainObjFromKey(this.getDs(), "conceptos");
