@@ -76,6 +76,7 @@ class NominaRequestDTO extends JsonRequest {
             _docAttribs.setFecha((String) fecha.orElseThrow());
             _docAttribs.setMoneda((String) moneda.orElseThrow());
             _docAttribs.setExportacion((String) exportacion.orElseThrow());
+            _docAttribs.setMetodoPago((String) metodoPago.orElseThrow());
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Comprobante tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -182,6 +183,9 @@ class NominaRequestDTO extends JsonRequest {
         private String moneda;
         private String exportacion;
         private String metodoPago;
+        private  BigDecimal descuento;
+        private  BigDecimal subtotal;
+        private  BigDecimal total;
     }
 
     @NoArgsConstructor
