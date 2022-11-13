@@ -26,7 +26,7 @@ class NominaRequestDTO extends JsonRequest {
     PseudoEmisor _pe;
     List<PseudoConcepto> _pcs;
 
-    private NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
+    public NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
 
         super(reader);
         _docAttribs = new DocPrincipalAttributes();
