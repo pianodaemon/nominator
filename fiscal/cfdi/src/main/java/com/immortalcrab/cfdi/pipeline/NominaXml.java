@@ -68,8 +68,8 @@ class NominaXml {
             cfdi.setTipoDeComprobante(CTipoDeComprobante.fromValue((String) ds.get("tipo_de_comprobante")));
             cfdi.setMoneda(CMoneda.fromValue(cfdiReq.getDocAttributes().getMoneda()));
             cfdi.setDescuento(cfdiReq.getDocAttributes().getDescuento());
-            cfdi.setSubTotal(new BigDecimal(((Double) ds.get("subtotal")).toString()));
-            cfdi.setTotal(new BigDecimal(((Double) ds.get("total")).toString()));
+            cfdi.setSubTotal(cfdiReq.getDocAttributes().getSubtotal());
+            cfdi.setTotal(cfdiReq.getDocAttributes().getTotal());
             cfdi.setExportacion(cfdiReq.getDocAttributes().getExportacion());
             cfdi.setMetodoPago(CMetodoPago.fromValue(cfdiReq.getDocAttributes().getMetodoPago()));
             cfdi.setLugarExpedicion(cfdiReq.getDocAttributes().getLugarExpedicion());
