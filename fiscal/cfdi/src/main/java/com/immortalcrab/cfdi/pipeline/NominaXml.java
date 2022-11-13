@@ -126,9 +126,8 @@ class NominaXml {
             nomina.setFechaInicialPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaInicialPago()));
             nomina.setFechaFinalPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaFinalPago()));
             nomina.setNumDiasPagados(cfdiReq.getNomAttributes().getDiasPagados());
-            nomina.setTotalPercepciones(new BigDecimal(((Double) dsNomina.get("total_percepciones")).toString()));
-            nomina.setTotalDeducciones(new BigDecimal(((Double) dsNomina.get("total_deducciones")).toString()));
-
+            nomina.setTotalPercepciones(cfdiReq.getNomAttributes().getTotalPercepciones());
+            nomina.setTotalDeducciones(cfdiReq.getNomAttributes().getTotalDeducciones());
             // Complemento:Nomina:Emisor ------------------------------------
 
             var dsNomEmisor = (Map<String,String>) dsNomina.get("emisor");

@@ -204,6 +204,16 @@ class NominaRequestDTO extends JsonRequest {
                 _nomAttribs.setDiasPagados(new BigDecimal(numDiasPagados));
             }
 
+            {
+                Double totalPercepciones = (Double) LegoAssembler.obtainObjFromKey(dic, "total_percepciones").orElseThrow();
+                _nomAttribs.setTotalPercepciones(new BigDecimal(totalPercepciones.toString()));
+            }
+
+            {
+                Double totalDeducciones = (Double) LegoAssembler.obtainObjFromKey(dic, "total_deducciones").orElseThrow();
+                _nomAttribs.setTotalDeducciones(new BigDecimal(totalDeducciones.toString()));
+            }
+
             _nomAttribs.setFechaPago((String) fechaPago.orElseThrow());
             _nomAttribs.setFechaInicialPago((String) fechaInicialPago.orElseThrow());
             _nomAttribs.setFechaFinalPago((String) fechaFinalPago.orElseThrow());
@@ -280,6 +290,8 @@ class NominaRequestDTO extends JsonRequest {
         private String fechaInicialPago;
         private String fechaFinalPago;
         private BigDecimal diasPagados;
+        private BigDecimal totalPercepciones;
+        private BigDecimal totalDeducciones;
     }
 
     private static class LegoAssembler {
