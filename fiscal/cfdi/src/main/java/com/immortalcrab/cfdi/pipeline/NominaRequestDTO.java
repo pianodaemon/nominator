@@ -18,7 +18,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 class NominaRequestDTO extends JsonRequest {
 
-    public final String VERSION = "4.0";
+    public static final String VERSION = "4.0";
 
     PseudoReceptor _pr;
     PseudoEmisor _pe;
