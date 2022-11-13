@@ -1,6 +1,5 @@
 package com.immortalcrab.cfdi.pipeline;
 
-
 import com.immortalcrab.cfdi.error.StorageError;
 import com.immortalcrab.cfdi.error.FormatError;
 import com.immortalcrab.cfdi.pipeline.NominaRequestDTO.PseudoConcepto;
@@ -57,23 +56,23 @@ class NominaXml {
     private StringWriter shape() throws FormatError {
 
         StringWriter sw = new StringWriter();
-        Map<String,Object> ds = this.cfdiReq.getDs();
+        Map<String,Object> ds = cfdiReq.getDs();
 
         try {
             ObjectFactory cfdiFactory = new ObjectFactory();
             Comprobante cfdi = cfdiFactory.createComprobante();
-            cfdi.setVersion("4.0");
-            cfdi.setSerie((String) ds.get("serie"));
-            cfdi.setFolio((String) ds.get("folio"));
-            cfdi.setFecha(DatatypeFactory.newInstance().newXMLGregorianCalendar((String) ds.get("fecha")));
-            cfdi.setTipoDeComprobante(CTipoDeComprobante.fromValue((String) ds.get("tipo_de_comprobante")));
-            cfdi.setMoneda(CMoneda.fromValue((String) ds.get("moneda")));
-            cfdi.setDescuento(new BigDecimal(((Double) ds.get("descuento")).toString()));
-            cfdi.setSubTotal(new BigDecimal(((Double) ds.get("subtotal")).toString()));
-            cfdi.setTotal(new BigDecimal(((Double) ds.get("total")).toString()));
-            cfdi.setExportacion((String) ds.get("exportacion"));
-            cfdi.setMetodoPago(CMetodoPago.fromValue((String) ds.get("metodo_pago")));
-            cfdi.setLugarExpedicion((String) ds.get("lugar_expedicion"));
+            cfdi.setVersion(NominaRequestDTO.VERSION);
+            cfdi.setSerie(cfdiReq.getDocAttributes().getSerie());
+            cfdi.setFolio(cfdiReq.getDocAttributes().getFolio());
+            cfdi.setFecha(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getDocAttributes().getFecha()));
+            cfdi.setTipoDeComprobante(CTipoDeComprobante.fromValue(NominaRequestDTO.TIPO_COMPROBANTE));
+            cfdi.setMoneda(CMoneda.fromValue(cfdiReq.getDocAttributes().getMoneda()));
+            cfdi.setDescuento(cfdiReq.getDocAttributes().getDescuento());
+            cfdi.setSubTotal(cfdiReq.getDocAttributes().getSubtotal());
+            cfdi.setTotal(cfdiReq.getDocAttributes().getTotal());
+            cfdi.setExportacion(cfdiReq.getDocAttributes().getExportacion());
+            cfdi.setMetodoPago(CMetodoPago.fromValue(cfdiReq.getDocAttributes().getMetodoPago()));
+            cfdi.setLugarExpedicion(cfdiReq.getDocAttributes().getLugarExpedicion());
             // var montesToolbox = new MontesToolbox();
             // cfdi.setCertificado(montesToolbox.renderCerticate(null));
             // cfdi.setNoCertificado((String) ds.get("numero_certificado"));
