@@ -73,7 +73,7 @@ class NominaXml {
             cfdi.setTotal(new BigDecimal(((Double) ds.get("total")).toString()));
             cfdi.setExportacion((String) ds.get("exportacion"));
             cfdi.setMetodoPago(CMetodoPago.fromValue((String) ds.get("metodo_pago")));
-            cfdi.setLugarExpedicion((String) ds.get("lugar_expedicion"));
+            cfdi.setLugarExpedicion(cfdiReq.getDocAttributes().getLugarExpedicion());
             // var montesToolbox = new MontesToolbox();
             // cfdi.setCertificado(montesToolbox.renderCerticate(null));
             // cfdi.setNoCertificado((String) ds.get("numero_certificado"));
