@@ -1,6 +1,5 @@
 package com.immortalcrab.cfdi.pipeline;
 
-
 import com.immortalcrab.cfdi.error.StorageError;
 import com.immortalcrab.cfdi.error.FormatError;
 import com.immortalcrab.cfdi.pipeline.NominaRequestDTO.PseudoConcepto;
