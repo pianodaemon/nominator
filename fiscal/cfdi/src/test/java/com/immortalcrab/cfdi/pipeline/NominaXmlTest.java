@@ -62,6 +62,7 @@ public class NominaXmlTest {
             assertTrue("2022-10-25".equals(dto.getNomAttributes().getFechaPago()));
             assertTrue("2022-10-16".equals(dto.getNomAttributes().getFechaInicialPago()));
             assertTrue("2022-10-31".equals(dto.getNomAttributes().getFechaFinalPago()));
+            assertTrue(new BigDecimal("15").equals(dto.getNomAttributes().getDiasPagados()));
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);
         }

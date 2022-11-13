@@ -124,8 +124,8 @@ class NominaXml {
             nomina.setTipoNomina(CTipoNomina.fromValue((String) dsNomina.get("tipo_nomina")));
             nomina.setFechaPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaPago()));
             nomina.setFechaInicialPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaInicialPago()));
-	    nomina.setFechaFinalPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaFinalPago()));
-            nomina.setNumDiasPagados(new BigDecimal(((Double) dsNomina.get("num_dias_pagados")).intValue()));
+            nomina.setFechaFinalPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaFinalPago()));
+            nomina.setNumDiasPagados(cfdiReq.getNomAttributes().getDiasPagados());
             nomina.setTotalPercepciones(new BigDecimal(((Double) dsNomina.get("total_percepciones")).toString()));
             nomina.setTotalDeducciones(new BigDecimal(((Double) dsNomina.get("total_deducciones")).toString()));
 
