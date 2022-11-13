@@ -55,10 +55,6 @@ class NominaRequestDTO extends JsonRequest {
         return _pcs;
     }
 
-    public static NominaRequestDTO render(InputStreamReader reader) throws RequestError, DecodeError {
-        return new NominaRequestDTO(reader);
-    }
-
     private void shapeDocAttribs() throws RequestError {
 
         try {
