@@ -53,8 +53,8 @@ public class NominaXmlTest {
             assertTrue("5457".equals(dto.getDocAttributes().getFolio()));
             assertTrue("2022-10-26T20:00:18".equals(dto.getDocAttributes().getFecha()));
             assertTrue("MXN".equals(dto.getDocAttributes().getMoneda()));
-            assertTrue(new BigDecimal(1185.82) == dto.getDocAttributes().getDescuento());
-            assertTrue(new BigDecimal(7185.82) == dto.getDocAttributes().getSubtotal());
+            assertTrue(new BigDecimal("1185.82").equals(dto.getDocAttributes().getDescuento()));
+            assertTrue(new BigDecimal("7185.82").equals(dto.getDocAttributes().getSubtotal()));
 
             // We verify the mandatory pseudo-emisor attributes
             assertTrue("RRM031001QE7".equals(dto.getPseudoEmisor().getRfc()));
