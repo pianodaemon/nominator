@@ -32,7 +32,7 @@ public class FacturaRequestDTOTest {
             InputStream is = _cloader.getResourceAsStream("jsonreqs/facturareq.json");
             InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
 
-            FacturaRequest.render(reader);
+            FacturaRequestDTO dto = new FacturaRequestDTO(reader);
 
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);

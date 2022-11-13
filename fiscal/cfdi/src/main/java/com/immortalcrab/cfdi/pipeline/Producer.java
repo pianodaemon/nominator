@@ -23,7 +23,7 @@ public class Producer extends Pipeline implements IIssuer {
                 stamper,
                 storage,
                 ImmutableMap.of(
-                        "fac", new Pair<>(FacturaRequest::render, FacturaXml::render),
+                        "fac", new Pair<>(reader -> new FacturaRequestDTO(reader), FacturaXml::render),
                         "nom", new Pair<>(reader-> new NominaRequestDTO(reader), NominaXml::render))
         );
     }
