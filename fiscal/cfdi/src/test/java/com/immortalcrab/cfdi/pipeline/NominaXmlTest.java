@@ -60,7 +60,7 @@ public class NominaXmlTest {
 
             // We verify the mandatory attributes of nomina´s complement
             assertTrue("2022-10-25".equals(dto.getNomAttributes().getFechaPago()));
-
+            assertTrue("2022-10-16".equals(dto.getNomAttributes().getFechaInicialPago()));
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);
         }
