@@ -195,6 +195,7 @@ class NominaRequestDTO extends JsonRequest {
         try {
 
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "nomina");
+            Optional<Object> tipoNomina = LegoAssembler.obtainObjFromKey(dic, "tipo_nomina");
             Optional<Object> fechaPago = LegoAssembler.obtainObjFromKey(dic, "fecha_pago");
             Optional<Object> fechaInicialPago = LegoAssembler.obtainObjFromKey(dic, "fecha_inicial_pago");
             Optional<Object> fechaFinalPago = LegoAssembler.obtainObjFromKey(dic, "fecha_final_pago");
@@ -214,6 +215,7 @@ class NominaRequestDTO extends JsonRequest {
                 _nomAttribs.setTotalDeducciones(new BigDecimal(totalDeducciones.toString()));
             }
 
+            _nomAttribs.setTipoNomina((String) tipoNomina.orElseThrow());
             _nomAttribs.setFechaPago((String) fechaPago.orElseThrow());
             _nomAttribs.setFechaInicialPago((String) fechaInicialPago.orElseThrow());
             _nomAttribs.setFechaFinalPago((String) fechaFinalPago.orElseThrow());
@@ -228,6 +230,7 @@ class NominaRequestDTO extends JsonRequest {
     @Setter
     public static class DocPrincipalAttributes {
 
+        private String tipoNomina;
         private String fecha;
         private String lugarExpedicion;
         private String serie;
