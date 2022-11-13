@@ -32,6 +32,7 @@ class NominaRequestDTO extends JsonRequest {
         _pr = new PseudoReceptor();
         _pe = new PseudoEmisor();
         _pcs = new LinkedList<>();
+        shapeDocAttribs();
         shapeRp();
         shapeEp();
         shapePcs();
@@ -55,6 +56,21 @@ class NominaRequestDTO extends JsonRequest {
 
     public static NominaRequestDTO render(InputStreamReader reader) throws RequestError, DecodeError {
         return new NominaRequestDTO(reader);
+    }
+
+    private void shapeDocAttribs() throws RequestError {
+
+        try {
+
+            Optional<Object> serie = LegoAssembler.obtainObjFromKey(this.getDs(), "serie");
+            Optional<Object> folio = LegoAssembler.obtainObjFromKey(this.getDs(), "folio");
+
+            _docAttribs.setSerie((String) serie.orElseThrow());
+            _docAttribs.setFolio((String) folio.orElseThrow());
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements of Emisor tag is missing");
+            throw new RequestError("mandatory element in request is missing", ex);
+        }
     }
 
     private void shapePcs() throws RequestError {
