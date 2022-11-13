@@ -2,7 +2,6 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
-import com.immortalcrab.cfdi.pipeline.NominaRequestDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -16,7 +15,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 
-import com.immortalcrab.cfdi.pipeline.NominaXml;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class NominaXmlTest {
@@ -48,10 +47,13 @@ public class NominaXmlTest {
             InputStream is = _cloader.getResourceAsStream("jsonreqs/nominareq.json");
             InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
             NominaRequestDTO dto = new NominaRequestDTO(reader);
+            
+            assertTrue("RRM031001QE7".equals(dto.getPseudoEmisor().getRfc()));
+            assertTrue("RR MEDICA S.A. DE C.V.".equals(dto.getPseudoEmisor().getNombre()));
+            assertTrue("601".equals(dto.getPseudoEmisor().getRegimenFiscal()));
 
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);
         }
     }
-
 }
