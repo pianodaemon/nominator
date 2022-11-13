@@ -67,7 +67,7 @@ class NominaXml {
             cfdi.setFolio(cfdiReq.getDocAttributes().getFolio());
             cfdi.setFecha(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getDocAttributes().getFecha()));
             cfdi.setTipoDeComprobante(CTipoDeComprobante.fromValue((String) ds.get("tipo_de_comprobante")));
-            cfdi.setMoneda(CMoneda.fromValue((String) ds.get("moneda")));
+            cfdi.setMoneda(CMoneda.fromValue(cfdiReq.getDocAttributes().getMoneda()));
             cfdi.setDescuento(new BigDecimal(((Double) ds.get("descuento")).toString()));
             cfdi.setSubTotal(new BigDecimal(((Double) ds.get("subtotal")).toString()));
             cfdi.setTotal(new BigDecimal(((Double) ds.get("total")).toString()));
