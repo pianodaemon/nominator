@@ -48,6 +48,10 @@ public class NominaXmlTest {
             InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
             NominaRequestDTO dto = new NominaRequestDTO(reader);
 
+            // We verify the mandatory document attributes
+            assertTrue("RRM".equals(dto.getDocAttributes().getSerie()));
+            assertTrue("5457".equals(dto.getDocAttributes().getFolio()));
+
             // We verify the mandatory pseudo-emisor attributes
             assertTrue("RRM031001QE7".equals(dto.getPseudoEmisor().getRfc()));
             assertTrue("RR MEDICA S.A. DE C.V.".equals(dto.getPseudoEmisor().getNombre()));
