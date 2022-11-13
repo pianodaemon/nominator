@@ -47,8 +47,7 @@ public class NominaXmlTest {
         try {
             InputStream is = _cloader.getResourceAsStream("jsonreqs/nominareq.json");
             InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
-
-            NominaRequestDTO.render(reader);
+            NominaRequestDTO dto = new NominaRequestDTO(reader);
 
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);
