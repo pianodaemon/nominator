@@ -51,6 +51,8 @@ public class NominaXmlTest {
             // We verify the mandatory document attributes
             assertTrue("RRM".equals(dto.getDocAttributes().getSerie()));
             assertTrue("5457".equals(dto.getDocAttributes().getFolio()));
+            assertTrue("2022-10-26T20:00:18".equals(dto.getDocAttributes().getFecha()));
+            assertTrue("MXN".equals(dto.getDocAttributes().getMoneda()));
 
             // We verify the mandatory pseudo-emisor attributes
             assertTrue("RRM031001QE7".equals(dto.getPseudoEmisor().getRfc()));
