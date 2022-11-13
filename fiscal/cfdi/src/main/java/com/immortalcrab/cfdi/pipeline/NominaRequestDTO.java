@@ -71,6 +71,11 @@ class NominaRequestDTO extends JsonRequest {
             Optional<Object> metodoPago = LegoAssembler.obtainObjFromKey(this.getDs(), "metodo_pago");
 
             {
+                Double subtotal = (Double) LegoAssembler.obtainObjFromKey(this.getDs(), "subtotal").orElseThrow();
+                _docAttribs.setSubtotal(new BigDecimal(subtotal.toString()));
+            }
+
+            {
                 Double descuento = (Double) LegoAssembler.obtainObjFromKey(this.getDs(), "descuento").orElseThrow();
                 _docAttribs.setDescuento(new BigDecimal(descuento.toString()));
             }
