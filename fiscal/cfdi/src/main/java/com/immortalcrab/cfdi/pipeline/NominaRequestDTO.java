@@ -70,7 +70,7 @@ class NominaRequestDTO extends JsonRequest {
             _docAttribs.setFolio((String) folio.orElseThrow());
             _docAttribs.setLugarExpedicion((String) lugar.orElseThrow());
         } catch (NoSuchElementException ex) {
-            log.error("One or more of the mandatory elements of Emisor tag is missing");
+            log.error("One or more of the mandatory elements of Comprobante tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
         }
     }
