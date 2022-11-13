@@ -61,7 +61,7 @@ class NominaXml {
         try {
             ObjectFactory cfdiFactory = new ObjectFactory();
             Comprobante cfdi = cfdiFactory.createComprobante();
-            cfdi.setVersion(NominaRequestDTO.VERSION);
+            cfdi.setVersion(NominaRequestDTO.CFDI_VER);
             cfdi.setSerie(cfdiReq.getDocAttributes().getSerie());
             cfdi.setFolio(cfdiReq.getDocAttributes().getFolio());
             cfdi.setFecha(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getDocAttributes().getFecha()));
@@ -120,7 +120,7 @@ class NominaXml {
             var dsNomina = (Map<String,Object>) ds.get("nomina");
             var nominaFactory = new mx.gob.sat.nomina12.ObjectFactory();
             Nomina nomina = nominaFactory.createNomina();
-            nomina.setVersion(NominaRequestDTO.VERSION_NOMINA);
+            nomina.setVersion(NominaRequestDTO.NOMINA_VER);
             nomina.setTipoNomina(CTipoNomina.fromValue(cfdiReq.getNomAttributes().getTipoNomina()));
             nomina.setFechaPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaPago()));
             nomina.setFechaInicialPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaInicialPago()));
