@@ -58,6 +58,10 @@ public class NominaXmlTest {
             assertTrue("605".equals(dto.getPseudoReceptor().getRegimenFiscal()));
             assertTrue("CN01".equals(dto.getPseudoReceptor().getProposito()));
 
+            // We verify the mandatory attributes of nomina´s complement
+            assertTrue("2022-10-25".equals(dto.getNomAttributes().getFechaPago()));
+            assertTrue("2022-10-16".equals(dto.getNomAttributes().getFechaInicialPago()));
+            assertTrue("2022-10-31".equals(dto.getNomAttributes().getFechaFinalPago()));
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);
         }
