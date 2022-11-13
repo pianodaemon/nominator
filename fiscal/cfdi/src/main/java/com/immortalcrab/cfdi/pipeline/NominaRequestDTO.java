@@ -64,9 +64,11 @@ class NominaRequestDTO extends JsonRequest {
 
             Optional<Object> serie = LegoAssembler.obtainObjFromKey(this.getDs(), "serie");
             Optional<Object> folio = LegoAssembler.obtainObjFromKey(this.getDs(), "folio");
+            Optional<Object> lugar = LegoAssembler.obtainObjFromKey(this.getDs(), "lugar_expedicion");
 
             _docAttribs.setSerie((String) serie.orElseThrow());
             _docAttribs.setFolio((String) folio.orElseThrow());
+            _docAttribs.setLugarExpedicion((String) lugar.orElseThrow());
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Emisor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -166,6 +168,7 @@ class NominaRequestDTO extends JsonRequest {
     @Setter
     public static class DocPrincipalAttributes {
 
+        private String lugarExpedicion;
         private String serie;
         private String folio;
     }
