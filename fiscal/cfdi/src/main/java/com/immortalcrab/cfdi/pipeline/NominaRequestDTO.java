@@ -67,12 +67,14 @@ class NominaRequestDTO extends JsonRequest {
             Optional<Object> lugar = LegoAssembler.obtainObjFromKey(this.getDs(), "lugar_expedicion");
             Optional<Object> fecha = LegoAssembler.obtainObjFromKey(this.getDs(), "fecha");
             Optional<Object> moneda = LegoAssembler.obtainObjFromKey(this.getDs(), "moneda");
+            Optional<Object> exportacion = LegoAssembler.obtainObjFromKey(dic, "exportacion");
 
             _docAttribs.setSerie((String) serie.orElseThrow());
             _docAttribs.setFolio((String) folio.orElseThrow());
             _docAttribs.setLugarExpedicion((String) lugar.orElseThrow());
             _docAttribs.setFecha((String) fecha.orElseThrow());
             _docAttribs.setMoneda((String) moneda.orElseThrow());
+            _docAttribs.setExportacion((String) exportacion.orElseThrow());
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Comprobante tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -177,6 +179,7 @@ class NominaRequestDTO extends JsonRequest {
         private String serie;
         private String folio;
         private String moneda;
+        private String exportacion;
     }
 
     @NoArgsConstructor
