@@ -57,14 +57,14 @@ class NominaXml {
     private StringWriter shape() throws FormatError {
 
         StringWriter sw = new StringWriter();
-        Map<String,Object> ds = this.cfdiReq.getDs();
+        Map<String,Object> ds = cfdiReq.getDs();
 
         try {
             ObjectFactory cfdiFactory = new ObjectFactory();
             Comprobante cfdi = cfdiFactory.createComprobante();
             cfdi.setVersion(NominaRequestDTO.VERSION);
-            cfdi.setSerie((String) ds.get("serie"));
-            cfdi.setFolio((String) ds.get("folio"));
+            cfdi.setSerie(cfdiReq.getDocAttributes().getSerie());
+            cfdi.setFolio(cfdiReq.getDocAttributes().getFolio());
             cfdi.setFecha(DatatypeFactory.newInstance().newXMLGregorianCalendar((String) ds.get("fecha")));
             cfdi.setTipoDeComprobante(CTipoDeComprobante.fromValue((String) ds.get("tipo_de_comprobante")));
             cfdi.setMoneda(CMoneda.fromValue((String) ds.get("moneda")));
