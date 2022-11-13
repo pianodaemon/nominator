@@ -168,6 +168,7 @@ class NominaRequestDTO extends JsonRequest {
     @Setter
     public static class DocPrincipalAttributes {
 
+        private String fecha;
         private String lugarExpedicion;
         private String serie;
         private String folio;
