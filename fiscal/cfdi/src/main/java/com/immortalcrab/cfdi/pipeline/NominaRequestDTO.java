@@ -67,7 +67,7 @@ class NominaRequestDTO extends JsonRequest {
             Optional<Object> lugar = LegoAssembler.obtainObjFromKey(this.getDs(), "lugar_expedicion");
             Optional<Object> fecha = LegoAssembler.obtainObjFromKey(this.getDs(), "fecha");
             Optional<Object> moneda = LegoAssembler.obtainObjFromKey(this.getDs(), "moneda");
-            Optional<Object> exportacion = LegoAssembler.obtainObjFromKey(dic, "exportacion");
+            Optional<Object> exportacion = LegoAssembler.obtainObjFromKey(this.getDs(), "exportacion");
 
             _docAttribs.setSerie((String) serie.orElseThrow());
             _docAttribs.setFolio((String) folio.orElseThrow());
