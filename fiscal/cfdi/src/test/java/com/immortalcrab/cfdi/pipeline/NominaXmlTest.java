@@ -47,10 +47,18 @@ public class NominaXmlTest {
             InputStream is = _cloader.getResourceAsStream("jsonreqs/nominareq.json");
             InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
             NominaRequestDTO dto = new NominaRequestDTO(reader);
-            
+
+            // We verify the mandatory pseudo-emisor attributes
             assertTrue("RRM031001QE7".equals(dto.getPseudoEmisor().getRfc()));
             assertTrue("RR MEDICA S.A. DE C.V.".equals(dto.getPseudoEmisor().getNombre()));
             assertTrue("601".equals(dto.getPseudoEmisor().getRegimenFiscal()));
+
+            // We verify the mandatory pseudo-receptor attributes
+            assertTrue("TORG700702KZ5".equals(dto.getPseudoReceptor().getRfc()));
+            assertTrue("JOSE GUADALUPE DE LA TORRE RIOS".equals(dto.getPseudoReceptor().getNombre()));
+            assertTrue("45625".equals(dto.getPseudoReceptor().getDomicilioFiscal()));
+            assertTrue("605".equals(dto.getPseudoReceptor().getRegimenFiscal()));
+            assertTrue("CN01".equals(dto.getPseudoReceptor().getProposito()));
 
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);
