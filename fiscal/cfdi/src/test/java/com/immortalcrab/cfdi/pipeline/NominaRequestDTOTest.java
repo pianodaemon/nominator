@@ -79,6 +79,7 @@ public class NominaRequestDTOTest {
             assertTrue("1520".equals(dto.getNomReceptorAttribs().getNumEmpleado()));
             assertTrue("2".equals(dto.getNomReceptorAttribs().getRiesgoPuesto()));
             assertTrue("04".equals(dto.getNomReceptorAttribs().getPeriodicidadPago()));
+            assertTrue(new BigDecimal("523.34").equals(dto.getNomReceptorAttribs().getSalarioDiarioIntegrado()));
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);
         }
