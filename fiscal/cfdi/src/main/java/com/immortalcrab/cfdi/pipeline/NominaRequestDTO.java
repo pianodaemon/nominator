@@ -80,36 +80,36 @@ class NominaRequestDTO extends JsonRequest {
 
         try {
 
-            Optional<Object> serie = LegoAssembler.obtainObjFromKey(this.getDs(), "serie");
-            Optional<Object> folio = LegoAssembler.obtainObjFromKey(this.getDs(), "folio");
-            Optional<Object> lugar = LegoAssembler.obtainObjFromKey(this.getDs(), "lugar_expedicion");
-            Optional<Object> fecha = LegoAssembler.obtainObjFromKey(this.getDs(), "fecha");
-            Optional<Object> moneda = LegoAssembler.obtainObjFromKey(this.getDs(), "moneda");
-            Optional<Object> exportacion = LegoAssembler.obtainObjFromKey(this.getDs(), "exportacion");
-            Optional<Object> metodoPago = LegoAssembler.obtainObjFromKey(this.getDs(), "metodo_pago");
+            Object serie = LegoAssembler.obtainObjFromKey(this.getDs(), "serie");
+            Object folio = LegoAssembler.obtainObjFromKey(this.getDs(), "folio");
+            Object lugar = LegoAssembler.obtainObjFromKey(this.getDs(), "lugar_expedicion");
+            Object fecha = LegoAssembler.obtainObjFromKey(this.getDs(), "fecha");
+            Object moneda = LegoAssembler.obtainObjFromKey(this.getDs(), "moneda");
+            Object exportacion = LegoAssembler.obtainObjFromKey(this.getDs(), "exportacion");
+            Object metodoPago = LegoAssembler.obtainObjFromKey(this.getDs(), "metodo_pago");
 
             {
-                Double total = (Double) LegoAssembler.obtainObjFromKey(this.getDs(), "total").orElseThrow();
+                Double total = (Double) LegoAssembler.obtainObjFromKey(this.getDs(), "total");
                 _docAttribs.setTotal(new BigDecimal(total.toString()));
             }
 
             {
-                Double subtotal = (Double) LegoAssembler.obtainObjFromKey(this.getDs(), "subtotal").orElseThrow();
+                Double subtotal = (Double) LegoAssembler.obtainObjFromKey(this.getDs(), "subtotal");
                 _docAttribs.setSubtotal(new BigDecimal(subtotal.toString()));
             }
 
             {
-                Double descuento = (Double) LegoAssembler.obtainObjFromKey(this.getDs(), "descuento").orElseThrow();
+                Double descuento = (Double) LegoAssembler.obtainObjFromKey(this.getDs(), "descuento");
                 _docAttribs.setDescuento(new BigDecimal(descuento.toString()));
             }
 
-            _docAttribs.setSerie((String) serie.orElseThrow());
-            _docAttribs.setFolio((String) folio.orElseThrow());
-            _docAttribs.setLugarExpedicion((String) lugar.orElseThrow());
-            _docAttribs.setFecha((String) fecha.orElseThrow());
-            _docAttribs.setMoneda((String) moneda.orElseThrow());
-            _docAttribs.setExportacion((String) exportacion.orElseThrow());
-            _docAttribs.setMetodoPago((String) metodoPago.orElseThrow());
+            _docAttribs.setSerie((String) serie);
+            _docAttribs.setFolio((String) folio);
+            _docAttribs.setLugarExpedicion((String) lugar);
+            _docAttribs.setFecha((String) fecha);
+            _docAttribs.setMoneda((String) moneda);
+            _docAttribs.setExportacion((String) exportacion);
+            _docAttribs.setMetodoPago((String) metodoPago);
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Comprobante tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -118,37 +118,37 @@ class NominaRequestDTO extends JsonRequest {
 
     private void shapePcs() throws RequestError {
 
-        Optional<Object> cs = NominaRequestDTO.LegoAssembler.obtainObjFromKey(this.getDs(), "conceptos");
+        Object cs = NominaRequestDTO.LegoAssembler.obtainObjFromKey(this.getDs(), "conceptos");
 
         try {
 
-            List<Map<String, Object>> items = (List<Map<String, Object>>) cs.orElseThrow();
+            List<Map<String, Object>> items = (List<Map<String, Object>>) cs;
 
             items.stream().map(i -> {
 
                 PseudoConcepto p = new PseudoConcepto();
-                p.setClaveProdServ((String) LegoAssembler.obtainObjFromKey(i, "clave_prod_serv").orElseThrow());
-                p.setDescripcion((String) LegoAssembler.obtainObjFromKey(i, "descripcion").orElseThrow());
-                p.setClaveUnidad((String) LegoAssembler.obtainObjFromKey(i, "clave_unidad").orElseThrow());
-                p.setObjImp((String) LegoAssembler.obtainObjFromKey(i, "objeto_imp").orElseThrow());
+                p.setClaveProdServ((String) LegoAssembler.obtainObjFromKey(i, "clave_prod_serv"));
+                p.setDescripcion((String) LegoAssembler.obtainObjFromKey(i, "descripcion"));
+                p.setClaveUnidad((String) LegoAssembler.obtainObjFromKey(i, "clave_unidad"));
+                p.setObjImp((String) LegoAssembler.obtainObjFromKey(i, "objeto_imp"));
 
                 {
-                    Double cantidad = (Double) LegoAssembler.obtainObjFromKey(i, "cantidad").orElseThrow();
+                    Double cantidad = (Double) LegoAssembler.obtainObjFromKey(i, "cantidad");
                     p.setCantidad(new BigDecimal(cantidad.intValue()));
                 }
 
                 {
-                    Double valorUnitario = (Double) LegoAssembler.obtainObjFromKey(i, "valor_unitario").orElseThrow();
+                    Double valorUnitario = (Double) LegoAssembler.obtainObjFromKey(i, "valor_unitario");
                     p.setValorUnitario(new BigDecimal(valorUnitario.toString()));
                 }
 
                 {
-                    Double importe = (Double) LegoAssembler.obtainObjFromKey(i, "importe").orElseThrow();
+                    Double importe = (Double) LegoAssembler.obtainObjFromKey(i, "importe");
                     p.setImporte(new BigDecimal(importe.toString()));
                 }
 
                 {
-                    Double descuento = (Double) LegoAssembler.obtainObjFromKey(i, "descuento").orElseThrow();
+                    Double descuento = (Double) LegoAssembler.obtainObjFromKey(i, "descuento");
                     p.setDescuento(new BigDecimal(descuento.toString()));
                 }
 
@@ -169,13 +169,13 @@ class NominaRequestDTO extends JsonRequest {
         try {
 
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "emisor");
-            Optional<Object> emirfc = LegoAssembler.obtainObjFromKey(dic, "rfc");
-            Optional<Object> eminom = LegoAssembler.obtainObjFromKey(dic, "nombre");
-            Optional<Object> regimen = LegoAssembler.obtainObjFromKey(dic, "regimen_fiscal");
+            Object emirfc = LegoAssembler.obtainObjFromKey(dic, "rfc");
+            Object eminom = LegoAssembler.obtainObjFromKey(dic, "nombre");
+            Object regimen = LegoAssembler.obtainObjFromKey(dic, "regimen_fiscal");
 
-            _pe.setRfc((String) emirfc.orElseThrow());
-            _pe.setNombre((String) eminom.orElseThrow());
-            _pe.setRegimenFiscal((String) regimen.orElseThrow());
+            _pe.setRfc((String) emirfc);
+            _pe.setNombre((String) eminom);
+            _pe.setRegimenFiscal((String) regimen);
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Emisor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -187,17 +187,17 @@ class NominaRequestDTO extends JsonRequest {
         try {
 
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "receptor");
-            Optional<Object> cterfc = LegoAssembler.obtainObjFromKey(dic, "rfc");
-            Optional<Object> ctenom = LegoAssembler.obtainObjFromKey(dic, "nombre");
-            Optional<Object> proposito = LegoAssembler.obtainObjFromKey(dic, "uso_cfdi");
-            Optional<Object> df = LegoAssembler.obtainObjFromKey(dic, "domicilio_fiscal_receptor");
-            Optional<Object> rf = LegoAssembler.obtainObjFromKey(dic, "regimen_fiscal_receptor");
+            Object cterfc = LegoAssembler.obtainObjFromKey(dic, "rfc");
+            Object ctenom = LegoAssembler.obtainObjFromKey(dic, "nombre");
+            Object proposito = LegoAssembler.obtainObjFromKey(dic, "uso_cfdi");
+            Object df = LegoAssembler.obtainObjFromKey(dic, "domicilio_fiscal_receptor");
+            Object rf = LegoAssembler.obtainObjFromKey(dic, "regimen_fiscal_receptor");
 
-            _pr.setRfc((String) cterfc.orElseThrow());
-            _pr.setNombre((String) ctenom.orElseThrow());
-            _pr.setProposito((String) proposito.orElseThrow());
-            _pr.setDomicilioFiscal((String) df.orElseThrow());
-            _pr.setRegimenFiscal((String) rf.orElseThrow());
+            _pr.setRfc((String) cterfc);
+            _pr.setNombre((String) ctenom);
+            _pr.setProposito((String) proposito);
+            _pr.setDomicilioFiscal((String) df);
+            _pr.setRegimenFiscal((String) rf);
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Receptor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -209,30 +209,30 @@ class NominaRequestDTO extends JsonRequest {
         try {
 
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "nomina");
-            Optional<Object> tipoNomina = LegoAssembler.obtainObjFromKey(dic, "tipo_nomina");
-            Optional<Object> fechaPago = LegoAssembler.obtainObjFromKey(dic, "fecha_pago");
-            Optional<Object> fechaInicialPago = LegoAssembler.obtainObjFromKey(dic, "fecha_inicial_pago");
-            Optional<Object> fechaFinalPago = LegoAssembler.obtainObjFromKey(dic, "fecha_final_pago");
+            Object tipoNomina = LegoAssembler.obtainObjFromKey(dic, "tipo_nomina");
+            Object fechaPago = LegoAssembler.obtainObjFromKey(dic, "fecha_pago");
+            Object fechaInicialPago = LegoAssembler.obtainObjFromKey(dic, "fecha_inicial_pago");
+            Object fechaFinalPago = LegoAssembler.obtainObjFromKey(dic, "fecha_final_pago");
 
             {
-                Integer numDiasPagados = (Integer) LegoAssembler.obtainObjFromKey(dic, "num_dias_pagados").orElseThrow();
+                Integer numDiasPagados = (Integer) LegoAssembler.obtainObjFromKey(dic, "num_dias_pagados");
                 _nomAttribs.setDiasPagados(new BigDecimal(numDiasPagados));
             }
 
             {
-                Double totalPercepciones = (Double) LegoAssembler.obtainObjFromKey(dic, "total_percepciones").orElseThrow();
+                Double totalPercepciones = (Double) LegoAssembler.obtainObjFromKey(dic, "total_percepciones");
                 _nomAttribs.setTotalPercepciones(new BigDecimal(totalPercepciones.toString()));
             }
 
             {
-                Double totalDeducciones = (Double) LegoAssembler.obtainObjFromKey(dic, "total_deducciones").orElseThrow();
+                Double totalDeducciones = (Double) LegoAssembler.obtainObjFromKey(dic, "total_deducciones");
                 _nomAttribs.setTotalDeducciones(new BigDecimal(totalDeducciones.toString()));
             }
 
-            _nomAttribs.setTipoNomina((String) tipoNomina.orElseThrow());
-            _nomAttribs.setFechaPago((String) fechaPago.orElseThrow());
-            _nomAttribs.setFechaInicialPago((String) fechaInicialPago.orElseThrow());
-            _nomAttribs.setFechaFinalPago((String) fechaFinalPago.orElseThrow());
+            _nomAttribs.setTipoNomina((String) tipoNomina);
+            _nomAttribs.setFechaPago((String) fechaPago);
+            _nomAttribs.setFechaInicialPago((String) fechaInicialPago);
+            _nomAttribs.setFechaFinalPago((String) fechaFinalPago);
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -245,7 +245,7 @@ class NominaRequestDTO extends JsonRequest {
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
                     "emisor");
-            return new NomEmisorAttributes((String) LegoAssembler.obtainObjFromKey(dic, "registro_patronal").orElseThrow());
+            return new NomEmisorAttributes((String) LegoAssembler.obtainObjFromKey(dic, "registro_patronal"));
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina:Emisor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -259,20 +259,20 @@ class NominaRequestDTO extends JsonRequest {
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
                     "receptor");
 
-            Double sdi = (Double) LegoAssembler.obtainObjFromKey(dic, "salario_diario_integrado").orElseThrow();
+            Double sdi = (Double) LegoAssembler.obtainObjFromKey(dic, "salario_diario_integrado");
 
             return new NomReceptorAttributes(
-                    (String) LegoAssembler.obtainObjFromKey(dic, "fecha_inicio_rel_laboral").orElseThrow(),
-                    (String) LegoAssembler.obtainObjFromKey(dic, "clave_ent_fed").orElseThrow(),
-                    (String) LegoAssembler.obtainObjFromKey(dic, "num_seguridad_social").orElseThrow(),
-                    (String) LegoAssembler.obtainObjFromKey(dic, "curp").orElseThrow(),
-                    (String) LegoAssembler.obtainObjFromKey(dic, "tipo_contrato").orElseThrow(),
-                    (String) LegoAssembler.obtainObjFromKey(dic, "tipo_regimen").orElseThrow(),
-                    (String) LegoAssembler.obtainObjFromKey(dic, "num_empleado").orElseThrow(),
-                    (String) LegoAssembler.obtainObjFromKey(dic, "riesgo_puesto").orElseThrow(),
-                    (String) LegoAssembler.obtainObjFromKey(dic, "periodicidad_pago").orElseThrow(),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "fecha_inicio_rel_laboral"),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "clave_ent_fed"),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "num_seguridad_social"),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "curp"),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "tipo_contrato"),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "tipo_regimen"),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "num_empleado"),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "riesgo_puesto"),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "periodicidad_pago"),
                     new BigDecimal(sdi.toString()),
-                    (String) LegoAssembler.obtainObjFromKey(dic, "antiguedad").orElseThrow());
+                    (String) LegoAssembler.obtainObjFromKey(dic, "antiguedad"));
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina:Receptor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -377,6 +377,16 @@ class NominaRequestDTO extends JsonRequest {
         private String antiguedad;
     }
 
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class NomPercepcionesAttributes {
+
+        BigDecimal totalSueldos;
+        BigDecimal totalGravado;
+        BigDecimal totalExento;
+    }
+
     private static class LegoAssembler {
 
         private static Map<String, Object> obtainMapFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
@@ -385,8 +395,8 @@ class NominaRequestDTO extends JsonRequest {
             return (Map<String, Object>) dict.orElseThrow();
         }
 
-        private static Optional<Object> obtainObjFromKey(Map<String, Object> m, final String k) {
-            return Optional.ofNullable(m.get(k));
+        private static Object obtainObjFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
+            return Optional.ofNullable(m.get(k)).orElseThrow();
         }
     }
 }
