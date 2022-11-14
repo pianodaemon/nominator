@@ -171,8 +171,8 @@ class NominaXml {
             // Complemento:Nomina:Deducciones ------------------------------------
             var dsNomDeducciones = (Map<String, Object>) dsNomina.get("deducciones");
             Deducciones deducciones = nominaFactory.createNominaDeducciones();
-            deducciones.setTotalOtrasDeducciones(cfdiReq.getNomDeduccionesAttribs().getTotalOtrasDeducciones());
-            deducciones.setTotalImpuestosRetenidos(cfdiReq.getNomDeduccionesAttribs().getTotalImpuestosRetenidos());
+            deducciones.setTotalOtrasDeducciones(new BigDecimal(((Double) dsNomDeducciones.get("total_otras_deducciones")).toString()));
+            deducciones.setTotalImpuestosRetenidos(new BigDecimal(((Double) dsNomDeducciones.get("total_impuestos_retenidos")).toString()));
 
             var listaDeducciones = (List<Map<String, Object>>) dsNomDeducciones.get("lista");
             for (Map<String, Object> d : listaDeducciones) {
