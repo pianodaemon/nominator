@@ -137,7 +137,7 @@ class NominaXml {
             // Complemento:Nomina:Receptor ------------------------------------
             var dsNomReceptor = (Map<String,Object>) dsNomina.get("receptor");
             Nomina.Receptor nomReceptor = nominaFactory.createNominaReceptor();
-            nomReceptor.setCurp((String) dsNomReceptor.get("curp"));
+            nomReceptor.setCurp(cfdiReq.getNomReceptorAttribs().getCurp());
             nomReceptor.setNumSeguridadSocial((String) dsNomReceptor.get("num_seguridad_social"));
             nomReceptor.setFechaInicioRelLaboral(DatatypeFactory.newInstance().newXMLGregorianCalendar((String) dsNomReceptor.get("fecha_inicio_rel_laboral")));
             nomReceptor.setAntigüedad((String) dsNomReceptor.get("antigüedad"));

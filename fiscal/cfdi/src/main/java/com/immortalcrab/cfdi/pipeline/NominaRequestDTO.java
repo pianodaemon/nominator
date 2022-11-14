@@ -259,6 +259,7 @@ class NominaRequestDTO extends JsonRequest {
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
                     "receptor");
             return new NomReceptorAttributes(
+                    (String) LegoAssembler.obtainObjFromKey(dic, "curp").orElseThrow(),
                     (String) LegoAssembler.obtainObjFromKey(dic, "tipo_contrato").orElseThrow(),
                     (String) LegoAssembler.obtainObjFromKey(dic, "tipo_regimen").orElseThrow(),
                     (String) LegoAssembler.obtainObjFromKey(dic, "num_empleado").orElseThrow(),
@@ -355,6 +356,7 @@ class NominaRequestDTO extends JsonRequest {
     @Setter
     public static class NomReceptorAttributes {
 
+        private String curp;
         private String tipoContrato;
         private String tipoRegimen;
         private String numEmpleado;
