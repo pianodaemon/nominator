@@ -309,11 +309,15 @@ class NominaRequestDTO extends JsonRequest {
 
             List<PercepcionItem> items = lms.stream().map(m -> {
 
+                Double importeGravado = LegoAssembler.obtainObjFromKey(m, "importe_gravado");
+                Double importeExento = LegoAssembler.obtainObjFromKey(m, "importe_exento");
+
                 PercepcionItem p = new PercepcionItem(
                         LegoAssembler.obtainObjFromKey(m, "clave"),
                         LegoAssembler.obtainObjFromKey(m, "concepto"),
-                        LegoAssembler.obtainObjFromKey(m, "tipo_percepcion")
-                );
+                        LegoAssembler.obtainObjFromKey(m, "tipo_percepcion"),
+                        new BigDecimal(importeGravado.toString()),
+                        new BigDecimal(importeExento.toString()));
 
                 return p;
             }).collect(Collectors.toList());
@@ -479,6 +483,8 @@ class NominaRequestDTO extends JsonRequest {
         private String clave;
         private String concepto;
         private String tipoPercepcion;
+        private BigDecimal importeGravado;
+        private BigDecimal importeExento;
     }
 
     @AllArgsConstructor
