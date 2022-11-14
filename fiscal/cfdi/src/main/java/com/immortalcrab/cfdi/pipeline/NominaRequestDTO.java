@@ -30,6 +30,7 @@ class NominaRequestDTO extends JsonRequest {
     NomPrincipalAttributes _nomAttribs;
     NomEmisorAttributes _nomEmisorAttribs;
     NomReceptorAttributes _nomReceptorAttribs;
+    NomPercepcionesAttributes _nomPercepcionesAttribs;
 
     public NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
 
@@ -44,8 +45,9 @@ class NominaRequestDTO extends JsonRequest {
         shapePcs();
         _nomAttribs = new NomPrincipalAttributes();
         shapeNomAttribs();
-        _nomEmisorAttribs = _shapeNomEmisorAttribs();
-        _nomReceptorAttribs = _shapeNomReceptorAttribs();
+        _nomEmisorAttribs = shapeNomEmisorAttribs();
+        _nomReceptorAttribs = shapeNomReceptorAttribs();
+        _nomPercepcionesAttribs = shapeNomPercepcionesAttribs();
     }
 
     public NomPrincipalAttributes getNomAttributes() {
@@ -58,6 +60,10 @@ class NominaRequestDTO extends JsonRequest {
 
     public NomReceptorAttributes getNomReceptorAttribs() {
         return _nomReceptorAttribs;
+    }
+
+    public NomPercepcionesAttributes getNomPercepcionesAttribs() {
+        return this._nomPercepcionesAttribs;
     }
 
     public DocPrincipalAttributes getDocAttributes() {
@@ -239,7 +245,7 @@ class NominaRequestDTO extends JsonRequest {
         }
     }
 
-    private NomEmisorAttributes _shapeNomEmisorAttribs() throws RequestError {
+    private NomEmisorAttributes shapeNomEmisorAttribs() throws RequestError {
         try {
 
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
@@ -252,7 +258,7 @@ class NominaRequestDTO extends JsonRequest {
         }
     }
 
-    private NomReceptorAttributes _shapeNomReceptorAttribs() throws RequestError {
+    private NomReceptorAttributes shapeNomReceptorAttribs() throws RequestError {
         try {
 
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
@@ -275,6 +281,25 @@ class NominaRequestDTO extends JsonRequest {
                     LegoAssembler.obtainObjFromKey(dic, "antiguedad"));
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina:Receptor tag is missing");
+            throw new RequestError("mandatory element in request is missing", ex);
+        }
+    }
+
+    private NomPercepcionesAttributes shapeNomPercepcionesAttribs() throws RequestError {
+        try {
+            Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
+                    LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
+                    "percepciones");
+
+            Double ts = LegoAssembler.obtainObjFromKey(dic, "total_sueldos");
+            Double tg = LegoAssembler.obtainObjFromKey(dic, "total_gravado");
+            Double te = LegoAssembler.obtainObjFromKey(dic, "total_exento");
+            return new NomPercepcionesAttributes(
+                    new BigDecimal(ts.toString()),
+                    new BigDecimal(tg.toString()),
+                    new BigDecimal(te.toString()));
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements of Complemento:Nomina:Percepciones tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
         }
     }
