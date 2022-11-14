@@ -258,6 +258,9 @@ class NominaRequestDTO extends JsonRequest {
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
                     "receptor");
+
+            Double sdi = (Double) LegoAssembler.obtainObjFromKey(dic, "salario_diario_integrado").orElseThrow();
+
             return new NomReceptorAttributes(
                     (String) LegoAssembler.obtainObjFromKey(dic, "clave_ent_fed").orElseThrow(),
                     (String) LegoAssembler.obtainObjFromKey(dic, "num_seguridad_social").orElseThrow(),
@@ -266,7 +269,8 @@ class NominaRequestDTO extends JsonRequest {
                     (String) LegoAssembler.obtainObjFromKey(dic, "tipo_regimen").orElseThrow(),
                     (String) LegoAssembler.obtainObjFromKey(dic, "num_empleado").orElseThrow(),
                     (String) LegoAssembler.obtainObjFromKey(dic, "riesgo_puesto").orElseThrow(),
-                    (String) LegoAssembler.obtainObjFromKey(dic, "periodicidad_pago").orElseThrow());
+                    (String) LegoAssembler.obtainObjFromKey(dic, "periodicidad_pago").orElseThrow(),
+                    new BigDecimal(sdi.toString()));
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -366,6 +370,7 @@ class NominaRequestDTO extends JsonRequest {
         private String numEmpleado;
         private String riesgoPuesto;
         private String periodicidadPago;
+        private BigDecimal salarioDiarioIntegrado;
     }
 
     private static class LegoAssembler {
