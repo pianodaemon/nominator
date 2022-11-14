@@ -31,6 +31,7 @@ class NominaRequestDTO extends JsonRequest {
     NomEmisorAttributes _nomEmisorAttribs;
     NomReceptorAttributes _nomReceptorAttribs;
     NomPercepcionesAttributes _nomPercepcionesAttribs;
+    NomDeduccionesAttributes _nomDeduccionesAttribs;
 
     public NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
 
@@ -48,6 +49,7 @@ class NominaRequestDTO extends JsonRequest {
         _nomEmisorAttribs = shapeNomEmisorAttribs();
         _nomReceptorAttribs = shapeNomReceptorAttribs();
         _nomPercepcionesAttribs = shapeNomPercepcionesAttribs();
+        _nomDeduccionesAttribs = shapeNomDeduccionesAttribs();
     }
 
     public NomPrincipalAttributes getNomAttributes() {
@@ -64,6 +66,10 @@ class NominaRequestDTO extends JsonRequest {
 
     public NomPercepcionesAttributes getNomPercepcionesAttribs() {
         return this._nomPercepcionesAttribs;
+    }
+
+    public NomDeduccionesAttributes getNomDeduccionesAttribs() {
+        return _nomDeduccionesAttribs;
     }
 
     public DocPrincipalAttributes getDocAttributes() {
@@ -259,6 +265,7 @@ class NominaRequestDTO extends JsonRequest {
     }
 
     private NomReceptorAttributes shapeNomReceptorAttribs() throws RequestError {
+
         try {
 
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
@@ -286,6 +293,7 @@ class NominaRequestDTO extends JsonRequest {
     }
 
     private NomPercepcionesAttributes shapeNomPercepcionesAttribs() throws RequestError {
+
         try {
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
@@ -300,6 +308,24 @@ class NominaRequestDTO extends JsonRequest {
                     new BigDecimal(te.toString()));
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina:Percepciones tag is missing");
+            throw new RequestError("mandatory element in request is missing", ex);
+        }
+    }
+
+    private NomDeduccionesAttributes shapeNomDeduccionesAttribs() throws RequestError {
+
+        try {
+            Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
+                    LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
+                    "deducciones");
+
+            Double tod = LegoAssembler.obtainObjFromKey(dic, "total_otras_deducciones");
+            Double tir = LegoAssembler.obtainObjFromKey(dic, "total_impuestos_retenidos");
+            return new NomDeduccionesAttributes(
+                    new BigDecimal(tod.toString()),
+                    new BigDecimal(tir.toString()));
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements of Complemento:Nomina:Deducciones tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
         }
     }
@@ -341,9 +367,6 @@ class NominaRequestDTO extends JsonRequest {
         private String rfc;
         private String nombre;
         private String regimenFiscal;
-        private BigDecimal numDiasPagados;
-        private BigDecimal totalPercepciones;
-        private BigDecimal totalDeducciones;
     }
 
     @NoArgsConstructor
@@ -412,12 +435,19 @@ class NominaRequestDTO extends JsonRequest {
         BigDecimal totalExento;
     }
 
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class NomDeduccionesAttributes {
+
+        private BigDecimal totalOtrasDeducciones;
+        private BigDecimal totalImpuestosRetenidos;
+    }
+
     private static class LegoAssembler {
 
         private static Map<String, Object> obtainMapFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
-
-            Optional<Object> dict = Optional.ofNullable(m.get(k));
-            return (Map<String, Object>) dict.orElseThrow();
+            return LegoAssembler.obtainObjFromKey(m, k);
         }
 
         private static <T> T obtainObjFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
