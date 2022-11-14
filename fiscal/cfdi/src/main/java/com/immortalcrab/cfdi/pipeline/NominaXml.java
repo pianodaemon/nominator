@@ -151,9 +151,9 @@ class NominaXml {
             var dsNomina = (Map<String, Object>) ds.get("nomina");
             var dsNomPercepciones = (Map<String, Object>) dsNomina.get("percepciones");
             Percepciones percepciones = nominaFactory.createNominaPercepciones();
-            percepciones.setTotalSueldos(new BigDecimal(((Double) dsNomPercepciones.get("total_sueldos")).toString()));
-            percepciones.setTotalGravado(new BigDecimal(((Double) dsNomPercepciones.get("total_gravado")).toString()));
-            percepciones.setTotalExento(new BigDecimal(((Double) dsNomPercepciones.get("total_exento")).toString()));
+            percepciones.setTotalSueldos(cfdiReq.getNomPercepcionesAttribs().getTotalSueldos());
+            percepciones.setTotalGravado(cfdiReq.getNomPercepcionesAttribs().getTotalGravado());
+            percepciones.setTotalExento(cfdiReq.getNomPercepcionesAttribs().getTotalExento());
 
             var listaPercepciones = (List<Map<String, Object>>) dsNomPercepciones.get("lista");
             for (Map<String, Object> p : listaPercepciones) {
