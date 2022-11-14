@@ -295,17 +295,33 @@ class NominaRequestDTO extends JsonRequest {
     private NomPercepcionesAttributes shapeNomPercepcionesAttribs() throws RequestError {
 
         try {
+
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
                     "percepciones");
 
+            List<Map<String, Object>> lms = NominaRequestDTO.LegoAssembler.obtainObjFromKey(dic, "lista");
+
             Double ts = LegoAssembler.obtainObjFromKey(dic, "total_sueldos");
             Double tg = LegoAssembler.obtainObjFromKey(dic, "total_gravado");
             Double te = LegoAssembler.obtainObjFromKey(dic, "total_exento");
+
+            List<PercepcionItem> items = lms.stream().map(m -> {
+
+                PercepcionItem p = new PercepcionItem(
+                        LegoAssembler.obtainObjFromKey(m, "clave"),
+                        LegoAssembler.obtainObjFromKey(m, "concepto"),
+                        LegoAssembler.obtainObjFromKey(m, "tipo_deduccion")
+                );
+
+                return p;
+            }).collect(Collectors.toList());
+
             return new NomPercepcionesAttributes(
                     new BigDecimal(ts.toString()),
                     new BigDecimal(tg.toString()),
-                    new BigDecimal(te.toString()));
+                    new BigDecimal(te.toString()),
+                    items);
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina:Percepciones tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -433,6 +449,17 @@ class NominaRequestDTO extends JsonRequest {
         BigDecimal totalSueldos;
         BigDecimal totalGravado;
         BigDecimal totalExento;
+        List<PercepcionItem> items;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class PercepcionItem {
+
+        private String clave;
+        private String concepto;
+        private String tipoDeduccion;
     }
 
     @AllArgsConstructor
