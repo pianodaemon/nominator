@@ -141,11 +141,11 @@ class NominaXml {
             nomReceptor.setNumSeguridadSocial((String) dsNomReceptor.get("num_seguridad_social"));
             nomReceptor.setFechaInicioRelLaboral(DatatypeFactory.newInstance().newXMLGregorianCalendar((String) dsNomReceptor.get("fecha_inicio_rel_laboral")));
             nomReceptor.setAntigüedad((String) dsNomReceptor.get("antigüedad"));
-            nomReceptor.setTipoContrato((String) dsNomReceptor.get("tipo_contrato"));
-            nomReceptor.setTipoRegimen((String) dsNomReceptor.get("tipo_regimen"));
-            nomReceptor.setNumEmpleado((String) dsNomReceptor.get("num_empleado"));
-            nomReceptor.setRiesgoPuesto((String) dsNomReceptor.get("riesgo_puesto"));
-            nomReceptor.setPeriodicidadPago((String) dsNomReceptor.get("periodicidad_pago"));
+	    nomReceptor.setTipoContrato(cfdiReq.getNomReceptorAttribs().getTipoContrato());
+            nomReceptor.setTipoRegimen(cfdiReq.getNomReceptorAttribs().getTipoRegimen());
+            nomReceptor.setNumEmpleado(cfdiReq.getNomReceptorAttribs().getNumEmpleado());
+            nomReceptor.setRiesgoPuesto(cfdiReq.getNomReceptorAttribs().getRiesgoPuesto());
+            nomReceptor.setPeriodicidadPago(cfdiReq.getNomReceptorAttribs().getPeriodicidadPago());
             nomReceptor.setSalarioDiarioIntegrado(new BigDecimal(((Double) dsNomReceptor.get("salario_diario_integrado")).toString()));
             nomReceptor.setClaveEntFed(CEstado.fromValue((String) dsNomReceptor.get("clave_ent_fed")));
             nomina.setReceptor(nomReceptor);
