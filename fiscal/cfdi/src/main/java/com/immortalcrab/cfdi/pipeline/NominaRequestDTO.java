@@ -40,11 +40,10 @@ class NominaRequestDTO extends JsonRequest {
         _docAttribs = new RegularRootAttributes();
         _pr = new RegularReceptor();
         _pe = new RegularEmisor();
-        _pcs = new LinkedList<>();
+        _pcs = shapePcs();
         shapeDocAttribs();
         shapeRp();
         shapeEp();
-        shapePcs();
         _nomAttribs = new NomPrincipalAttributes();
         shapeNomAttribs();
         _nomEmisorAttribs = shapeNomEmisorAttribs();
@@ -129,7 +128,7 @@ class NominaRequestDTO extends JsonRequest {
         }
     }
 
-    private void shapePcs() throws RequestError {
+    private List<RegularConcepto> shapePcs() throws RequestError {
 
         Object cs = NominaRequestDTO.LegoAssembler.obtainObjFromKey(this.getDs(), "conceptos");
 
@@ -137,7 +136,7 @@ class NominaRequestDTO extends JsonRequest {
 
             List<Map<String, Object>> items = (List<Map<String, Object>>) cs;
 
-            items.stream().map(i -> {
+            return items.stream().map(i -> {
 
                 RegularConcepto p = new RegularConcepto();
                 p.setClaveProdServ(LegoAssembler.obtainObjFromKey(i, "clave_prod_serv"));
@@ -167,9 +166,7 @@ class NominaRequestDTO extends JsonRequest {
 
                 return p;
 
-            }).forEachOrdered(p -> {
-                _pcs.add(p);
-            });
+            }).collect(Collectors.toList());
 
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Concepto tag is missing");
