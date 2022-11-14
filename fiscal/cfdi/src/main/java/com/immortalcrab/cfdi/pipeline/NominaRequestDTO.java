@@ -37,13 +37,10 @@ class NominaRequestDTO extends JsonRequest {
 
         super(reader);
         _docAttribs = shapeDocAttribs();
-        _pr = new RegularReceptor();
+        _pr = shapeRp();
         _pe = shapeEp();
         _pcs = shapePcs();
-        shapeRp();
-
-        _nomAttribs = new NomPrincipalAttributes();
-        shapeNomAttribs();
+        _nomAttribs = shapeNomAttribs();
         _nomEmisorAttribs = shapeNomEmisorAttribs();
         _nomReceptorAttribs = shapeNomReceptorAttribs();
         _nomPercepcionesAttribs = shapeNomPercepcionesAttribs();
@@ -198,9 +195,11 @@ class NominaRequestDTO extends JsonRequest {
         }
     }
 
-    private void shapeRp() throws RequestError {
+    private RegularReceptor shapeRp() throws RequestError {
 
         try {
+
+            RegularReceptor receptor = new RegularReceptor();
 
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "receptor");
             String cterfc = LegoAssembler.obtainObjFromKey(dic, "rfc");
@@ -209,20 +208,24 @@ class NominaRequestDTO extends JsonRequest {
             String df = LegoAssembler.obtainObjFromKey(dic, "domicilio_fiscal_receptor");
             String rf = LegoAssembler.obtainObjFromKey(dic, "regimen_fiscal_receptor");
 
-            _pr.setRfc(cterfc);
-            _pr.setNombre(ctenom);
-            _pr.setProposito(proposito);
-            _pr.setDomicilioFiscal(df);
-            _pr.setRegimenFiscal(rf);
+            receptor.setRfc(cterfc);
+            receptor.setNombre(ctenom);
+            receptor.setProposito(proposito);
+            receptor.setDomicilioFiscal(df);
+            receptor.setRegimenFiscal(rf);
+
+            return receptor;
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Receptor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
         }
     }
 
-    private void shapeNomAttribs() throws RequestError {
+    private NomPrincipalAttributes shapeNomAttribs() throws RequestError {
 
         try {
+
+            NomPrincipalAttributes nomAttrs = new NomPrincipalAttributes();
 
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "nomina");
             String tipoNomina = LegoAssembler.obtainObjFromKey(dic, "tipo_nomina");
@@ -232,23 +235,25 @@ class NominaRequestDTO extends JsonRequest {
 
             {
                 Integer numDiasPagados = LegoAssembler.obtainObjFromKey(dic, "num_dias_pagados");
-                _nomAttribs.setDiasPagados(new BigDecimal(numDiasPagados));
+                nomAttrs.setDiasPagados(new BigDecimal(numDiasPagados));
             }
 
             {
                 Double totalPercepciones = LegoAssembler.obtainObjFromKey(dic, "total_percepciones");
-                _nomAttribs.setTotalPercepciones(new BigDecimal(totalPercepciones.toString()));
+                nomAttrs.setTotalPercepciones(new BigDecimal(totalPercepciones.toString()));
             }
 
             {
                 Double totalDeducciones = LegoAssembler.obtainObjFromKey(dic, "total_deducciones");
-                _nomAttribs.setTotalDeducciones(new BigDecimal(totalDeducciones.toString()));
+                nomAttrs.setTotalDeducciones(new BigDecimal(totalDeducciones.toString()));
             }
 
-            _nomAttribs.setTipoNomina(tipoNomina);
-            _nomAttribs.setFechaPago(fechaPago);
-            _nomAttribs.setFechaInicialPago(fechaInicialPago);
-            _nomAttribs.setFechaFinalPago(fechaFinalPago);
+            nomAttrs.setTipoNomina(tipoNomina);
+            nomAttrs.setFechaPago(fechaPago);
+            nomAttrs.setFechaInicialPago(fechaInicialPago);
+            nomAttrs.setFechaFinalPago(fechaFinalPago);
+
+            return nomAttrs;
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
