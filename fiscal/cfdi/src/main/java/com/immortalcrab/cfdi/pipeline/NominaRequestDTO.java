@@ -4,7 +4,6 @@ import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -37,13 +36,12 @@ class NominaRequestDTO extends JsonRequest {
     public NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
 
         super(reader);
-        _docAttribs = new RegularRootAttributes();
+        _docAttribs = shapeDocAttribs();
         _pr = new RegularReceptor();
-        _pe = new RegularEmisor();
+        _pe = shapeEp();
         _pcs = shapePcs();
-        shapeDocAttribs();
         shapeRp();
-        shapeEp();
+
         _nomAttribs = new NomPrincipalAttributes();
         shapeNomAttribs();
         _nomEmisorAttribs = shapeNomEmisorAttribs();
@@ -88,7 +86,9 @@ class NominaRequestDTO extends JsonRequest {
         return _pcs;
     }
 
-    private void shapeDocAttribs() throws RequestError {
+    private RegularRootAttributes shapeDocAttribs() throws RequestError {
+
+        RegularRootAttributes rattrs = new RegularRootAttributes();
 
         try {
 
@@ -102,26 +102,28 @@ class NominaRequestDTO extends JsonRequest {
 
             {
                 Double total = LegoAssembler.obtainObjFromKey(this.getDs(), "total");
-                _docAttribs.setTotal(new BigDecimal(total.toString()));
+                rattrs.setTotal(new BigDecimal(total.toString()));
             }
 
             {
                 Double subtotal = LegoAssembler.obtainObjFromKey(this.getDs(), "subtotal");
-                _docAttribs.setSubtotal(new BigDecimal(subtotal.toString()));
+                rattrs.setSubtotal(new BigDecimal(subtotal.toString()));
             }
 
             {
                 Double descuento = LegoAssembler.obtainObjFromKey(this.getDs(), "descuento");
-                _docAttribs.setDescuento(new BigDecimal(descuento.toString()));
+                rattrs.setDescuento(new BigDecimal(descuento.toString()));
             }
 
-            _docAttribs.setSerie(serie);
-            _docAttribs.setFolio(folio);
-            _docAttribs.setLugarExpedicion(lugar);
-            _docAttribs.setFecha(fecha);
-            _docAttribs.setMoneda(moneda);
-            _docAttribs.setExportacion(exportacion);
-            _docAttribs.setMetodoPago(metodoPago);
+            rattrs.setSerie(serie);
+            rattrs.setFolio(folio);
+            rattrs.setLugarExpedicion(lugar);
+            rattrs.setFecha(fecha);
+            rattrs.setMoneda(moneda);
+            rattrs.setExportacion(exportacion);
+            rattrs.setMetodoPago(metodoPago);
+
+            return rattrs;
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Comprobante tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -174,18 +176,22 @@ class NominaRequestDTO extends JsonRequest {
         }
     }
 
-    private void shapeEp() throws RequestError {
+    private RegularEmisor shapeEp() throws RequestError {
 
         try {
+
+            RegularEmisor emisor = new RegularEmisor();
 
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "emisor");
             String emirfc = LegoAssembler.obtainObjFromKey(dic, "rfc");
             String eminom = LegoAssembler.obtainObjFromKey(dic, "nombre");
             String regimen = LegoAssembler.obtainObjFromKey(dic, "regimen_fiscal");
 
-            _pe.setRfc(emirfc);
-            _pe.setNombre(eminom);
-            _pe.setRegimenFiscal(regimen);
+            emisor.setRfc(emirfc);
+            emisor.setNombre(eminom);
+            emisor.setRegimenFiscal(regimen);
+
+            return emisor;
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Emisor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
