@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ class NominaRequestDTO extends JsonRequest {
     PseudoEmisor _pe;
     List<PseudoConcepto> _pcs;
     NomPrincipalAttributes _nomAttribs;
+    NomEmisorAttributes _nomEmisorAttribs;
 
     public NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
 
@@ -41,10 +43,15 @@ class NominaRequestDTO extends JsonRequest {
         shapePcs();
         _nomAttribs = new NomPrincipalAttributes();
         shapeNomAttribs();
+        _nomEmisorAttribs = _shapeNomEmisorAttribs();
     }
 
     public NomPrincipalAttributes getNomAttributes() {
         return _nomAttribs;
+    }
+
+    public NomEmisorAttributes getNomEmisorAttribs() {
+        return _nomEmisorAttribs;
     }
 
     public DocPrincipalAttributes getDocAttributes() {
@@ -226,6 +233,19 @@ class NominaRequestDTO extends JsonRequest {
         }
     }
 
+    private NomEmisorAttributes _shapeNomEmisorAttribs() throws RequestError {
+        try {
+
+            Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
+                    LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
+                    "emisor");
+            return new NomEmisorAttributes((String) LegoAssembler.obtainObjFromKey(dic, "registro_patronal").orElseThrow());
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements of Complemento:Nomina tag is missing");
+            throw new RequestError("mandatory element in request is missing", ex);
+        }
+    }
+
     @NoArgsConstructor
     @Getter
     @Setter
@@ -296,6 +316,14 @@ class NominaRequestDTO extends JsonRequest {
         private BigDecimal diasPagados;
         private BigDecimal totalPercepciones;
         private BigDecimal totalDeducciones;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class NomEmisorAttributes {
+
+        private String registroPatronal;
     }
 
     private static class LegoAssembler {

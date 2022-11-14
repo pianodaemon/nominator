@@ -66,6 +66,9 @@ public class NominaRequestDTOTest {
             assertTrue(new BigDecimal("15").equals(dto.getNomAttributes().getDiasPagados()));
             assertTrue(new BigDecimal("7185.82").equals(dto.getNomAttributes().getTotalPercepciones()));
             assertTrue(new BigDecimal("1185.82").equals(dto.getNomAttributes().getTotalDeducciones()));
+
+            // We verify the mandatory attributes of nominas's emisor
+            assertTrue("D4562908100".equals(dto.getNomEmisorAttribs().getRegistroPatronal()));
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);
         }

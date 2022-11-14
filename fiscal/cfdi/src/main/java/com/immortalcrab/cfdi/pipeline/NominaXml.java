@@ -130,13 +130,11 @@ class NominaXml {
             nomina.setTotalDeducciones(cfdiReq.getNomAttributes().getTotalDeducciones());
             // Complemento:Nomina:Emisor ------------------------------------
 
-            var dsNomEmisor = (Map<String,String>) dsNomina.get("emisor");
             Nomina.Emisor nomEmisor = nominaFactory.createNominaEmisor();
-            nomEmisor.setRegistroPatronal(dsNomEmisor.get("registro_patronal"));
+            nomEmisor.setRegistroPatronal(cfdiReq.getNomEmisorAttribs().getRegistroPatronal());
             nomina.setEmisor(nomEmisor);
 
             // Complemento:Nomina:Receptor ------------------------------------
-
             var dsNomReceptor = (Map<String,Object>) dsNomina.get("receptor");
             Nomina.Receptor nomReceptor = nominaFactory.createNominaReceptor();
             nomReceptor.setCurp((String) dsNomReceptor.get("curp"));
