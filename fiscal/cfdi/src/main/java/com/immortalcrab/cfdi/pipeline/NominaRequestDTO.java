@@ -341,9 +341,6 @@ class NominaRequestDTO extends JsonRequest {
         private String rfc;
         private String nombre;
         private String regimenFiscal;
-        private BigDecimal numDiasPagados;
-        private BigDecimal totalPercepciones;
-        private BigDecimal totalDeducciones;
     }
 
     @NoArgsConstructor
