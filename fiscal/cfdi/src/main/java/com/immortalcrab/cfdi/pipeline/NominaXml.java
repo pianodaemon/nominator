@@ -96,7 +96,7 @@ class NominaXml {
             // Conceptos
             Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
 
-            for (PseudoConcepto psc : cfdiReq.getPseudoConceptos()) {
+            for (var psc : cfdiReq.getPseudoConceptos()) {
 
                 var concepto = cfdiFactory.createComprobanteConceptosConcepto();
 
