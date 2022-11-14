@@ -56,7 +56,7 @@ class NominaXml {
     private StringWriter shape() throws FormatError {
 
         StringWriter sw = new StringWriter();
-        Map<String,Object> ds = cfdiReq.getDs();
+        Map<String, Object> ds = cfdiReq.getDs();
 
         try {
             ObjectFactory cfdiFactory = new ObjectFactory();
@@ -112,12 +112,10 @@ class NominaXml {
             }
             cfdi.setConceptos(conceptos);
 
-            String contextPath    = "mx.gob.sat.cfd._4";
+            String contextPath = "mx.gob.sat.cfd._4";
             String schemaLocation = "http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd";
 
             // Complemento:Nomina ------------------------------------
-
-            var dsNomina = (Map<String,Object>) ds.get("nomina");
             var nominaFactory = new mx.gob.sat.nomina12.ObjectFactory();
             Nomina nomina = nominaFactory.createNomina();
             nomina.setVersion(NominaRequestDTO.NOMINA_VER);
@@ -130,38 +128,35 @@ class NominaXml {
             nomina.setTotalDeducciones(cfdiReq.getNomAttributes().getTotalDeducciones());
             // Complemento:Nomina:Emisor ------------------------------------
 
-            var dsNomEmisor = (Map<String,String>) dsNomina.get("emisor");
             Nomina.Emisor nomEmisor = nominaFactory.createNominaEmisor();
-            nomEmisor.setRegistroPatronal(dsNomEmisor.get("registro_patronal"));
+            nomEmisor.setRegistroPatronal(cfdiReq.getNomEmisorAttribs().getRegistroPatronal());
             nomina.setEmisor(nomEmisor);
 
             // Complemento:Nomina:Receptor ------------------------------------
-
-            var dsNomReceptor = (Map<String,Object>) dsNomina.get("receptor");
             Nomina.Receptor nomReceptor = nominaFactory.createNominaReceptor();
-            nomReceptor.setCurp((String) dsNomReceptor.get("curp"));
-            nomReceptor.setNumSeguridadSocial((String) dsNomReceptor.get("num_seguridad_social"));
-            nomReceptor.setFechaInicioRelLaboral(DatatypeFactory.newInstance().newXMLGregorianCalendar((String) dsNomReceptor.get("fecha_inicio_rel_laboral")));
-            nomReceptor.setAntigüedad((String) dsNomReceptor.get("antigüedad"));
-            nomReceptor.setTipoContrato((String) dsNomReceptor.get("tipo_contrato"));
-            nomReceptor.setTipoRegimen((String) dsNomReceptor.get("tipo_regimen"));
-            nomReceptor.setNumEmpleado((String) dsNomReceptor.get("num_empleado"));
-            nomReceptor.setRiesgoPuesto((String) dsNomReceptor.get("riesgo_puesto"));
-            nomReceptor.setPeriodicidadPago((String) dsNomReceptor.get("periodicidad_pago"));
-            nomReceptor.setSalarioDiarioIntegrado(new BigDecimal(((Double) dsNomReceptor.get("salario_diario_integrado")).toString()));
-            nomReceptor.setClaveEntFed(CEstado.fromValue((String) dsNomReceptor.get("clave_ent_fed")));
+            nomReceptor.setCurp(cfdiReq.getNomReceptorAttribs().getCurp());
+            nomReceptor.setNumSeguridadSocial(cfdiReq.getNomReceptorAttribs().getNumSeguridadSocial());
+            nomReceptor.setFechaInicioRelLaboral(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomReceptorAttribs().getFechaInicioRelLaboral()));
+            nomReceptor.setAntigüedad(cfdiReq.getNomReceptorAttribs().getAntiguedad());
+            nomReceptor.setTipoContrato(cfdiReq.getNomReceptorAttribs().getTipoContrato());
+            nomReceptor.setTipoRegimen(cfdiReq.getNomReceptorAttribs().getTipoRegimen());
+            nomReceptor.setNumEmpleado(cfdiReq.getNomReceptorAttribs().getNumEmpleado());
+            nomReceptor.setRiesgoPuesto(cfdiReq.getNomReceptorAttribs().getRiesgoPuesto());
+            nomReceptor.setPeriodicidadPago(cfdiReq.getNomReceptorAttribs().getPeriodicidadPago());
+            nomReceptor.setSalarioDiarioIntegrado(cfdiReq.getNomReceptorAttribs().getSalarioDiarioIntegrado());
+            nomReceptor.setClaveEntFed(CEstado.fromValue(cfdiReq.getNomReceptorAttribs().getClaveEntFed()));
             nomina.setReceptor(nomReceptor);
 
             // Complemento:Nomina:Percepciones ------------------------------------
-
-            var dsNomPercepciones = (Map<String,Object>) dsNomina.get("percepciones");
+            var dsNomina = (Map<String, Object>) ds.get("nomina");
+            var dsNomPercepciones = (Map<String, Object>) dsNomina.get("percepciones");
             Percepciones percepciones = nominaFactory.createNominaPercepciones();
             percepciones.setTotalSueldos(new BigDecimal(((Double) dsNomPercepciones.get("total_sueldos")).toString()));
             percepciones.setTotalGravado(new BigDecimal(((Double) dsNomPercepciones.get("total_gravado")).toString()));
             percepciones.setTotalExento(new BigDecimal(((Double) dsNomPercepciones.get("total_exento")).toString()));
 
-            var listaPercepciones = (List<Map<String,Object>>) dsNomPercepciones.get("lista");
-            for (Map<String,Object> p : listaPercepciones) {
+            var listaPercepciones = (List<Map<String, Object>>) dsNomPercepciones.get("lista");
+            for (Map<String, Object> p : listaPercepciones) {
 
                 var percepcion = nominaFactory.createNominaPercepcionesPercepcion();
                 percepcion.setTipoPercepcion((String) p.get("tipo_percepcion"));
@@ -174,14 +169,13 @@ class NominaXml {
             nomina.setPercepciones(percepciones);
 
             // Complemento:Nomina:Deducciones ------------------------------------
-
-            var dsNomDeducciones = (Map<String,Object>) dsNomina.get("deducciones");
+            var dsNomDeducciones = (Map<String, Object>) dsNomina.get("deducciones");
             Deducciones deducciones = nominaFactory.createNominaDeducciones();
             deducciones.setTotalOtrasDeducciones(new BigDecimal(((Double) dsNomDeducciones.get("total_otras_deducciones")).toString()));
             deducciones.setTotalImpuestosRetenidos(new BigDecimal(((Double) dsNomDeducciones.get("total_impuestos_retenidos")).toString()));
 
-            var listaDeducciones = (List<Map<String,Object>>) dsNomDeducciones.get("lista");
-            for (Map<String,Object> d : listaDeducciones) {
+            var listaDeducciones = (List<Map<String, Object>>) dsNomDeducciones.get("lista");
+            for (Map<String, Object> d : listaDeducciones) {
 
                 var deduccion = nominaFactory.createNominaDeduccionesDeduccion();
                 deduccion.setTipoDeduccion((String) d.get("tipo_deduccion"));
@@ -193,10 +187,9 @@ class NominaXml {
             nomina.setDeducciones(deducciones);
 
             // Complemento:Nomina:OtrosPagos ------------------------------------
-
             OtrosPagos otrosPagos = nominaFactory.createNominaOtrosPagos();
-            var listaOtrosPagos = (List<Map<String,Object>>) dsNomina.get("otros_pagos");
-            for (Map<String,Object> o : listaOtrosPagos) {
+            var listaOtrosPagos = (List<Map<String, Object>>) dsNomina.get("otros_pagos");
+            for (Map<String, Object> o : listaOtrosPagos) {
 
                 var otroPago = nominaFactory.createNominaOtrosPagosOtroPago();
                 otroPago.setTipoOtroPago((String) o.get("tipo_otro_pago"));
@@ -216,7 +209,7 @@ class NominaXml {
             complemento.getAny().add(nomina);
             cfdi.setComplemento(complemento);
 
-            contextPath    += ":mx.gob.sat.nomina12";
+            contextPath += ":mx.gob.sat.nomina12";
             schemaLocation += " http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xsd";
 
             JAXBContext context = JAXBContext.newInstance(contextPath);

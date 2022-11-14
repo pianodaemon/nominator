@@ -66,6 +66,22 @@ public class NominaRequestDTOTest {
             assertTrue(new BigDecimal("15").equals(dto.getNomAttributes().getDiasPagados()));
             assertTrue(new BigDecimal("7185.82").equals(dto.getNomAttributes().getTotalPercepciones()));
             assertTrue(new BigDecimal("1185.82").equals(dto.getNomAttributes().getTotalDeducciones()));
+
+            // We verify the mandatory attributes of nominas's emisor
+            assertTrue("D4562908100".equals(dto.getNomEmisorAttribs().getRegistroPatronal()));
+
+            // We verify the mandatory attributes of nominas's receptor
+            assertTrue("2021-10-31".equals(dto.getNomReceptorAttribs().getFechaInicioRelLaboral()));
+            assertTrue("MEX".equals(dto.getNomReceptorAttribs().getClaveEntFed()));
+            assertTrue("68742002174".equals(dto.getNomReceptorAttribs().getNumSeguridadSocial()));
+            assertTrue("MORO700125HDFNRM09".equals(dto.getNomReceptorAttribs().getCurp()));
+            assertTrue("01".equals(dto.getNomReceptorAttribs().getTipoContrato()));
+            assertTrue("02".equals(dto.getNomReceptorAttribs().getTipoRegimen()));
+            assertTrue("1520".equals(dto.getNomReceptorAttribs().getNumEmpleado()));
+            assertTrue("2".equals(dto.getNomReceptorAttribs().getRiesgoPuesto()));
+            assertTrue("04".equals(dto.getNomReceptorAttribs().getPeriodicidadPago()));
+            assertTrue(new BigDecimal("523.34").equals(dto.getNomReceptorAttribs().getSalarioDiarioIntegrado()));
+            assertTrue("P52W".equals(dto.getNomReceptorAttribs().getAntiguedad()));
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);
         }
