@@ -312,7 +312,7 @@ class NominaRequestDTO extends JsonRequest {
                 PercepcionItem p = new PercepcionItem(
                         LegoAssembler.obtainObjFromKey(m, "clave"),
                         LegoAssembler.obtainObjFromKey(m, "concepto"),
-                        LegoAssembler.obtainObjFromKey(m, "tipo_deduccion")
+                        LegoAssembler.obtainObjFromKey(m, "tipo_percepcion")
                 );
 
                 return p;
@@ -332,15 +332,30 @@ class NominaRequestDTO extends JsonRequest {
     private NomDeduccionesAttributes shapeNomDeduccionesAttribs() throws RequestError {
 
         try {
+
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
                     "deducciones");
 
+            List<Map<String, Object>> lms = NominaRequestDTO.LegoAssembler.obtainObjFromKey(dic, "lista");
+
             Double tod = LegoAssembler.obtainObjFromKey(dic, "total_otras_deducciones");
             Double tir = LegoAssembler.obtainObjFromKey(dic, "total_impuestos_retenidos");
+
+            List<DeduccionItem> items = lms.stream().map(m -> {
+
+                DeduccionItem p = new DeduccionItem(
+                        LegoAssembler.obtainObjFromKey(m, "clave"),
+                        LegoAssembler.obtainObjFromKey(m, "concepto"),
+                        LegoAssembler.obtainObjFromKey(m, "tipo_deduccion"));
+
+                return p;
+            }).collect(Collectors.toList());
+
             return new NomDeduccionesAttributes(
                     new BigDecimal(tod.toString()),
-                    new BigDecimal(tir.toString()));
+                    new BigDecimal(tir.toString()),
+                    items);
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina:Deducciones tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -460,7 +475,7 @@ class NominaRequestDTO extends JsonRequest {
 
         private String clave;
         private String concepto;
-        private String tipoDeduccion;
+        private String tipoPercepcion;
     }
 
     @AllArgsConstructor
@@ -470,6 +485,17 @@ class NominaRequestDTO extends JsonRequest {
 
         private BigDecimal totalOtrasDeducciones;
         private BigDecimal totalImpuestosRetenidos;
+        List<DeduccionItem> items;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class DeduccionItem {
+
+        private String clave;
+        private String concepto;
+        private String tipoDeduccion;
     }
 
     private static class LegoAssembler {
