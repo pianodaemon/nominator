@@ -271,7 +271,8 @@ class NominaRequestDTO extends JsonRequest {
                     (String) LegoAssembler.obtainObjFromKey(dic, "num_empleado").orElseThrow(),
                     (String) LegoAssembler.obtainObjFromKey(dic, "riesgo_puesto").orElseThrow(),
                     (String) LegoAssembler.obtainObjFromKey(dic, "periodicidad_pago").orElseThrow(),
-                    new BigDecimal(sdi.toString()));
+                    new BigDecimal(sdi.toString()),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "antiguedad").orElseThrow());
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina:Receptor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -373,6 +374,7 @@ class NominaRequestDTO extends JsonRequest {
         private String riesgoPuesto;
         private String periodicidadPago;
         private BigDecimal salarioDiarioIntegrado;
+        private String antiguedad;
     }
 
     private static class LegoAssembler {
