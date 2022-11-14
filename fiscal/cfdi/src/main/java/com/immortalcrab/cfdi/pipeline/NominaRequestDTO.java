@@ -272,7 +272,7 @@ class NominaRequestDTO extends JsonRequest {
                     LegoAssembler.obtainObjFromKey(dic, "riesgo_puesto"),
                     LegoAssembler.obtainObjFromKey(dic, "periodicidad_pago"),
                     new BigDecimal(sdi.toString()),
-                    (String) LegoAssembler.obtainObjFromKey(dic, "antiguedad"));
+                    LegoAssembler.obtainObjFromKey(dic, "antiguedad"));
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina:Receptor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
