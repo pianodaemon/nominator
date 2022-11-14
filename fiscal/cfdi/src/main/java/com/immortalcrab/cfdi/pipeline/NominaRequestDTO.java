@@ -24,10 +24,10 @@ class NominaRequestDTO extends JsonRequest {
     public static final String NOMINA_VER = "1.2";
     public static final String TIPO_COMPROBANTE = "N";
 
-    DocPrincipalAttributes _docAttribs;
-    PseudoReceptor _pr;
-    PseudoEmisor _pe;
-    List<PseudoConcepto> _pcs;
+    RegularRootAttributes _docAttribs;
+    RegularReceptor _pr;
+    RegularEmisor _pe;
+    List<RegularConcepto> _pcs;
     NomPrincipalAttributes _nomAttribs;
     NomEmisorAttributes _nomEmisorAttribs;
     NomReceptorAttributes _nomReceptorAttribs;
@@ -37,9 +37,9 @@ class NominaRequestDTO extends JsonRequest {
     public NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
 
         super(reader);
-        _docAttribs = new DocPrincipalAttributes();
-        _pr = new PseudoReceptor();
-        _pe = new PseudoEmisor();
+        _docAttribs = new RegularRootAttributes();
+        _pr = new RegularReceptor();
+        _pe = new RegularEmisor();
         _pcs = new LinkedList<>();
         shapeDocAttribs();
         shapeRp();
@@ -73,19 +73,19 @@ class NominaRequestDTO extends JsonRequest {
         return _nomDeduccionesAttribs;
     }
 
-    public DocPrincipalAttributes getDocAttributes() {
+    public RegularRootAttributes getDocAttributes() {
         return _docAttribs;
     }
 
-    public PseudoReceptor getPseudoReceptor() {
+    public RegularReceptor getPseudoReceptor() {
         return _pr;
     }
 
-    public PseudoEmisor getPseudoEmisor() {
+    public RegularEmisor getPseudoEmisor() {
         return _pe;
     }
 
-    public List<PseudoConcepto> getPseudoConceptos() {
+    public List<RegularConcepto> getPseudoConceptos() {
         return _pcs;
     }
 
@@ -139,7 +139,7 @@ class NominaRequestDTO extends JsonRequest {
 
             items.stream().map(i -> {
 
-                PseudoConcepto p = new PseudoConcepto();
+                RegularConcepto p = new RegularConcepto();
                 p.setClaveProdServ(LegoAssembler.obtainObjFromKey(i, "clave_prod_serv"));
                 p.setDescripcion(LegoAssembler.obtainObjFromKey(i, "descripcion"));
                 p.setClaveUnidad(LegoAssembler.obtainObjFromKey(i, "clave_unidad"));
@@ -372,7 +372,7 @@ class NominaRequestDTO extends JsonRequest {
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class DocPrincipalAttributes {
+    public static class RegularRootAttributes {
 
         private String fecha;
         private String lugarExpedicion;
@@ -389,7 +389,7 @@ class NominaRequestDTO extends JsonRequest {
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class PseudoReceptor {
+    public static class RegularReceptor {
 
         private String rfc;
         private String nombre;
@@ -401,7 +401,7 @@ class NominaRequestDTO extends JsonRequest {
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class PseudoEmisor {
+    public static class RegularEmisor {
 
         private String rfc;
         private String nombre;
@@ -411,7 +411,7 @@ class NominaRequestDTO extends JsonRequest {
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class PseudoConcepto {
+    public static class RegularConcepto {
 
         private String claveProdServ;
         private String claveUnidad;
