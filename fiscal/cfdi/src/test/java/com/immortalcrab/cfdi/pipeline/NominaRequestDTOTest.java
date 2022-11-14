@@ -69,6 +69,13 @@ public class NominaRequestDTOTest {
 
             // We verify the mandatory attributes of nominas's emisor
             assertTrue("D4562908100".equals(dto.getNomEmisorAttribs().getRegistroPatronal()));
+
+            // We verify the mandatory attributes of nominas's receptor
+            assertTrue("01".equals(dto.getNomReceptorAttribs().getTipoContrato()));
+            assertTrue("02".equals(dto.getNomReceptorAttribs().getTipoRegimen()));
+            assertTrue("1520".equals(dto.getNomReceptorAttribs().getNumEmpleado()));
+            assertTrue("2".equals(dto.getNomReceptorAttribs().getRiesgoPuesto()));
+            assertTrue("04".equals(dto.getNomReceptorAttribs().getPeriodicidadPago()));
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);
         }
