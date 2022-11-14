@@ -71,6 +71,8 @@ public class NominaRequestDTOTest {
             assertTrue("D4562908100".equals(dto.getNomEmisorAttribs().getRegistroPatronal()));
 
             // We verify the mandatory attributes of nominas's receptor
+            assertTrue("MEX".equals(dto.getNomReceptorAttribs().getClaveEntFed()));
+            assertTrue("68742002174".equals(dto.getNomReceptorAttribs().getNumSeguridadSocial()));
             assertTrue("MORO700125HDFNRM09".equals(dto.getNomReceptorAttribs().getCurp()));
             assertTrue("01".equals(dto.getNomReceptorAttribs().getTipoContrato()));
             assertTrue("02".equals(dto.getNomReceptorAttribs().getTipoRegimen()));

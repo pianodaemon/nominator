@@ -147,7 +147,7 @@ class NominaXml {
             nomReceptor.setRiesgoPuesto(cfdiReq.getNomReceptorAttribs().getRiesgoPuesto());
             nomReceptor.setPeriodicidadPago(cfdiReq.getNomReceptorAttribs().getPeriodicidadPago());
             nomReceptor.setSalarioDiarioIntegrado(new BigDecimal(((Double) dsNomReceptor.get("salario_diario_integrado")).toString()));
-            nomReceptor.setClaveEntFed(CEstado.fromValue((String) dsNomReceptor.get("clave_ent_fed")));
+	    nomReceptor.setClaveEntFed(CEstado.fromValue(cfdiReq.getNomReceptorAttribs().getClaveEntFed()));
             nomina.setReceptor(nomReceptor);
 
             // Complemento:Nomina:Percepciones ------------------------------------
