@@ -259,6 +259,7 @@ class NominaRequestDTO extends JsonRequest {
     }
 
     private NomReceptorAttributes shapeNomReceptorAttribs() throws RequestError {
+
         try {
 
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
@@ -286,6 +287,7 @@ class NominaRequestDTO extends JsonRequest {
     }
 
     private NomPercepcionesAttributes shapeNomPercepcionesAttribs() throws RequestError {
+
         try {
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
@@ -300,6 +302,24 @@ class NominaRequestDTO extends JsonRequest {
                     new BigDecimal(te.toString()));
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina:Percepciones tag is missing");
+            throw new RequestError("mandatory element in request is missing", ex);
+        }
+    }
+
+    private NomDeduccionesAttributes shapeNomDeduccionesAttribs() throws RequestError {
+
+        try {
+            Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
+                    LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
+                    "deducciones");
+
+            Double tod = LegoAssembler.obtainObjFromKey(dic, "total_otras_deducciones");
+            Double tir = LegoAssembler.obtainObjFromKey(dic, "total_impuestos_retenidos");
+            return new NomDeduccionesAttributes(
+                    new BigDecimal(tod.toString()),
+                    new BigDecimal(tir.toString()));
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements of Complemento:Nomina:Deducciones tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
         }
     }
