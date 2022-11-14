@@ -133,8 +133,6 @@ class NominaXml {
             nomina.setEmisor(nomEmisor);
 
             // Complemento:Nomina:Receptor ------------------------------------
-            var dsNomina = (Map<String, Object>) ds.get("nomina");
-            var dsNomReceptor = (Map<String, Object>) dsNomina.get("receptor");
             Nomina.Receptor nomReceptor = nominaFactory.createNominaReceptor();
             nomReceptor.setCurp(cfdiReq.getNomReceptorAttribs().getCurp());
             nomReceptor.setNumSeguridadSocial(cfdiReq.getNomReceptorAttribs().getNumSeguridadSocial());
@@ -150,6 +148,7 @@ class NominaXml {
             nomina.setReceptor(nomReceptor);
 
             // Complemento:Nomina:Percepciones ------------------------------------
+            var dsNomina = (Map<String, Object>) ds.get("nomina");
             var dsNomPercepciones = (Map<String, Object>) dsNomina.get("percepciones");
             Percepciones percepciones = nominaFactory.createNominaPercepciones();
             percepciones.setTotalSueldos(new BigDecimal(((Double) dsNomPercepciones.get("total_sueldos")).toString()));
