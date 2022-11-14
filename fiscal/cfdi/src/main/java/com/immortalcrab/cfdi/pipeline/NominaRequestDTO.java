@@ -29,6 +29,7 @@ class NominaRequestDTO extends JsonRequest {
     List<PseudoConcepto> _pcs;
     NomPrincipalAttributes _nomAttribs;
     NomEmisorAttributes _nomEmisorAttribs;
+    NomReceptorAttributes _nomReceptorAttribs;
 
     public NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
 
@@ -44,6 +45,7 @@ class NominaRequestDTO extends JsonRequest {
         _nomAttribs = new NomPrincipalAttributes();
         shapeNomAttribs();
         _nomEmisorAttribs = _shapeNomEmisorAttribs();
+        _nomReceptorAttribs = _shapeNomReceptorAttribs();
     }
 
     public NomPrincipalAttributes getNomAttributes() {
@@ -52,6 +54,10 @@ class NominaRequestDTO extends JsonRequest {
 
     public NomEmisorAttributes getNomEmisorAttribs() {
         return _nomEmisorAttribs;
+    }
+
+    public NomReceptorAttributes getNomReceptorAttribs() {
+        return _nomReceptorAttribs;
     }
 
     public DocPrincipalAttributes getDocAttributes() {
@@ -246,6 +252,24 @@ class NominaRequestDTO extends JsonRequest {
         }
     }
 
+    private NomReceptorAttributes _shapeNomReceptorAttribs() throws RequestError {
+        try {
+
+            Map<String, Object> dic = LegoAssembler.obtainMapFromKey(
+                    LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
+                    "receptor");
+            return new NomReceptorAttributes(
+                    (String) LegoAssembler.obtainObjFromKey(dic, "tipo_contrato").orElseThrow(),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "tipo_regimen").orElseThrow(),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "num_empleado").orElseThrow(),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "riesgo_puesto").orElseThrow(),
+                    (String) LegoAssembler.obtainObjFromKey(dic, "periodicidad_pago").orElseThrow());
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements of Complemento:Nomina tag is missing");
+            throw new RequestError("mandatory element in request is missing", ex);
+        }
+    }
+
     @NoArgsConstructor
     @Getter
     @Setter
@@ -324,6 +348,18 @@ class NominaRequestDTO extends JsonRequest {
     public static class NomEmisorAttributes {
 
         private String registroPatronal;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class NomReceptorAttributes {
+
+        private String tipoContrato;
+        private String tipoRegimen;
+        private String numEmpleado;
+        private String riesgoPuesto;
+        private String periodicidadPago;
     }
 
     private static class LegoAssembler {
