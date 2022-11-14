@@ -447,9 +447,7 @@ class NominaRequestDTO extends JsonRequest {
     private static class LegoAssembler {
 
         private static Map<String, Object> obtainMapFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
-
-            Optional<Object> dict = Optional.ofNullable(m.get(k));
-            return (Map<String, Object>) dict.orElseThrow();
+            return LegoAssembler.obtainObjFromKey(m, k);
         }
 
         private static <T> T obtainObjFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
