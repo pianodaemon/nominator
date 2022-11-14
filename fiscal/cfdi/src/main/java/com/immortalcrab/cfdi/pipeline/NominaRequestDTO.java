@@ -409,6 +409,15 @@ class NominaRequestDTO extends JsonRequest {
         BigDecimal totalExento;
     }
 
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class NomDeduccionesAttributes {
+
+        private BigDecimal totalOtrasDeducciones;
+        private BigDecimal totalImpuestosRetenidos;
+    }
+
     private static class LegoAssembler {
 
         private static Map<String, Object> obtainMapFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
