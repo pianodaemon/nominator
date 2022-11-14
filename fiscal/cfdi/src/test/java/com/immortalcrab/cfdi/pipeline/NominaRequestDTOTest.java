@@ -87,6 +87,10 @@ public class NominaRequestDTOTest {
             assertTrue(new BigDecimal("7185.82").equals(dto.getNomPercepcionesAttribs().getTotalSueldos()));
             assertTrue(new BigDecimal("7185.82").equals(dto.getNomPercepcionesAttribs().getTotalGravado()));
             assertTrue(new BigDecimal("0.0").equals(dto.getNomPercepcionesAttribs().getTotalExento()));
+
+            // We verify the mandatory attributes of nominas's percepciones
+            assertTrue(new BigDecimal("987.62").equals(dto.getNomDeduccionesAttribs().getTotalImpuestosRetenidos()));
+            assertTrue(new BigDecimal("198.2").equals(dto.getNomDeduccionesAttribs().getTotalOtrasDeducciones()));
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);
         }
