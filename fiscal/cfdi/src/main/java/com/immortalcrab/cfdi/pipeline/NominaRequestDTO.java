@@ -247,7 +247,7 @@ class NominaRequestDTO extends JsonRequest {
                     "emisor");
             return new NomEmisorAttributes((String) LegoAssembler.obtainObjFromKey(dic, "registro_patronal").orElseThrow());
         } catch (NoSuchElementException ex) {
-            log.error("One or more of the mandatory elements of Complemento:Nomina tag is missing");
+            log.error("One or more of the mandatory elements of Complemento:Nomina:Emisor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
         }
     }
@@ -262,6 +262,7 @@ class NominaRequestDTO extends JsonRequest {
             Double sdi = (Double) LegoAssembler.obtainObjFromKey(dic, "salario_diario_integrado").orElseThrow();
 
             return new NomReceptorAttributes(
+                    (String) LegoAssembler.obtainObjFromKey(dic, "fecha_inicio_rel_laboral").orElseThrow(),
                     (String) LegoAssembler.obtainObjFromKey(dic, "clave_ent_fed").orElseThrow(),
                     (String) LegoAssembler.obtainObjFromKey(dic, "num_seguridad_social").orElseThrow(),
                     (String) LegoAssembler.obtainObjFromKey(dic, "curp").orElseThrow(),
@@ -272,7 +273,7 @@ class NominaRequestDTO extends JsonRequest {
                     (String) LegoAssembler.obtainObjFromKey(dic, "periodicidad_pago").orElseThrow(),
                     new BigDecimal(sdi.toString()));
         } catch (NoSuchElementException ex) {
-            log.error("One or more of the mandatory elements of Complemento:Nomina tag is missing");
+            log.error("One or more of the mandatory elements of Complemento:Nomina:Receptor tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
         }
     }
@@ -362,6 +363,7 @@ class NominaRequestDTO extends JsonRequest {
     @Setter
     public static class NomReceptorAttributes {
 
+        private String fechaInicioRelLaboral;
         private String claveEntFed;
         private String numSeguridadSocial;
         private String curp;
