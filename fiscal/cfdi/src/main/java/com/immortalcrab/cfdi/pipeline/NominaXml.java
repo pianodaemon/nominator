@@ -145,7 +145,7 @@ class NominaXml {
             nomReceptor.setNumEmpleado(cfdiReq.getNomReceptorAttribs().getNumEmpleado());
             nomReceptor.setRiesgoPuesto(cfdiReq.getNomReceptorAttribs().getRiesgoPuesto());
             nomReceptor.setPeriodicidadPago(cfdiReq.getNomReceptorAttribs().getPeriodicidadPago());
-            nomReceptor.setSalarioDiarioIntegrado(new BigDecimal(((Double) dsNomReceptor.get("salario_diario_integrado")).toString()));
+            nomReceptor.setSalarioDiarioIntegrado(cfdiReq.getNomReceptorAttribs().getSalarioDiarioIntegrado());
             nomReceptor.setClaveEntFed(CEstado.fromValue(cfdiReq.getNomReceptorAttribs().getClaveEntFed()));
             nomina.setReceptor(nomReceptor);
 
