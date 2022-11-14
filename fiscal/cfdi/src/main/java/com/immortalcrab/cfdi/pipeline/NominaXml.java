@@ -2,7 +2,7 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.StorageError;
 import com.immortalcrab.cfdi.error.FormatError;
-import com.immortalcrab.cfdi.pipeline.NominaRequestDTO.PseudoConcepto;
+import com.immortalcrab.cfdi.pipeline.NominaRequestDTO.RegularConcepto;
 
 import mx.gob.sat.cfd._4.Comprobante;
 import mx.gob.sat.cfd._4.ObjectFactory;
