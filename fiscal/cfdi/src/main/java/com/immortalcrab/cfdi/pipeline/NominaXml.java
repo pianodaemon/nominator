@@ -21,44 +21,52 @@ import mx.gob.sat.nomina12.Nomina.OtrosPagos;
 import mx.gob.sat.nomina12.Nomina.Percepciones;
 
 import java.io.StringWriter;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 
-@AllArgsConstructor
 @Getter
 class NominaXml {
 
-    private final @NonNull NominaRequestDTO cfdiReq;
+    private final @NonNull
+    NominaRequestDTO cfdiReq;
 
-    private final @NonNull IStorage st;
+    private final StringWriter sw;
 
-    public static String render(Request cfdiReq, IStamp < PacRegularRequest, PacRegularResponse > stamper, IStorage st) throws FormatError, StorageError {
+    public NominaXml(NominaRequestDTO req) throws FormatError {
 
-        NominaXml ic = new NominaXml((NominaRequestDTO) cfdiReq, st);
+        this.cfdiReq = req;
+        this.sw = shape();
+    }
 
-        StringWriter cfdi = ic.shape();
-        PacRegularRequest pacReq = new PacRegularRequest(cfdi.toString());
+    public static String render(Request cfdiReq, IStamp< PacRegularRequest, PacRegularResponse> stamper, IStorage st) throws FormatError, StorageError {
+
+        NominaXml ic = new NominaXml((NominaRequestDTO) cfdiReq);
+
+        PacRegularRequest pacReq = new PacRegularRequest(ic.toString());
         PacRegularResponse pacRes = stamper.impress(pacReq);
 
         return "It must be slightly implemented as it was in lola";
     }
 
+    @Override
+    public String toString() {
+        return sw.toString();
+    }
+
     private StringWriter shape() throws FormatError {
 
-        StringWriter sw = new StringWriter();
-
         try {
+
             ObjectFactory cfdiFactory = new ObjectFactory();
             Comprobante cfdi = cfdiFactory.createComprobante();
+
             cfdi.setVersion(NominaRequestDTO.CFDI_VER);
             cfdi.setSerie(cfdiReq.getDocAttributes().getSerie());
             cfdi.setFolio(cfdiReq.getDocAttributes().getFolio());
@@ -236,18 +244,22 @@ class NominaXml {
             contextPath += ":mx.gob.sat.nomina12";
             schemaLocation += " http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xsd";
 
-            JAXBContext context = JAXBContext.newInstance(contextPath);
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty("jaxb.schemaLocation", schemaLocation);
-            marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new CfdiNamespaceMapper());
-            marshaller.setProperty("jaxb.formatted.output", true);
-            marshaller.marshal(cfdi, sw);
-            System.out.println(sw.toString());
+            StringWriter swriter = new StringWriter();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            // Marshalling
+            {
+                JAXBContext context = JAXBContext.newInstance(contextPath);
+                Marshaller marshaller = context.createMarshaller();
+                marshaller.setProperty("jaxb.schemaLocation", schemaLocation);
+                marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new CfdiNamespaceMapper());
+                marshaller.setProperty("jaxb.formatted.output", true);
+                marshaller.marshal(cfdi, swriter);
+            }
+
+            return swriter;
+
+        } catch (JAXBException | DatatypeConfigurationException ex) {
+            throw new FormatError("", ex);
         }
-
-        return sw;
     }
 }
