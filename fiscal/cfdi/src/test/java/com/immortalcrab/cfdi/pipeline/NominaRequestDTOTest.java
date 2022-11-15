@@ -84,14 +84,10 @@ public class NominaRequestDTOTest {
             assertTrue("P52W".equals(dto.getNomReceptorAttribs().getAntiguedad()));
 
             // We verify the mandatory attributes of nominas's percepciones
-            assertTrue(new BigDecimal("7185.82").equals(dto.getNomPercepcionesAttribs().getTotalSueldos()));
-            assertTrue(new BigDecimal("7185.82").equals(dto.getNomPercepcionesAttribs().getTotalGravado()));
-            assertTrue(new BigDecimal("0.0").equals(dto.getNomPercepcionesAttribs().getTotalExento()));
-
-            // We verify the mandatory attributes of nominas's percepciones
             {
-                assertTrue(new BigDecimal("987.62").equals(dto.getNomDeduccionesAttribs().getTotalImpuestosRetenidos()));
-                assertTrue(new BigDecimal("198.2").equals(dto.getNomDeduccionesAttribs().getTotalOtrasDeducciones()));
+                assertTrue(new BigDecimal("7185.82").equals(dto.getNomPercepcionesAttribs().getTotalSueldos()));
+                assertTrue(new BigDecimal("7185.82").equals(dto.getNomPercepcionesAttribs().getTotalGravado()));
+                assertTrue(new BigDecimal("0.0").equals(dto.getNomPercepcionesAttribs().getTotalExento()));
 
                 final int uniqueExpected = 0;
                 var item = dto.getNomPercepcionesAttribs().getItems().get(uniqueExpected);
@@ -100,6 +96,27 @@ public class NominaRequestDTOTest {
                 assertTrue("sueldo".equals(item.getConcepto()));
                 assertTrue(new BigDecimal("0.0").equals(item.getImporteExento()));
                 assertTrue(new BigDecimal("7185.82").equals(item.getImporteGravado()));
+            }
+
+            // We verify the mandatory attributes of nominas's deducciones
+            {
+                assertTrue(new BigDecimal("987.62").equals(dto.getNomDeduccionesAttribs().getTotalImpuestosRetenidos()));
+                assertTrue(new BigDecimal("198.2").equals(dto.getNomDeduccionesAttribs().getTotalOtrasDeducciones()));
+
+                final int firstExpected = 0;
+                final int secondExpected = 1;
+                {
+                    var item = dto.getNomDeduccionesAttribs().getItems().get(firstExpected);
+                    assertTrue("001".equals(item.getTipoDeduccion()));
+                    assertTrue("001".equals(item.getClave()));
+                    assertTrue("IMSS".equals(item.getConcepto()));
+                }
+                {
+                    var item = dto.getNomDeduccionesAttribs().getItems().get(secondExpected);
+                    assertTrue("002".equals(item.getTipoDeduccion()));
+                    assertTrue("002".equals(item.getClave()));
+                    assertTrue("ISR".equals(item.getConcepto()));
+                }
             }
 
             // We verify the mandatory attributes of nominas's otros pagos
