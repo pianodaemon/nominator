@@ -91,6 +91,18 @@ public class NominaRequestDTOTest {
             // We verify the mandatory attributes of nominas's percepciones
             assertTrue(new BigDecimal("987.62").equals(dto.getNomDeduccionesAttribs().getTotalImpuestosRetenidos()));
             assertTrue(new BigDecimal("198.2").equals(dto.getNomDeduccionesAttribs().getTotalOtrasDeducciones()));
+
+            // We verify the mandatory attributes of nominas's otros pagos
+            {
+                final int uniqueExpected = 0;
+
+                var item = dto.getNomOtrosPagosAttribs().getItems().get(uniqueExpected);
+                assertTrue("002".equals(item.getTipoOtroPago()));
+                assertTrue("4455".equals(item.getClave()));
+                assertTrue("mi otro paguito".equals(item.getConcepto()));
+                assertTrue(new BigDecimal("0.0").equals(item.getImporte()));
+                assertTrue(new BigDecimal("0.0").equals(item.getSubsidioCausado()));
+            }
         } catch (RequestError | DecodeError ex) {
             assertNotNull(ex);
         }
