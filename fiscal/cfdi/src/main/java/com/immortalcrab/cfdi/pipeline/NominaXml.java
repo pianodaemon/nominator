@@ -185,24 +185,28 @@ class NominaXml {
             }
             nomina.setDeducciones(deducciones);
 
-            // Complemento:Nomina:OtrosPagos ------------------------------------
-            OtrosPagos otrosPagos = nominaFactory.createNominaOtrosPagos();
-            var listaOtrosPagos = (List<Map<String, Object>>) dsNomina.get("otros_pagos");
-            for (Map<String, Object> o : listaOtrosPagos) {
+	    // Complemento:Nomina:OtrosPagos
+	    {
+		    OtrosPagos otrosPagos = nominaFactory.createNominaOtrosPagos();
+		    cfdiReq.getNomOtrosPagosAttribs().getItems().stream().map(o -> {
 
-                var otroPago = nominaFactory.createNominaOtrosPagosOtroPago();
-                otroPago.setTipoOtroPago((String) o.get("tipo_otro_pago"));
-                otroPago.setClave((String) o.get("clave"));
-                otroPago.setConcepto((String) o.get("concepto"));
-                otroPago.setImporte(new BigDecimal(((Double) o.get("importe")).toString()));
+			var otroPago = nominaFactory.createNominaOtrosPagosOtroPago();
+			otroPago.setTipoOtroPago(o.getTipoOtroPago());
+			otroPago.setClave(o.getClave());
+			otroPago.setConcepto(o.getConcepto());
+			otroPago.setImporte(o.getImporte());
 
-                var subsidioAlEmpleo = nominaFactory.createNominaOtrosPagosOtroPagoSubsidioAlEmpleo();
-                subsidioAlEmpleo.setSubsidioCausado(new BigDecimal(((Double) o.get("subsidio_causado")).toString()));
-                otroPago.setSubsidioAlEmpleo(subsidioAlEmpleo);
+			var subsidioAlEmpleo = nominaFactory.createNominaOtrosPagosOtroPagoSubsidioAlEmpleo();
+			subsidioAlEmpleo.setSubsidioCausado(o.getSubsidioCausado());
+			otroPago.setSubsidioAlEmpleo(subsidioAlEmpleo);
 
-                otrosPagos.getOtroPago().add(otroPago);
-            }
-            nomina.setOtrosPagos(otrosPagos);
+			return otroPago;
+		    }).forEachOrdered(o -> {
+
+			otrosPagos.getOtroPago().add(o);
+		    });
+		    nomina.setOtrosPagos(otrosPagos);
+	    }
 
             Complemento complemento = cfdiFactory.createComprobanteComplemento();
             complemento.getAny().add(nomina);
