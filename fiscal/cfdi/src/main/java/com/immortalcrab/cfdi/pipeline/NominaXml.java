@@ -77,20 +77,24 @@ class NominaXml {
             // cfdi.setNoCertificado((String) ds.get("numero_certificado"));
 
             // Emisor
-            Emisor emisor = cfdiFactory.createComprobanteEmisor();
-            emisor.setRfc(cfdiReq.getPseudoEmisor().getRfc());
-            emisor.setNombre(cfdiReq.getPseudoEmisor().getNombre());
-            emisor.setRegimenFiscal(cfdiReq.getPseudoEmisor().getRegimenFiscal());
-            cfdi.setEmisor(emisor);
+            {
+                Emisor emisor = cfdiFactory.createComprobanteEmisor();
+                emisor.setRfc(cfdiReq.getPseudoEmisor().getRfc());
+                emisor.setNombre(cfdiReq.getPseudoEmisor().getNombre());
+                emisor.setRegimenFiscal(cfdiReq.getPseudoEmisor().getRegimenFiscal());
+                cfdi.setEmisor(emisor);
+            }
 
             // Receptor
-            Receptor receptor = cfdiFactory.createComprobanteReceptor();
-            receptor.setRfc(cfdiReq.getPseudoReceptor().getRfc());
-            receptor.setNombre(cfdiReq.getPseudoReceptor().getNombre());
-            receptor.setDomicilioFiscalReceptor(cfdiReq.getPseudoReceptor().getDomicilioFiscal());
-            receptor.setRegimenFiscalReceptor(cfdiReq.getPseudoReceptor().getRegimenFiscal());
-            receptor.setUsoCFDI(CUsoCFDI.fromValue((cfdiReq.getPseudoReceptor().getProposito())));
-            cfdi.setReceptor(receptor);
+            {
+                Receptor receptor = cfdiFactory.createComprobanteReceptor();
+                receptor.setRfc(cfdiReq.getPseudoReceptor().getRfc());
+                receptor.setNombre(cfdiReq.getPseudoReceptor().getNombre());
+                receptor.setDomicilioFiscalReceptor(cfdiReq.getPseudoReceptor().getDomicilioFiscal());
+                receptor.setRegimenFiscalReceptor(cfdiReq.getPseudoReceptor().getRegimenFiscal());
+                receptor.setUsoCFDI(CUsoCFDI.fromValue((cfdiReq.getPseudoReceptor().getProposito())));
+                cfdi.setReceptor(receptor);
+            }
 
             // Conceptos
             {
