@@ -41,7 +41,7 @@ class NominaXml {
 
     private final @NonNull IStorage st;
 
-    public static String render(Request cfdiReq, IStamp<PacRegularRequest, PacRegularResponse> stamper, IStorage st) throws FormatError, StorageError {
+    public static String render(Request cfdiReq, IStamp < PacRegularRequest, PacRegularResponse > stamper, IStorage st) throws FormatError, StorageError {
 
         NominaXml ic = new NominaXml((NominaRequestDTO) cfdiReq, st);
 
@@ -55,7 +55,7 @@ class NominaXml {
     private StringWriter shape() throws FormatError {
 
         StringWriter sw = new StringWriter();
-        Map<String, Object> ds = cfdiReq.getDs();
+        Map < String, Object > ds = cfdiReq.getDs();
 
         try {
             ObjectFactory cfdiFactory = new ObjectFactory();
@@ -77,44 +77,54 @@ class NominaXml {
             // cfdi.setNoCertificado((String) ds.get("numero_certificado"));
 
             // Emisor
-            Emisor emisor = cfdiFactory.createComprobanteEmisor();
-            emisor.setRfc(cfdiReq.getPseudoEmisor().getRfc());
-            emisor.setNombre(cfdiReq.getPseudoEmisor().getNombre());
-            emisor.setRegimenFiscal(cfdiReq.getPseudoEmisor().getRegimenFiscal());
-            cfdi.setEmisor(emisor);
+            {
+                Emisor emisor = cfdiFactory.createComprobanteEmisor();
+                emisor.setRfc(cfdiReq.getPseudoEmisor().getRfc());
+                emisor.setNombre(cfdiReq.getPseudoEmisor().getNombre());
+                emisor.setRegimenFiscal(cfdiReq.getPseudoEmisor().getRegimenFiscal());
+                cfdi.setEmisor(emisor);
+            }
 
             // Receptor
-            Receptor receptor = cfdiFactory.createComprobanteReceptor();
-            receptor.setRfc(cfdiReq.getPseudoReceptor().getRfc());
-            receptor.setNombre(cfdiReq.getPseudoReceptor().getNombre());
-            receptor.setDomicilioFiscalReceptor(cfdiReq.getPseudoReceptor().getDomicilioFiscal());
-            receptor.setRegimenFiscalReceptor(cfdiReq.getPseudoReceptor().getRegimenFiscal());
-            receptor.setUsoCFDI(CUsoCFDI.fromValue((cfdiReq.getPseudoReceptor().getProposito())));
-            cfdi.setReceptor(receptor);
+            {
+                Receptor receptor = cfdiFactory.createComprobanteReceptor();
+                receptor.setRfc(cfdiReq.getPseudoReceptor().getRfc());
+                receptor.setNombre(cfdiReq.getPseudoReceptor().getNombre());
+                receptor.setDomicilioFiscalReceptor(cfdiReq.getPseudoReceptor().getDomicilioFiscal());
+                receptor.setRegimenFiscalReceptor(cfdiReq.getPseudoReceptor().getRegimenFiscal());
+                receptor.setUsoCFDI(CUsoCFDI.fromValue((cfdiReq.getPseudoReceptor().getProposito())));
+                cfdi.setReceptor(receptor);
+            }
 
             // Conceptos
-            Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
+            {
+                Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
 
-            for (var psc : cfdiReq.getPseudoConceptos()) {
+                cfdiReq.getPseudoConceptos().stream().map(psc -> {
 
-                var concepto = cfdiFactory.createComprobanteConceptosConcepto();
+                    var concepto = cfdiFactory.createComprobanteConceptosConcepto();
 
-                concepto.setClaveProdServ(psc.getClaveProdServ());
-                concepto.setCantidad(psc.getCantidad());
-                concepto.setClaveUnidad(psc.getClaveUnidad());
-                concepto.setDescripcion(psc.getDescripcion());
-                concepto.setValorUnitario(psc.getValorUnitario());
-                concepto.setImporte(psc.getImporte());
-                concepto.setDescuento(psc.getDescuento());
-                concepto.setObjetoImp(psc.getObjImp());
-                conceptos.getConcepto().add(concepto);
+                    concepto.setClaveProdServ(psc.getClaveProdServ());
+                    concepto.setCantidad(psc.getCantidad());
+                    concepto.setClaveUnidad(psc.getClaveUnidad());
+                    concepto.setDescripcion(psc.getDescripcion());
+                    concepto.setValorUnitario(psc.getValorUnitario());
+                    concepto.setImporte(psc.getImporte());
+                    concepto.setDescuento(psc.getDescuento());
+                    concepto.setObjetoImp(psc.getObjImp());
+
+                    return concepto;
+                }).forEachOrdered(concepto -> {
+
+                    conceptos.getConcepto().add(concepto);
+                });
+                cfdi.setConceptos(conceptos);
             }
-            cfdi.setConceptos(conceptos);
 
             String contextPath = "mx.gob.sat.cfd._4";
             String schemaLocation = "http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd";
 
-            // Complemento:Nomina ------------------------------------
+            // Complemento:Nomina
             var nominaFactory = new mx.gob.sat.nomina12.ObjectFactory();
             Nomina nomina = nominaFactory.createNomina();
             nomina.setVersion(NominaRequestDTO.NOMINA_VER);
@@ -125,84 +135,100 @@ class NominaXml {
             nomina.setNumDiasPagados(cfdiReq.getNomAttributes().getDiasPagados());
             nomina.setTotalPercepciones(cfdiReq.getNomAttributes().getTotalPercepciones());
             nomina.setTotalDeducciones(cfdiReq.getNomAttributes().getTotalDeducciones());
-            // Complemento:Nomina:Emisor ------------------------------------
 
-            Nomina.Emisor nomEmisor = nominaFactory.createNominaEmisor();
-            nomEmisor.setRegistroPatronal(cfdiReq.getNomEmisorAttribs().getRegistroPatronal());
-            nomina.setEmisor(nomEmisor);
-
-            // Complemento:Nomina:Receptor ------------------------------------
-            Nomina.Receptor nomReceptor = nominaFactory.createNominaReceptor();
-            nomReceptor.setCurp(cfdiReq.getNomReceptorAttribs().getCurp());
-            nomReceptor.setNumSeguridadSocial(cfdiReq.getNomReceptorAttribs().getNumSeguridadSocial());
-            nomReceptor.setFechaInicioRelLaboral(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomReceptorAttribs().getFechaInicioRelLaboral()));
-            nomReceptor.setAntigüedad(cfdiReq.getNomReceptorAttribs().getAntiguedad());
-            nomReceptor.setTipoContrato(cfdiReq.getNomReceptorAttribs().getTipoContrato());
-            nomReceptor.setTipoRegimen(cfdiReq.getNomReceptorAttribs().getTipoRegimen());
-            nomReceptor.setNumEmpleado(cfdiReq.getNomReceptorAttribs().getNumEmpleado());
-            nomReceptor.setRiesgoPuesto(cfdiReq.getNomReceptorAttribs().getRiesgoPuesto());
-            nomReceptor.setPeriodicidadPago(cfdiReq.getNomReceptorAttribs().getPeriodicidadPago());
-            nomReceptor.setSalarioDiarioIntegrado(cfdiReq.getNomReceptorAttribs().getSalarioDiarioIntegrado());
-            nomReceptor.setClaveEntFed(CEstado.fromValue(cfdiReq.getNomReceptorAttribs().getClaveEntFed()));
-            nomina.setReceptor(nomReceptor);
-
-            // Complemento:Nomina:Percepciones ------------------------------------
-            var dsNomina = (Map<String, Object>) ds.get("nomina");
-            var dsNomPercepciones = (Map<String, Object>) dsNomina.get("percepciones");
-            Percepciones percepciones = nominaFactory.createNominaPercepciones();
-            percepciones.setTotalSueldos(cfdiReq.getNomPercepcionesAttribs().getTotalSueldos());
-            percepciones.setTotalGravado(cfdiReq.getNomPercepcionesAttribs().getTotalGravado());
-            percepciones.setTotalExento(cfdiReq.getNomPercepcionesAttribs().getTotalExento());
-
-            var listaPercepciones = (List<Map<String, Object>>) dsNomPercepciones.get("lista");
-            for (Map<String, Object> p : listaPercepciones) {
-
-                var percepcion = nominaFactory.createNominaPercepcionesPercepcion();
-                percepcion.setTipoPercepcion((String) p.get("tipo_percepcion"));
-                percepcion.setClave((String) p.get("clave"));
-                percepcion.setConcepto((String) p.get("concepto"));
-                percepcion.setImporteGravado(new BigDecimal(((Double) p.get("importe_gravado")).toString()));
-                percepcion.setImporteExento(new BigDecimal(((Double) p.get("importe_exento")).toString()));
-                percepciones.getPercepcion().add(percepcion);
+            // Complemento:Nomina:Emisor 
+            {
+                Nomina.Emisor nomEmisor = nominaFactory.createNominaEmisor();
+                nomEmisor.setRegistroPatronal(cfdiReq.getNomEmisorAttribs().getRegistroPatronal());
+                nomina.setEmisor(nomEmisor);
             }
-            nomina.setPercepciones(percepciones);
 
-            // Complemento:Nomina:Deducciones ------------------------------------
-            var dsNomDeducciones = (Map<String, Object>) dsNomina.get("deducciones");
-            Deducciones deducciones = nominaFactory.createNominaDeducciones();
-            deducciones.setTotalOtrasDeducciones(cfdiReq.getNomDeduccionesAttribs().getTotalOtrasDeducciones());
-            deducciones.setTotalImpuestosRetenidos(cfdiReq.getNomDeduccionesAttribs().getTotalImpuestosRetenidos());
-
-            var listaDeducciones = (List<Map<String, Object>>) dsNomDeducciones.get("lista");
-            for (Map<String, Object> d : listaDeducciones) {
-
-                var deduccion = nominaFactory.createNominaDeduccionesDeduccion();
-                deduccion.setTipoDeduccion((String) d.get("tipo_deduccion"));
-                deduccion.setClave((String) d.get("clave"));
-                deduccion.setConcepto((String) d.get("concepto"));
-                deduccion.setImporte(new BigDecimal(((Double) d.get("importe")).toString()));
-                deducciones.getDeduccion().add(deduccion);
+            // Complemento:Nomina:Receptor
+            {
+                Nomina.Receptor nomReceptor = nominaFactory.createNominaReceptor();
+                nomReceptor.setCurp(cfdiReq.getNomReceptorAttribs().getCurp());
+                nomReceptor.setNumSeguridadSocial(cfdiReq.getNomReceptorAttribs().getNumSeguridadSocial());
+                nomReceptor.setFechaInicioRelLaboral(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomReceptorAttribs().getFechaInicioRelLaboral()));
+                nomReceptor.setAntigüedad(cfdiReq.getNomReceptorAttribs().getAntiguedad());
+                nomReceptor.setTipoContrato(cfdiReq.getNomReceptorAttribs().getTipoContrato());
+                nomReceptor.setTipoRegimen(cfdiReq.getNomReceptorAttribs().getTipoRegimen());
+                nomReceptor.setNumEmpleado(cfdiReq.getNomReceptorAttribs().getNumEmpleado());
+                nomReceptor.setRiesgoPuesto(cfdiReq.getNomReceptorAttribs().getRiesgoPuesto());
+                nomReceptor.setPeriodicidadPago(cfdiReq.getNomReceptorAttribs().getPeriodicidadPago());
+                nomReceptor.setSalarioDiarioIntegrado(cfdiReq.getNomReceptorAttribs().getSalarioDiarioIntegrado());
+                nomReceptor.setClaveEntFed(CEstado.fromValue(cfdiReq.getNomReceptorAttribs().getClaveEntFed()));
+                nomina.setReceptor(nomReceptor);
             }
-            nomina.setDeducciones(deducciones);
 
-            // Complemento:Nomina:OtrosPagos ------------------------------------
-            OtrosPagos otrosPagos = nominaFactory.createNominaOtrosPagos();
-            var listaOtrosPagos = (List<Map<String, Object>>) dsNomina.get("otros_pagos");
-            for (Map<String, Object> o : listaOtrosPagos) {
+            // Complemento:Nomina:Percepciones
+            {
+                Percepciones percepciones = nominaFactory.createNominaPercepciones();
 
-                var otroPago = nominaFactory.createNominaOtrosPagosOtroPago();
-                otroPago.setTipoOtroPago((String) o.get("tipo_otro_pago"));
-                otroPago.setClave((String) o.get("clave"));
-                otroPago.setConcepto((String) o.get("concepto"));
-                otroPago.setImporte(new BigDecimal(((Double) o.get("importe")).toString()));
+                percepciones.setTotalSueldos(cfdiReq.getNomPercepcionesAttribs().getTotalSueldos());
+                percepciones.setTotalGravado(cfdiReq.getNomPercepcionesAttribs().getTotalGravado());
+                percepciones.setTotalExento(cfdiReq.getNomPercepcionesAttribs().getTotalExento());
 
-                var subsidioAlEmpleo = nominaFactory.createNominaOtrosPagosOtroPagoSubsidioAlEmpleo();
-                subsidioAlEmpleo.setSubsidioCausado(new BigDecimal(((Double) o.get("subsidio_causado")).toString()));
-                otroPago.setSubsidioAlEmpleo(subsidioAlEmpleo);
+                cfdiReq.getNomPercepcionesAttribs().getItems().stream().map(p -> {
 
-                otrosPagos.getOtroPago().add(otroPago);
+                    var percepcion = nominaFactory.createNominaPercepcionesPercepcion();
+
+                    percepcion.setTipoPercepcion(p.getTipoPercepcion());
+                    percepcion.setClave(p.getClave());
+                    percepcion.setConcepto(p.getConcepto());
+                    percepcion.setImporteGravado(p.getImporteGravado());
+                    percepcion.setImporteExento(p.getImporteExento());
+
+                    return percepcion;
+                }).forEachOrdered(i -> {
+
+                    percepciones.getPercepcion().add(i);
+                });
+                nomina.setPercepciones(percepciones);
             }
-            nomina.setOtrosPagos(otrosPagos);
+
+            // Complemento:Nomina:Deducciones
+            {
+                Deducciones deducciones = nominaFactory.createNominaDeducciones();
+                deducciones.setTotalOtrasDeducciones(cfdiReq.getNomDeduccionesAttribs().getTotalOtrasDeducciones());
+                deducciones.setTotalImpuestosRetenidos(cfdiReq.getNomDeduccionesAttribs().getTotalImpuestosRetenidos());
+                cfdiReq.getNomDeduccionesAttribs().getItems().stream().map(d -> {
+
+                    var deduccion = nominaFactory.createNominaDeduccionesDeduccion();
+                    deduccion.setTipoDeduccion(d.getTipoDeduccion());
+                    deduccion.setClave(d.getClave());
+                    deduccion.setConcepto(d.getConcepto());
+                    deduccion.setImporte(d.getImporte());
+
+                    return deduccion;
+                }).forEachOrdered(i -> {
+
+                    deducciones.getDeduccion().add(i);
+                });
+                nomina.setDeducciones(deducciones);
+            }
+
+            // Complemento:Nomina:OtrosPagos
+            {
+                OtrosPagos otrosPagos = nominaFactory.createNominaOtrosPagos();
+                cfdiReq.getNomOtrosPagosAttribs().getItems().stream().map(o -> {
+
+                    var otroPago = nominaFactory.createNominaOtrosPagosOtroPago();
+                    otroPago.setTipoOtroPago(o.getTipoOtroPago());
+                    otroPago.setClave(o.getClave());
+                    otroPago.setConcepto(o.getConcepto());
+                    otroPago.setImporte(o.getImporte());
+
+                    var subsidioAlEmpleo = nominaFactory.createNominaOtrosPagosOtroPagoSubsidioAlEmpleo();
+                    subsidioAlEmpleo.setSubsidioCausado(o.getSubsidioCausado());
+                    otroPago.setSubsidioAlEmpleo(subsidioAlEmpleo);
+
+                    return otroPago;
+                }).forEachOrdered(i -> {
+
+                    otrosPagos.getOtroPago().add(i);
+                });
+                nomina.setOtrosPagos(otrosPagos);
+            }
 
             Complemento complemento = cfdiFactory.createComprobanteComplemento();
             complemento.getAny().add(nomina);
