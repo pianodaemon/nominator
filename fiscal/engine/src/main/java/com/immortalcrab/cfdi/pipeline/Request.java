@@ -10,7 +10,7 @@ import lombok.NonNull;
 @Getter
 abstract class Request {
 
-    private final @NonNull Map<String, Object> ds;
+    protected final @NonNull Map<String, Object> ds;
 
     protected abstract Map<String, Object> craftImpt() throws RequestError;
 
