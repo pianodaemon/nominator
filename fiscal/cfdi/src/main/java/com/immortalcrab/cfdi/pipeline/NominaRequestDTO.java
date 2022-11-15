@@ -32,7 +32,7 @@ class NominaRequestDTO extends JsonRequest {
     NomReceptorAttributes _nomReceptorAttribs;
     NomPercepcionesAttributes _nomPercepcionesAttribs;
     NomDeduccionesAttributes _nomDeduccionesAttribs;
-    NomOtrosPagosAttributes _nomNomOtrosPagosAttribs;
+    NomOtrosPagosAttributes _nomOtrosPagosAttribs;
 
     public NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
 
@@ -41,7 +41,7 @@ class NominaRequestDTO extends JsonRequest {
         _pr = shapeRp();
         _pe = shapeEp();
         _pcs = shapePcs();
-        _nomNomOtrosPagosAttribs = shapeNomOtrosPagosAttribs();
+        _nomOtrosPagosAttribs = shapeNomOtrosPagosAttribs();
         _nomAttribs = shapeNomAttribs();
         _nomEmisorAttribs = shapeNomEmisorAttribs();
         _nomReceptorAttribs = shapeNomReceptorAttribs();
@@ -69,8 +69,8 @@ class NominaRequestDTO extends JsonRequest {
         return _nomDeduccionesAttribs;
     }
 
-    public NomOtrosPagosAttributes getNomNomOtrosPagosAttribs() {
-        return _nomNomOtrosPagosAttribs;
+    public NomOtrosPagosAttributes getNomOtrosPagosAttribs() {
+        return _nomOtrosPagosAttribs;
     }
 
     public RegularRootAttributes getDocAttributes() {
