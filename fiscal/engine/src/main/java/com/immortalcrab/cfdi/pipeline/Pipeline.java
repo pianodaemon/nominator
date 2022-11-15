@@ -48,7 +48,7 @@ class Pipeline {
         /* Second stage of the pipeline
         It stands for hand craft a valid xml at sat */
         IXmlStep sxml = stages.get().getValue1();
-        String uuid = sxml.render(cfdiReq, this.getStamper(), this.getStorage());
+        String uuid = sxml.render(cfdiReq, this.getStamper());
 
         return uuid;
     }
