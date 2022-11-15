@@ -37,19 +37,19 @@ import lombok.extern.log4j.Log4j;
 class NominaXml {
 
     private final @NonNull
-    NominaRequestDTO cfdiReq;
+    NominaRequestDTO _req;
 
-    private final StringWriter sw;
+    private final StringWriter _sw;
 
     public NominaXml(NominaRequestDTO req) throws FormatError {
 
-        this.cfdiReq = req;
-        this.sw = shape();
+        _req = req;
+        _sw = shape();
     }
 
-    public static String render(Request cfdiReq, IStamp< PacRegularRequest, PacRegularResponse> stamper, IStorage st) throws FormatError, StorageError {
+    public static String render(Request req, IStamp< PacRegularRequest, PacRegularResponse> stamper, IStorage st) throws FormatError, StorageError {
 
-        NominaXml ic = new NominaXml((NominaRequestDTO) cfdiReq);
+        NominaXml ic = new NominaXml((NominaRequestDTO) req);
 
         PacRegularRequest pacReq = new PacRegularRequest(ic.toString());
         PacRegularResponse pacRes = stamper.impress(pacReq);
@@ -59,7 +59,7 @@ class NominaXml {
 
     @Override
     public String toString() {
-        return sw.toString();
+        return _sw.toString();
     }
 
     private StringWriter shape() throws FormatError {
@@ -70,17 +70,17 @@ class NominaXml {
             Comprobante cfdi = cfdiFactory.createComprobante();
 
             cfdi.setVersion(NominaRequestDTO.CFDI_VER);
-            cfdi.setSerie(cfdiReq.getDocAttributes().getSerie());
-            cfdi.setFolio(cfdiReq.getDocAttributes().getFolio());
-            cfdi.setFecha(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getDocAttributes().getFecha()));
+            cfdi.setSerie(_req.getDocAttributes().getSerie());
+            cfdi.setFolio(_req.getDocAttributes().getFolio());
+            cfdi.setFecha(DatatypeFactory.newInstance().newXMLGregorianCalendar(_req.getDocAttributes().getFecha()));
             cfdi.setTipoDeComprobante(CTipoDeComprobante.fromValue(NominaRequestDTO.TIPO_COMPROBANTE));
-            cfdi.setMoneda(CMoneda.fromValue(cfdiReq.getDocAttributes().getMoneda()));
-            cfdi.setDescuento(cfdiReq.getDocAttributes().getDescuento());
-            cfdi.setSubTotal(cfdiReq.getDocAttributes().getSubtotal());
-            cfdi.setTotal(cfdiReq.getDocAttributes().getTotal());
-            cfdi.setExportacion(cfdiReq.getDocAttributes().getExportacion());
-            cfdi.setMetodoPago(CMetodoPago.fromValue(cfdiReq.getDocAttributes().getMetodoPago()));
-            cfdi.setLugarExpedicion(cfdiReq.getDocAttributes().getLugarExpedicion());
+            cfdi.setMoneda(CMoneda.fromValue(_req.getDocAttributes().getMoneda()));
+            cfdi.setDescuento(_req.getDocAttributes().getDescuento());
+            cfdi.setSubTotal(_req.getDocAttributes().getSubtotal());
+            cfdi.setTotal(_req.getDocAttributes().getTotal());
+            cfdi.setExportacion(_req.getDocAttributes().getExportacion());
+            cfdi.setMetodoPago(CMetodoPago.fromValue(_req.getDocAttributes().getMetodoPago()));
+            cfdi.setLugarExpedicion(_req.getDocAttributes().getLugarExpedicion());
             // var montesToolbox = new MontesToolbox();
             // cfdi.setCertificado(montesToolbox.renderCerticate(null));
             // cfdi.setNoCertificado((String) ds.get("numero_certificado"));
@@ -88,20 +88,20 @@ class NominaXml {
             // Emisor
             {
                 Emisor emisor = cfdiFactory.createComprobanteEmisor();
-                emisor.setRfc(cfdiReq.getPseudoEmisor().getRfc());
-                emisor.setNombre(cfdiReq.getPseudoEmisor().getNombre());
-                emisor.setRegimenFiscal(cfdiReq.getPseudoEmisor().getRegimenFiscal());
+                emisor.setRfc(_req.getPseudoEmisor().getRfc());
+                emisor.setNombre(_req.getPseudoEmisor().getNombre());
+                emisor.setRegimenFiscal(_req.getPseudoEmisor().getRegimenFiscal());
                 cfdi.setEmisor(emisor);
             }
 
             // Receptor
             {
                 Receptor receptor = cfdiFactory.createComprobanteReceptor();
-                receptor.setRfc(cfdiReq.getPseudoReceptor().getRfc());
-                receptor.setNombre(cfdiReq.getPseudoReceptor().getNombre());
-                receptor.setDomicilioFiscalReceptor(cfdiReq.getPseudoReceptor().getDomicilioFiscal());
-                receptor.setRegimenFiscalReceptor(cfdiReq.getPseudoReceptor().getRegimenFiscal());
-                receptor.setUsoCFDI(CUsoCFDI.fromValue((cfdiReq.getPseudoReceptor().getProposito())));
+                receptor.setRfc(_req.getPseudoReceptor().getRfc());
+                receptor.setNombre(_req.getPseudoReceptor().getNombre());
+                receptor.setDomicilioFiscalReceptor(_req.getPseudoReceptor().getDomicilioFiscal());
+                receptor.setRegimenFiscalReceptor(_req.getPseudoReceptor().getRegimenFiscal());
+                receptor.setUsoCFDI(CUsoCFDI.fromValue((_req.getPseudoReceptor().getProposito())));
                 cfdi.setReceptor(receptor);
             }
 
@@ -109,7 +109,7 @@ class NominaXml {
             {
                 Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
 
-                cfdiReq.getPseudoConceptos().stream().map(psc -> {
+                _req.getPseudoConceptos().stream().map(psc -> {
 
                     var concepto = cfdiFactory.createComprobanteConceptosConcepto();
 
@@ -137,35 +137,35 @@ class NominaXml {
             var nominaFactory = new mx.gob.sat.nomina12.ObjectFactory();
             Nomina nomina = nominaFactory.createNomina();
             nomina.setVersion(NominaRequestDTO.NOMINA_VER);
-            nomina.setTipoNomina(CTipoNomina.fromValue(cfdiReq.getNomAttributes().getTipoNomina()));
-            nomina.setFechaPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaPago()));
-            nomina.setFechaInicialPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaInicialPago()));
-            nomina.setFechaFinalPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomAttributes().getFechaFinalPago()));
-            nomina.setNumDiasPagados(cfdiReq.getNomAttributes().getDiasPagados());
-            nomina.setTotalPercepciones(cfdiReq.getNomAttributes().getTotalPercepciones());
-            nomina.setTotalDeducciones(cfdiReq.getNomAttributes().getTotalDeducciones());
+            nomina.setTipoNomina(CTipoNomina.fromValue(_req.getNomAttributes().getTipoNomina()));
+            nomina.setFechaPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(_req.getNomAttributes().getFechaPago()));
+            nomina.setFechaInicialPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(_req.getNomAttributes().getFechaInicialPago()));
+            nomina.setFechaFinalPago(DatatypeFactory.newInstance().newXMLGregorianCalendar(_req.getNomAttributes().getFechaFinalPago()));
+            nomina.setNumDiasPagados(_req.getNomAttributes().getDiasPagados());
+            nomina.setTotalPercepciones(_req.getNomAttributes().getTotalPercepciones());
+            nomina.setTotalDeducciones(_req.getNomAttributes().getTotalDeducciones());
 
             // Complemento:Nomina:Emisor 
             {
                 Nomina.Emisor nomEmisor = nominaFactory.createNominaEmisor();
-                nomEmisor.setRegistroPatronal(cfdiReq.getNomEmisorAttribs().getRegistroPatronal());
+                nomEmisor.setRegistroPatronal(_req.getNomEmisorAttribs().getRegistroPatronal());
                 nomina.setEmisor(nomEmisor);
             }
 
             // Complemento:Nomina:Receptor
             {
                 Nomina.Receptor nomReceptor = nominaFactory.createNominaReceptor();
-                nomReceptor.setCurp(cfdiReq.getNomReceptorAttribs().getCurp());
-                nomReceptor.setNumSeguridadSocial(cfdiReq.getNomReceptorAttribs().getNumSeguridadSocial());
-                nomReceptor.setFechaInicioRelLaboral(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomReceptorAttribs().getFechaInicioRelLaboral()));
-                nomReceptor.setAntigüedad(cfdiReq.getNomReceptorAttribs().getAntiguedad());
-                nomReceptor.setTipoContrato(cfdiReq.getNomReceptorAttribs().getTipoContrato());
-                nomReceptor.setTipoRegimen(cfdiReq.getNomReceptorAttribs().getTipoRegimen());
-                nomReceptor.setNumEmpleado(cfdiReq.getNomReceptorAttribs().getNumEmpleado());
-                nomReceptor.setRiesgoPuesto(cfdiReq.getNomReceptorAttribs().getRiesgoPuesto());
-                nomReceptor.setPeriodicidadPago(cfdiReq.getNomReceptorAttribs().getPeriodicidadPago());
-                nomReceptor.setSalarioDiarioIntegrado(cfdiReq.getNomReceptorAttribs().getSalarioDiarioIntegrado());
-                nomReceptor.setClaveEntFed(CEstado.fromValue(cfdiReq.getNomReceptorAttribs().getClaveEntFed()));
+                nomReceptor.setCurp(_req.getNomReceptorAttribs().getCurp());
+                nomReceptor.setNumSeguridadSocial(_req.getNomReceptorAttribs().getNumSeguridadSocial());
+                nomReceptor.setFechaInicioRelLaboral(DatatypeFactory.newInstance().newXMLGregorianCalendar(_req.getNomReceptorAttribs().getFechaInicioRelLaboral()));
+                nomReceptor.setAntigüedad(_req.getNomReceptorAttribs().getAntiguedad());
+                nomReceptor.setTipoContrato(_req.getNomReceptorAttribs().getTipoContrato());
+                nomReceptor.setTipoRegimen(_req.getNomReceptorAttribs().getTipoRegimen());
+                nomReceptor.setNumEmpleado(_req.getNomReceptorAttribs().getNumEmpleado());
+                nomReceptor.setRiesgoPuesto(_req.getNomReceptorAttribs().getRiesgoPuesto());
+                nomReceptor.setPeriodicidadPago(_req.getNomReceptorAttribs().getPeriodicidadPago());
+                nomReceptor.setSalarioDiarioIntegrado(_req.getNomReceptorAttribs().getSalarioDiarioIntegrado());
+                nomReceptor.setClaveEntFed(CEstado.fromValue(_req.getNomReceptorAttribs().getClaveEntFed()));
                 nomina.setReceptor(nomReceptor);
             }
 
@@ -173,11 +173,11 @@ class NominaXml {
             {
                 Percepciones percepciones = nominaFactory.createNominaPercepciones();
 
-                percepciones.setTotalSueldos(cfdiReq.getNomPercepcionesAttribs().getTotalSueldos());
-                percepciones.setTotalGravado(cfdiReq.getNomPercepcionesAttribs().getTotalGravado());
-                percepciones.setTotalExento(cfdiReq.getNomPercepcionesAttribs().getTotalExento());
+                percepciones.setTotalSueldos(_req.getNomPercepcionesAttribs().getTotalSueldos());
+                percepciones.setTotalGravado(_req.getNomPercepcionesAttribs().getTotalGravado());
+                percepciones.setTotalExento(_req.getNomPercepcionesAttribs().getTotalExento());
 
-                cfdiReq.getNomPercepcionesAttribs().getItems().stream().map(p -> {
+                _req.getNomPercepcionesAttribs().getItems().stream().map(p -> {
 
                     var percepcion = nominaFactory.createNominaPercepcionesPercepcion();
 
@@ -198,9 +198,9 @@ class NominaXml {
             // Complemento:Nomina:Deducciones
             {
                 Deducciones deducciones = nominaFactory.createNominaDeducciones();
-                deducciones.setTotalOtrasDeducciones(cfdiReq.getNomDeduccionesAttribs().getTotalOtrasDeducciones());
-                deducciones.setTotalImpuestosRetenidos(cfdiReq.getNomDeduccionesAttribs().getTotalImpuestosRetenidos());
-                cfdiReq.getNomDeduccionesAttribs().getItems().stream().map(d -> {
+                deducciones.setTotalOtrasDeducciones(_req.getNomDeduccionesAttribs().getTotalOtrasDeducciones());
+                deducciones.setTotalImpuestosRetenidos(_req.getNomDeduccionesAttribs().getTotalImpuestosRetenidos());
+                _req.getNomDeduccionesAttribs().getItems().stream().map(d -> {
 
                     var deduccion = nominaFactory.createNominaDeduccionesDeduccion();
                     deduccion.setTipoDeduccion(d.getTipoDeduccion());
@@ -219,7 +219,7 @@ class NominaXml {
             // Complemento:Nomina:OtrosPagos
             {
                 OtrosPagos otrosPagos = nominaFactory.createNominaOtrosPagos();
-                cfdiReq.getNomOtrosPagosAttribs().getItems().stream().map(o -> {
+                _req.getNomOtrosPagosAttribs().getItems().stream().map(o -> {
 
                     var otroPago = nominaFactory.createNominaOtrosPagosOtroPago();
                     otroPago.setTipoOtroPago(o.getTipoOtroPago());
