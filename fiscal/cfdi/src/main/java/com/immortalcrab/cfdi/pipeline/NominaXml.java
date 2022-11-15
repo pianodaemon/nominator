@@ -45,7 +45,7 @@ class NominaXml {
         _sw = shape();
     }
 
-    public static String render(Request req, IStamp< PacRegularRequest, PacRegularResponse> stamper, IStorage st) throws FormatError, StorageError {
+    public static String render(Request req, IStamp< PacRegularRequest, PacRegularResponse> stamper) throws FormatError, StorageError {
 
         NominaXml ic = new NominaXml((NominaRequestDTO) req);
 
