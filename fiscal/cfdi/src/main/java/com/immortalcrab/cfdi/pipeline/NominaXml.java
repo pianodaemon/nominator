@@ -135,11 +135,13 @@ class NominaXml {
             nomina.setNumDiasPagados(cfdiReq.getNomAttributes().getDiasPagados());
             nomina.setTotalPercepciones(cfdiReq.getNomAttributes().getTotalPercepciones());
             nomina.setTotalDeducciones(cfdiReq.getNomAttributes().getTotalDeducciones());
-            // Complemento:Nomina:Emisor ------------------------------------
 
-            Nomina.Emisor nomEmisor = nominaFactory.createNominaEmisor();
-            nomEmisor.setRegistroPatronal(cfdiReq.getNomEmisorAttribs().getRegistroPatronal());
-            nomina.setEmisor(nomEmisor);
+            // Complemento:Nomina:Emisor 
+            {
+                Nomina.Emisor nomEmisor = nominaFactory.createNominaEmisor();
+                nomEmisor.setRegistroPatronal(cfdiReq.getNomEmisorAttribs().getRegistroPatronal());
+                nomina.setEmisor(nomEmisor);
+            }
 
             // Complemento:Nomina:Receptor ------------------------------------
             Nomina.Receptor nomReceptor = nominaFactory.createNominaReceptor();
