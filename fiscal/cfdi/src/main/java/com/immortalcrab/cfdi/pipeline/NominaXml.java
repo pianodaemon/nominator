@@ -167,23 +167,26 @@ class NominaXml {
             }
             nomina.setPercepciones(percepciones);
 
-            // Complemento:Nomina:Deducciones ------------------------------------
-            var dsNomDeducciones = (Map < String, Object > ) dsNomina.get("deducciones");
-            Deducciones deducciones = nominaFactory.createNominaDeducciones();
-            deducciones.setTotalOtrasDeducciones(cfdiReq.getNomDeduccionesAttribs().getTotalOtrasDeducciones());
-            deducciones.setTotalImpuestosRetenidos(cfdiReq.getNomDeduccionesAttribs().getTotalImpuestosRetenidos());
+            // Complemento:Nomina:Deducciones
+            {
+                Deducciones deducciones = nominaFactory.createNominaDeducciones();
+                deducciones.setTotalOtrasDeducciones(cfdiReq.getNomDeduccionesAttribs().getTotalOtrasDeducciones());
+                deducciones.setTotalImpuestosRetenidos(cfdiReq.getNomDeduccionesAttribs().getTotalImpuestosRetenidos());
+                cfdiReq.getNomDeduccionesAttribs().getItems().stream().map(d -> {
 
-            var listaDeducciones = (List < Map < String, Object >> ) dsNomDeducciones.get("lista");
-            for (Map < String, Object > d: listaDeducciones) {
+                    var deduccion = nominaFactory.createNominaDeduccionesDeduccion();
+                    deduccion.setTipoDeduccion(d.getTipoDeduccion());
+                    deduccion.setClave(d.getClave());
+                    deduccion.setConcepto(d.getConcepto());
+                    deduccion.setImporte(d.getImporte());
 
-                var deduccion = nominaFactory.createNominaDeduccionesDeduccion();
-                deduccion.setTipoDeduccion((String) d.get("tipo_deduccion"));
-                deduccion.setClave((String) d.get("clave"));
-                deduccion.setConcepto((String) d.get("concepto"));
-                deduccion.setImporte(new BigDecimal(((Double) d.get("importe")).toString()));
-                deducciones.getDeduccion().add(deduccion);
+                    return deduccion;
+                }).forEachOrdered(i -> {
+
+                    deducciones.getDeduccion().add(i);
+                });
+                nomina.setDeducciones(deducciones);
             }
-            nomina.setDeducciones(deducciones);
 
             // Complemento:Nomina:OtrosPagos
             {
