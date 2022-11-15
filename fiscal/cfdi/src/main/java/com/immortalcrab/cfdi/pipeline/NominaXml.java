@@ -146,26 +146,31 @@ class NominaXml {
             nomReceptor.setClaveEntFed(CEstado.fromValue(cfdiReq.getNomReceptorAttribs().getClaveEntFed()));
             nomina.setReceptor(nomReceptor);
 
-            // Complemento:Nomina:Percepciones ------------------------------------
-            var dsNomina = (Map < String, Object > ) ds.get("nomina");
-            var dsNomPercepciones = (Map < String, Object > ) dsNomina.get("percepciones");
-            Percepciones percepciones = nominaFactory.createNominaPercepciones();
-            percepciones.setTotalSueldos(cfdiReq.getNomPercepcionesAttribs().getTotalSueldos());
-            percepciones.setTotalGravado(cfdiReq.getNomPercepcionesAttribs().getTotalGravado());
-            percepciones.setTotalExento(cfdiReq.getNomPercepcionesAttribs().getTotalExento());
+            // Complemento:Nomina:Percepciones
+            {
+                Percepciones percepciones = nominaFactory.createNominaPercepciones();
 
-            var listaPercepciones = (List < Map < String, Object >> ) dsNomPercepciones.get("lista");
-            for (Map < String, Object > p: listaPercepciones) {
+                percepciones.setTotalSueldos(cfdiReq.getNomPercepcionesAttribs().getTotalSueldos());
+                percepciones.setTotalGravado(cfdiReq.getNomPercepcionesAttribs().getTotalGravado());
+                percepciones.setTotalExento(cfdiReq.getNomPercepcionesAttribs().getTotalExento());
 
-                var percepcion = nominaFactory.createNominaPercepcionesPercepcion();
-                percepcion.setTipoPercepcion((String) p.get("tipo_percepcion"));
-                percepcion.setClave((String) p.get("clave"));
-                percepcion.setConcepto((String) p.get("concepto"));
-                percepcion.setImporteGravado(new BigDecimal(((Double) p.get("importe_gravado")).toString()));
-                percepcion.setImporteExento(new BigDecimal(((Double) p.get("importe_exento")).toString()));
-                percepciones.getPercepcion().add(percepcion);
+                cfdiReq.getNomPercepcionesAttribs().getItems().stream().map(p -> {
+
+                    var percepcion = nominaFactory.createNominaPercepcionesPercepcion();
+
+                    percepcion.setTipoPercepcion(p.getTipoPercepcion());
+                    percepcion.setClave(p.getClave());
+                    percepcion.setConcepto(p.getConcepto());
+                    percepcion.setImporteGravado(p.getImporteGravado());
+                    percepcion.setImporteExento(p.getImporteExento());
+
+                    return percepcion;
+                }).forEachOrdered(i -> {
+
+                    percepciones.getPercepcion().add(i);
+                });
+                nomina.setPercepciones(percepciones);
             }
-            nomina.setPercepciones(percepciones);
 
             // Complemento:Nomina:Deducciones
             {
