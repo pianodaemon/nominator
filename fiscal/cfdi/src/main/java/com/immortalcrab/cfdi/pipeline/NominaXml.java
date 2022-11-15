@@ -93,23 +93,29 @@ class NominaXml {
             cfdi.setReceptor(receptor);
 
             // Conceptos
-            Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
+            {
+                Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
 
-            for (var psc: cfdiReq.getPseudoConceptos()) {
+                cfdiReq.getPseudoConceptos().stream().map(psc -> {
 
-                var concepto = cfdiFactory.createComprobanteConceptosConcepto();
+                    var concepto = cfdiFactory.createComprobanteConceptosConcepto();
 
-                concepto.setClaveProdServ(psc.getClaveProdServ());
-                concepto.setCantidad(psc.getCantidad());
-                concepto.setClaveUnidad(psc.getClaveUnidad());
-                concepto.setDescripcion(psc.getDescripcion());
-                concepto.setValorUnitario(psc.getValorUnitario());
-                concepto.setImporte(psc.getImporte());
-                concepto.setDescuento(psc.getDescuento());
-                concepto.setObjetoImp(psc.getObjImp());
-                conceptos.getConcepto().add(concepto);
+                    concepto.setClaveProdServ(psc.getClaveProdServ());
+                    concepto.setCantidad(psc.getCantidad());
+                    concepto.setClaveUnidad(psc.getClaveUnidad());
+                    concepto.setDescripcion(psc.getDescripcion());
+                    concepto.setValorUnitario(psc.getValorUnitario());
+                    concepto.setImporte(psc.getImporte());
+                    concepto.setDescuento(psc.getDescuento());
+                    concepto.setObjetoImp(psc.getObjImp());
+
+                    return concepto;
+                }).forEachOrdered(concepto -> {
+
+                    conceptos.getConcepto().add(concepto);
+                });
+                cfdi.setConceptos(conceptos);
             }
-            cfdi.setConceptos(conceptos);
 
             String contextPath = "mx.gob.sat.cfd._4";
             String schemaLocation = "http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd";
