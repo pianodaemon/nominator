@@ -32,6 +32,7 @@ class NominaRequestDTO extends JsonRequest {
     NomReceptorAttributes _nomReceptorAttribs;
     NomPercepcionesAttributes _nomPercepcionesAttribs;
     NomDeduccionesAttributes _nomDeduccionesAttribs;
+    NomOtrosPagosAttributes _nomNomOtrosPagosAttribs;
 
     public NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
 
@@ -40,6 +41,7 @@ class NominaRequestDTO extends JsonRequest {
         _pr = shapeRp();
         _pe = shapeEp();
         _pcs = shapePcs();
+        _nomNomOtrosPagosAttribs = shapeNomOtrosPagosAttribs();
         _nomAttribs = shapeNomAttribs();
         _nomEmisorAttribs = shapeNomEmisorAttribs();
         _nomReceptorAttribs = shapeNomReceptorAttribs();
@@ -65,6 +67,10 @@ class NominaRequestDTO extends JsonRequest {
 
     public NomDeduccionesAttributes getNomDeduccionesAttribs() {
         return _nomDeduccionesAttribs;
+    }
+
+    public NomOtrosPagosAttributes getNomNomOtrosPagosAttribs() {
+        return _nomNomOtrosPagosAttribs;
     }
 
     public RegularRootAttributes getDocAttributes() {
@@ -377,6 +383,34 @@ class NominaRequestDTO extends JsonRequest {
         }
     }
 
+    private NomOtrosPagosAttributes shapeNomOtrosPagosAttribs() throws RequestError {
+
+        try {
+
+            List<Map<String, Object>> lms = NominaRequestDTO.LegoAssembler.obtainObjFromKey(
+                    LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
+                    "otros_pagos");
+
+            List<OtrosPagosItem> items = lms.stream().map(m -> {
+
+                Double importe = LegoAssembler.obtainObjFromKey(m, "importe");
+
+                OtrosPagosItem p = new OtrosPagosItem(
+                        LegoAssembler.obtainObjFromKey(m, "clave"),
+                        LegoAssembler.obtainObjFromKey(m, "concepto"),
+                        LegoAssembler.obtainObjFromKey(m, "tipo_otro_pago"),
+                        new BigDecimal(importe.toString()));
+
+                return p;
+            }).collect(Collectors.toList());
+
+            return new NomOtrosPagosAttributes(items);
+        } catch (NoSuchElementException ex) {
+            log.error("One or more of the mandatory elements of Complemento:Nomina:OtrosPagos tag is missing");
+            throw new RequestError("mandatory element in request is missing", ex);
+        }
+    }
+
     @NoArgsConstructor
     @Getter
     @Setter
@@ -513,6 +547,25 @@ class NominaRequestDTO extends JsonRequest {
         private String clave;
         private String concepto;
         private String tipoDeduccion;
+        private BigDecimal importe;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class NomOtrosPagosAttributes {
+
+        List<OtrosPagosItem> items;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class OtrosPagosItem {
+
+        private String clave;
+        private String concepto;
+        private String tipoOtroPago;
         private BigDecimal importe;
     }
 
