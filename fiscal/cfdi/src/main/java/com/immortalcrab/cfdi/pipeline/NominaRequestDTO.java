@@ -391,20 +391,21 @@ class NominaRequestDTO extends JsonRequest {
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
                     "otros_pagos");
 
-            List<OtrosPagosItem> items = lms.stream().map(m -> {
+            return new NomOtrosPagosAttributes(lms.stream().map(m -> {
 
+                Double sub = LegoAssembler.obtainObjFromKey(m, "subsidio_causado");
                 Double importe = LegoAssembler.obtainObjFromKey(m, "importe");
 
                 OtrosPagosItem p = new OtrosPagosItem(
                         LegoAssembler.obtainObjFromKey(m, "clave"),
                         LegoAssembler.obtainObjFromKey(m, "concepto"),
                         LegoAssembler.obtainObjFromKey(m, "tipo_otro_pago"),
+                        new BigDecimal(sub.toString()),
                         new BigDecimal(importe.toString()));
 
                 return p;
-            }).collect(Collectors.toList());
+            }).collect(Collectors.toList()));
 
-            return new NomOtrosPagosAttributes(items);
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Complemento:Nomina:OtrosPagos tag is missing");
             throw new RequestError("mandatory element in request is missing", ex);
@@ -566,6 +567,7 @@ class NominaRequestDTO extends JsonRequest {
         private String clave;
         private String concepto;
         private String tipoOtroPago;
+        private BigDecimal subsidioCausado;
         private BigDecimal importe;
     }
 
