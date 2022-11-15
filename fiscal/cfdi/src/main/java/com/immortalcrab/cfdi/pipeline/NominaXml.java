@@ -55,7 +55,6 @@ class NominaXml {
     private StringWriter shape() throws FormatError {
 
         StringWriter sw = new StringWriter();
-        Map < String, Object > ds = cfdiReq.getDs();
 
         try {
             ObjectFactory cfdiFactory = new ObjectFactory();
