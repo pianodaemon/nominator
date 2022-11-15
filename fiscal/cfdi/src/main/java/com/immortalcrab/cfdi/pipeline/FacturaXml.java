@@ -2,10 +2,6 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.FormatError;
 import com.immortalcrab.cfdi.error.StorageError;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.extern.log4j.Log4j;
 import mx.gob.sat.cfd._4.Comprobante;
 import mx.gob.sat.cfd._4.ObjectFactory;
 import mx.gob.sat.sitio_internet.cfd.catalogos.*;
@@ -14,22 +10,28 @@ import javax.xml.datatype.DatatypeFactory;
 import java.io.StringWriter;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.extern.log4j.Log4j;
+
 @AllArgsConstructor
 @Log4j
 @Getter
 class FacturaXml {
 
     private final @NonNull FacturaRequestDTO cfdiReq;
+
     private final @NonNull IStorage st;
 
-    public static String render(Request cfdiReq, IStamp<PacRegularRequest, PacRegularResponse> stamper, IStorage st) throws FormatError, StorageError {
+    public static String render(Request cfdiReq, IStamp <PacRegularRequest, PacRegularResponse> stamper, IStorage st) throws FormatError, StorageError {
 
         FacturaXml ic = new FacturaXml((FacturaRequestDTO) cfdiReq, st);
 
         StringWriter cfdi = ic.shape();
         PacRegularRequest pacReq = new PacRegularRequest(cfdi.toString());
         PacRegularResponse pacRes = stamper.impress(pacReq);
- 
+
         return "It must be slightly implemented as it was in lola";
     }
 
@@ -74,7 +76,7 @@ class FacturaXml {
             // Conceptos
             Comprobante.Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
 
-            for (FacturaRequestDTO.PseudoConcepto psc : cfdiReq.getPseudoConceptos()) {
+            for (FacturaRequestDTO.PseudoConcepto psc: cfdiReq.getPseudoConceptos()) {
 
                 var concepto = cfdiFactory.createComprobanteConceptosConcepto();
 
@@ -90,7 +92,7 @@ class FacturaXml {
                 concepto.setObjetoImp(psc.getObjetoImp());
 
                 var traslados = cfdiFactory.createComprobanteConceptosConceptoImpuestosTraslados();
-                List<FacturaRequestDTO.ConceptoTrasladoAttributes> psTraslados = psc.getTraslados();
+                List < FacturaRequestDTO.ConceptoTrasladoAttributes > psTraslados = psc.getTraslados();
                 for (FacturaRequestDTO.ConceptoTrasladoAttributes t: psTraslados) {
 
                     var traslado = cfdiFactory.createComprobanteConceptosConceptoImpuestosTrasladosTraslado();
@@ -103,7 +105,7 @@ class FacturaXml {
                 }
 
                 var retenciones = cfdiFactory.createComprobanteConceptosConceptoImpuestosRetenciones();
-                List<FacturaRequestDTO.ConceptoRetencionAttributes> psRetenciones = psc.getRetenciones();
+                List < FacturaRequestDTO.ConceptoRetencionAttributes > psRetenciones = psc.getRetenciones();
                 for (FacturaRequestDTO.ConceptoRetencionAttributes r: psRetenciones) {
 
                     var retencion = cfdiFactory.createComprobanteConceptosConceptoImpuestosRetencionesRetencion();
@@ -128,7 +130,7 @@ class FacturaXml {
             impuestos.setTotalImpuestosTrasladados(cfdiReq.getImpuestosAttributes().getTotalImpuestosTrasladados());
 
             var impuestosRetenciones = cfdiFactory.createComprobanteImpuestosRetenciones();
-            for (FacturaRequestDTO.ImpuestosRetencionAttributes impRet : cfdiReq.getImpuestosRetenciones()) {
+            for (FacturaRequestDTO.ImpuestosRetencionAttributes impRet: cfdiReq.getImpuestosRetenciones()) {
                 var impRetencion = cfdiFactory.createComprobanteImpuestosRetencionesRetencion();
                 impRetencion.setImpuesto(impRet.getImpuesto());
                 impRetencion.setImporte(impRet.getImporte());
@@ -137,7 +139,7 @@ class FacturaXml {
             impuestos.setRetenciones(impuestosRetenciones);
 
             var impuestosTraslados = cfdiFactory.createComprobanteImpuestosTraslados();
-            for (FacturaRequestDTO.ImpuestosTrasladoAttributes impTras : cfdiReq.getImpuestosTraslados()) {
+            for (FacturaRequestDTO.ImpuestosTrasladoAttributes impTras: cfdiReq.getImpuestosTraslados()) {
                 var impTraslado = cfdiFactory.createComprobanteImpuestosTrasladosTraslado();
                 impTraslado.setBase(impTras.getBase());
                 impTraslado.setImpuesto(impTras.getImpuesto());
