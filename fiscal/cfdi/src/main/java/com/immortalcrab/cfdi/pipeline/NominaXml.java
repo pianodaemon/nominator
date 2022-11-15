@@ -28,12 +28,10 @@ import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-@Getter
 class NominaXml {
 
     private final @NonNull
