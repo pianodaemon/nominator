@@ -124,7 +124,7 @@ class NominaXml {
             String contextPath = "mx.gob.sat.cfd._4";
             String schemaLocation = "http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd";
 
-            // Complemento:Nomina ------------------------------------
+            // Complemento:Nomina
             var nominaFactory = new mx.gob.sat.nomina12.ObjectFactory();
             Nomina nomina = nominaFactory.createNomina();
             nomina.setVersion(NominaRequestDTO.NOMINA_VER);
