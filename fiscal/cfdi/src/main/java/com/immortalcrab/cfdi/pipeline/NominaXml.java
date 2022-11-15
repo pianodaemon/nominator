@@ -143,20 +143,22 @@ class NominaXml {
                 nomina.setEmisor(nomEmisor);
             }
 
-            // Complemento:Nomina:Receptor ------------------------------------
-            Nomina.Receptor nomReceptor = nominaFactory.createNominaReceptor();
-            nomReceptor.setCurp(cfdiReq.getNomReceptorAttribs().getCurp());
-            nomReceptor.setNumSeguridadSocial(cfdiReq.getNomReceptorAttribs().getNumSeguridadSocial());
-            nomReceptor.setFechaInicioRelLaboral(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomReceptorAttribs().getFechaInicioRelLaboral()));
-            nomReceptor.setAntigüedad(cfdiReq.getNomReceptorAttribs().getAntiguedad());
-            nomReceptor.setTipoContrato(cfdiReq.getNomReceptorAttribs().getTipoContrato());
-            nomReceptor.setTipoRegimen(cfdiReq.getNomReceptorAttribs().getTipoRegimen());
-            nomReceptor.setNumEmpleado(cfdiReq.getNomReceptorAttribs().getNumEmpleado());
-            nomReceptor.setRiesgoPuesto(cfdiReq.getNomReceptorAttribs().getRiesgoPuesto());
-            nomReceptor.setPeriodicidadPago(cfdiReq.getNomReceptorAttribs().getPeriodicidadPago());
-            nomReceptor.setSalarioDiarioIntegrado(cfdiReq.getNomReceptorAttribs().getSalarioDiarioIntegrado());
-            nomReceptor.setClaveEntFed(CEstado.fromValue(cfdiReq.getNomReceptorAttribs().getClaveEntFed()));
-            nomina.setReceptor(nomReceptor);
+            // Complemento:Nomina:Receptor
+            {
+                Nomina.Receptor nomReceptor = nominaFactory.createNominaReceptor();
+                nomReceptor.setCurp(cfdiReq.getNomReceptorAttribs().getCurp());
+                nomReceptor.setNumSeguridadSocial(cfdiReq.getNomReceptorAttribs().getNumSeguridadSocial());
+                nomReceptor.setFechaInicioRelLaboral(DatatypeFactory.newInstance().newXMLGregorianCalendar(cfdiReq.getNomReceptorAttribs().getFechaInicioRelLaboral()));
+                nomReceptor.setAntigüedad(cfdiReq.getNomReceptorAttribs().getAntiguedad());
+                nomReceptor.setTipoContrato(cfdiReq.getNomReceptorAttribs().getTipoContrato());
+                nomReceptor.setTipoRegimen(cfdiReq.getNomReceptorAttribs().getTipoRegimen());
+                nomReceptor.setNumEmpleado(cfdiReq.getNomReceptorAttribs().getNumEmpleado());
+                nomReceptor.setRiesgoPuesto(cfdiReq.getNomReceptorAttribs().getRiesgoPuesto());
+                nomReceptor.setPeriodicidadPago(cfdiReq.getNomReceptorAttribs().getPeriodicidadPago());
+                nomReceptor.setSalarioDiarioIntegrado(cfdiReq.getNomReceptorAttribs().getSalarioDiarioIntegrado());
+                nomReceptor.setClaveEntFed(CEstado.fromValue(cfdiReq.getNomReceptorAttribs().getClaveEntFed()));
+                nomina.setReceptor(nomReceptor);
+            }
 
             // Complemento:Nomina:Percepciones
             {
