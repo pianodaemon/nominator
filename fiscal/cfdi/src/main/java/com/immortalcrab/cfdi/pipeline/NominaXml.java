@@ -41,7 +41,7 @@ class NominaXml {
 
     private final @NonNull IStorage st;
 
-    public static String render(Request cfdiReq, IStamp<PacRegularRequest, PacRegularResponse> stamper, IStorage st) throws FormatError, StorageError {
+    public static String render(Request cfdiReq, IStamp < PacRegularRequest, PacRegularResponse > stamper, IStorage st) throws FormatError, StorageError {
 
         NominaXml ic = new NominaXml((NominaRequestDTO) cfdiReq, st);
 
@@ -55,7 +55,7 @@ class NominaXml {
     private StringWriter shape() throws FormatError {
 
         StringWriter sw = new StringWriter();
-        Map<String, Object> ds = cfdiReq.getDs();
+        Map < String, Object > ds = cfdiReq.getDs();
 
         try {
             ObjectFactory cfdiFactory = new ObjectFactory();
@@ -95,7 +95,7 @@ class NominaXml {
             // Conceptos
             Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
 
-            for (var psc : cfdiReq.getPseudoConceptos()) {
+            for (var psc: cfdiReq.getPseudoConceptos()) {
 
                 var concepto = cfdiFactory.createComprobanteConceptosConcepto();
 
@@ -147,15 +147,15 @@ class NominaXml {
             nomina.setReceptor(nomReceptor);
 
             // Complemento:Nomina:Percepciones ------------------------------------
-            var dsNomina = (Map<String, Object>) ds.get("nomina");
-            var dsNomPercepciones = (Map<String, Object>) dsNomina.get("percepciones");
+            var dsNomina = (Map < String, Object > ) ds.get("nomina");
+            var dsNomPercepciones = (Map < String, Object > ) dsNomina.get("percepciones");
             Percepciones percepciones = nominaFactory.createNominaPercepciones();
             percepciones.setTotalSueldos(cfdiReq.getNomPercepcionesAttribs().getTotalSueldos());
             percepciones.setTotalGravado(cfdiReq.getNomPercepcionesAttribs().getTotalGravado());
             percepciones.setTotalExento(cfdiReq.getNomPercepcionesAttribs().getTotalExento());
 
-            var listaPercepciones = (List<Map<String, Object>>) dsNomPercepciones.get("lista");
-            for (Map<String, Object> p : listaPercepciones) {
+            var listaPercepciones = (List < Map < String, Object >> ) dsNomPercepciones.get("lista");
+            for (Map < String, Object > p: listaPercepciones) {
 
                 var percepcion = nominaFactory.createNominaPercepcionesPercepcion();
                 percepcion.setTipoPercepcion((String) p.get("tipo_percepcion"));
@@ -168,13 +168,13 @@ class NominaXml {
             nomina.setPercepciones(percepciones);
 
             // Complemento:Nomina:Deducciones ------------------------------------
-            var dsNomDeducciones = (Map<String, Object>) dsNomina.get("deducciones");
+            var dsNomDeducciones = (Map < String, Object > ) dsNomina.get("deducciones");
             Deducciones deducciones = nominaFactory.createNominaDeducciones();
             deducciones.setTotalOtrasDeducciones(cfdiReq.getNomDeduccionesAttribs().getTotalOtrasDeducciones());
             deducciones.setTotalImpuestosRetenidos(cfdiReq.getNomDeduccionesAttribs().getTotalImpuestosRetenidos());
 
-            var listaDeducciones = (List<Map<String, Object>>) dsNomDeducciones.get("lista");
-            for (Map<String, Object> d : listaDeducciones) {
+            var listaDeducciones = (List < Map < String, Object >> ) dsNomDeducciones.get("lista");
+            for (Map < String, Object > d: listaDeducciones) {
 
                 var deduccion = nominaFactory.createNominaDeduccionesDeduccion();
                 deduccion.setTipoDeduccion((String) d.get("tipo_deduccion"));
@@ -185,28 +185,28 @@ class NominaXml {
             }
             nomina.setDeducciones(deducciones);
 
-	    // Complemento:Nomina:OtrosPagos
-	    {
-		    OtrosPagos otrosPagos = nominaFactory.createNominaOtrosPagos();
-		    cfdiReq.getNomOtrosPagosAttribs().getItems().stream().map(o -> {
+            // Complemento:Nomina:OtrosPagos
+            {
+                OtrosPagos otrosPagos = nominaFactory.createNominaOtrosPagos();
+                cfdiReq.getNomOtrosPagosAttribs().getItems().stream().map(o -> {
 
-			var otroPago = nominaFactory.createNominaOtrosPagosOtroPago();
-			otroPago.setTipoOtroPago(o.getTipoOtroPago());
-			otroPago.setClave(o.getClave());
-			otroPago.setConcepto(o.getConcepto());
-			otroPago.setImporte(o.getImporte());
+                    var otroPago = nominaFactory.createNominaOtrosPagosOtroPago();
+                    otroPago.setTipoOtroPago(o.getTipoOtroPago());
+                    otroPago.setClave(o.getClave());
+                    otroPago.setConcepto(o.getConcepto());
+                    otroPago.setImporte(o.getImporte());
 
-			var subsidioAlEmpleo = nominaFactory.createNominaOtrosPagosOtroPagoSubsidioAlEmpleo();
-			subsidioAlEmpleo.setSubsidioCausado(o.getSubsidioCausado());
-			otroPago.setSubsidioAlEmpleo(subsidioAlEmpleo);
+                    var subsidioAlEmpleo = nominaFactory.createNominaOtrosPagosOtroPagoSubsidioAlEmpleo();
+                    subsidioAlEmpleo.setSubsidioCausado(o.getSubsidioCausado());
+                    otroPago.setSubsidioAlEmpleo(subsidioAlEmpleo);
 
-			return otroPago;
-		    }).forEachOrdered(o -> {
+                    return otroPago;
+                }).forEachOrdered(i -> {
 
-			otrosPagos.getOtroPago().add(o);
-		    });
-		    nomina.setOtrosPagos(otrosPagos);
-	    }
+                    otrosPagos.getOtroPago().add(i);
+                });
+                nomina.setOtrosPagos(otrosPagos);
+            }
 
             Complemento complemento = cfdiFactory.createComprobanteComplemento();
             complemento.getAny().add(nomina);
