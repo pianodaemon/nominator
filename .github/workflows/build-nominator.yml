@@ -44,5 +44,5 @@ jobs:
           USER_SIMULATION_SKETCH: dev-tools/deployment/user-simulation-infra-stack.exp
         run: |
           cd $(dirname $USER_SIMULATION_SKETCH)
-          ./$(basename $USER_SIMULATION_SKETCH)
+          ./$(basename $USER_SIMULATION_SKETCH) >> $GITHUB_OUTPUT
           cd -
