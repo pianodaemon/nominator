@@ -45,14 +45,12 @@ class NominaXml {
         _sw = shape();
     }
 
-    public static String render(Request req, IStamp< PacRegularRequest, PacRegularResponse> stamper) throws FormatError, StorageError {
+    public static PacRes render(Request req, IStamp< PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
 
         NominaXml ic = new NominaXml((NominaRequestDTO) req);
 
         PacRegularRequest pacReq = new PacRegularRequest(ic.toString());
-        PacRegularResponse pacRes = stamper.impress(pacReq);
-
-        return "It must be slightly implemented as it was in lola";
+        return stamper.impress(pacReq);
     }
 
     @Override

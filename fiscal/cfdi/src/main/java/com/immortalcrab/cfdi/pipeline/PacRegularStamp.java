@@ -5,10 +5,10 @@ import com.immortalcrab.cfdi.error.FormatError;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class PacRegularStamp implements IStamp<PacRegularRequest, PacRegularResponse> {
+public class PacRegularStamp implements IStamp<PacRegularRequest, PacRes> {
 
     @Override
-    public PacRegularResponse impress(final PacRegularRequest target) throws FormatError {
+    public PacRes impress(final PacRegularRequest target) throws FormatError {
 
         throw new UnsupportedOperationException("Not supported yet.");
     }
