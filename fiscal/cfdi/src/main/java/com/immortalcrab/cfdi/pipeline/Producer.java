@@ -68,7 +68,7 @@ public class Producer extends Pipeline implements IIssuer {
             return stamper.impress(pacReq);
         }
 
-        public static <R extends Request> PacRes nom(R req, IStamp< PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
+        public static <R extends Request> PacRes nom(R req, IStamp<PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
 
             NominaXml ic = new NominaXml((NominaRequestDTO) req);
 
