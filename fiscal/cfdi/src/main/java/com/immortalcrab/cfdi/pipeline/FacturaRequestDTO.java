@@ -76,11 +76,11 @@ class FacturaRequestDTO extends JsonRequest {
             String fecha = LegoAssembler.obtainObjFromKey(this.getDs(), "fecha");
             String formaPago = LegoAssembler.obtainObjFromKey(this.getDs(), "forma_pago");
             String noCertificado = LegoAssembler.obtainObjFromKey(this.getDs(), "no_certificado");
-            BigDecimal subTotal = LegoAssembler.obtainObjFromKey(this.getDs(), "subtotal");
-            BigDecimal descuento = LegoAssembler.obtainObjFromKey(this.getDs(), "descuento");
+            Double subTotal = LegoAssembler.obtainObjFromKey(this.getDs(), "subtotal");
+            Double descuento = LegoAssembler.obtainObjFromKey(this.getDs(), "descuento");
             String moneda = LegoAssembler.obtainObjFromKey(this.getDs(), "moneda");
-            BigDecimal tipoCambio = LegoAssembler.obtainObjFromKey(this.getDs(), "tipo_cambio");
-            BigDecimal total = LegoAssembler.obtainObjFromKey(this.getDs(), "total");
+            Double tipoCambio = LegoAssembler.obtainObjFromKey(this.getDs(), "tipo_cambio");
+            Double total = LegoAssembler.obtainObjFromKey(this.getDs(), "total");
             String exportacion = LegoAssembler.obtainObjFromKey(this.getDs(), "exportacion");
             String metodoPago = LegoAssembler.obtainObjFromKey(this.getDs(), "metodo_pago");
             String lugarExpedicion = LegoAssembler.obtainObjFromKey(this.getDs(), "lugar_expedicion");
@@ -90,11 +90,11 @@ class FacturaRequestDTO extends JsonRequest {
             _comprobante.setFecha(fecha);
             _comprobante.setFormaPago(formaPago);
             _comprobante.setNoCertificado(noCertificado);
-            _comprobante.setSubTotal(subTotal);
-            _comprobante.setDescuento(descuento);
+            _comprobante.setSubTotal(new BigDecimal(subTotal.toString()));
+            _comprobante.setDescuento(new BigDecimal(descuento.toString()));
             _comprobante.setMoneda(moneda);
-            _comprobante.setTipoCambio(tipoCambio);
-            _comprobante.setTotal(total);
+            _comprobante.setTipoCambio(new BigDecimal(tipoCambio.toString()));
+            _comprobante.setTotal(new BigDecimal(total.toString()));
             _comprobante.setExportacion(exportacion);
             _comprobante.setMetodoPago(metodoPago);
             _comprobante.setLugarExpedicion(lugarExpedicion);
@@ -147,24 +147,31 @@ class FacturaRequestDTO extends JsonRequest {
                 PseudoConcepto p = new PseudoConcepto();
                 p.setClaveProdServ(LegoAssembler.obtainObjFromKey(i, "clave_prod_serv"));
                 p.setNoIdentificacion(LegoAssembler.obtainObjFromKey(i, "no_identificacion"));
-                p.setCantidad(LegoAssembler.obtainObjFromKey(i, "cantidad"));
+                Double cantidad = LegoAssembler.obtainObjFromKey(i, "cantidad");
+                p.setCantidad(new BigDecimal(cantidad.toString()));
                 p.setClaveUnidad(LegoAssembler.obtainObjFromKey(i, "clave_unidad"));
                 p.setUnidad(LegoAssembler.obtainObjFromKey(i, "unidad"));
                 p.setDescripcion(LegoAssembler.obtainObjFromKey(i, "descripcion"));
-                p.setValorUnitario(LegoAssembler.obtainObjFromKey(i, "valor_unitario"));
-                p.setImporte(LegoAssembler.obtainObjFromKey(i, "importe"));
-                p.setDescuento(LegoAssembler.obtainObjFromKey(i, "descuento"));
+                Double valorUnitario = LegoAssembler.obtainObjFromKey(i, "valor_unitario");
+                p.setValorUnitario(new BigDecimal(valorUnitario.toString()));
+                Double importe = LegoAssembler.obtainObjFromKey(i, "importe");
+                p.setImporte(new BigDecimal(importe.toString()));
+                Double descuento = LegoAssembler.obtainObjFromKey(i, "descuento");
+                p.setDescuento(new BigDecimal(descuento.toString()));
                 p.setObjetoImp(LegoAssembler.obtainObjFromKey(i, "objeto_imp"));
 
                 List<ConceptoTrasladoAttributes> psTraslados = new LinkedList<>();
                 List<Map<String, Object>> traslados = LegoAssembler.obtainObjFromKey(i, "traslados");
                 traslados.stream().map(j -> {
                     ConceptoTrasladoAttributes psTraslado = new ConceptoTrasladoAttributes();
-                    psTraslado.setBase(LegoAssembler.obtainObjFromKey(j, "base"));
+                    Double base = LegoAssembler.obtainObjFromKey(j, "base");
+                    psTraslado.setBase(new BigDecimal(base.toString()));
                     psTraslado.setImpuesto(LegoAssembler.obtainObjFromKey(j, "impuesto"));
                     psTraslado.setTipoFactor(LegoAssembler.obtainObjFromKey(j, "tipo_factor"));
-                    psTraslado.setTasaOCuota(LegoAssembler.obtainObjFromKey(j, "tasa_o_cuota"));
-                    psTraslado.setImporte(LegoAssembler.obtainObjFromKey(j, "importe"));
+                    Double tasaOCuota = LegoAssembler.obtainObjFromKey(j, "tasa_o_cuota");
+                    psTraslado.setTasaOCuota(new BigDecimal(tasaOCuota.toString()));
+                    Double importeTrasl = LegoAssembler.obtainObjFromKey(j, "importe");
+                    psTraslado.setImporte(new BigDecimal(importeTrasl.toString()));
                     return psTraslado;
                 }).forEachOrdered(t -> {
                     psTraslados.add(t);
@@ -175,11 +182,14 @@ class FacturaRequestDTO extends JsonRequest {
                 List<Map<String, Object>> retenciones = LegoAssembler.obtainObjFromKey(i, "retenciones");
                 retenciones.stream().map(k -> {
                     ConceptoRetencionAttributes psRetencion = new ConceptoRetencionAttributes();
-                    psRetencion.setBase(LegoAssembler.obtainObjFromKey(k, "base"));
+                    Double base = LegoAssembler.obtainObjFromKey(k, "base");
+                    psRetencion.setBase(new BigDecimal(base.toString()));
                     psRetencion.setImpuesto(LegoAssembler.obtainObjFromKey(k, "impuesto"));
                     psRetencion.setTipoFactor(LegoAssembler.obtainObjFromKey(k, "tipo_factor"));
-                    psRetencion.setTasaOCuota(LegoAssembler.obtainObjFromKey(k, "tasa_o_cuota"));
-                    psRetencion.setImporte(LegoAssembler.obtainObjFromKey(k, "importe"));
+                    Double tasaOCuota = LegoAssembler.obtainObjFromKey(k, "tasa_o_cuota");
+                    psRetencion.setTasaOCuota(new BigDecimal(tasaOCuota.toString()));
+                    Double importeReten = LegoAssembler.obtainObjFromKey(k, "importe");
+                    psRetencion.setImporte(new BigDecimal(importeReten.toString()));
                     return psRetencion;
                 }).forEachOrdered(r -> {
                     psRetenciones.add(r);
@@ -202,14 +212,21 @@ class FacturaRequestDTO extends JsonRequest {
 
         try {
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "impuestos");
-            _impuestos.setTotalImpuestosRetenidos((BigDecimal) dic.get("total_impuestos_retenidos"));
-            _impuestos.setTotalImpuestosTrasladados((BigDecimal) dic.get("total_impuestos_trasladados"));
+            {
+                Double d = (Double) dic.get("total_impuestos_retenidos");
+                _impuestos.setTotalImpuestosRetenidos(new BigDecimal(d.toString()));
+            }
+            {
+                Double d = (Double) dic.get("total_impuestos_trasladados");
+                _impuestos.setTotalImpuestosTrasladados(new BigDecimal(d.toString()));
+            }
 
             List<Map<String, Object>> retenciones = LegoAssembler.obtainObjFromKey(dic, "retenciones");
             for (Map<String, Object> r : retenciones) {
                 var ret = new ImpuestosRetencionAttributes();
                 ret.setImpuesto((String) r.get("impuesto"));
-                ret.setImporte((BigDecimal) r.get("importe"));
+                Double d = (Double) r.get("importe");
+                ret.setImporte(new BigDecimal(d.toString()));
                 _impuestosRetenciones.add(ret);
             }
             List<Map<String, Object>> traslados = LegoAssembler.obtainObjFromKey(dic, "traslados");
@@ -217,8 +234,14 @@ class FacturaRequestDTO extends JsonRequest {
                 var tras = new ImpuestosTrasladoAttributes();
                 tras.setImpuesto((String) t.get("impuesto"));
                 tras.setTipoFactor((String) t.get("tipo_factor"));
-                tras.setTasaOCuota((BigDecimal) t.get("tasa_o_cuota"));
-                tras.setImporte((BigDecimal) t.get("importe"));
+                {
+                    Double d = (Double) t.get("tasa_o_cuota");
+                    tras.setTasaOCuota(new BigDecimal(d.toString()));
+                }
+                {
+                    Double d = (Double) t.get("importe");
+                    tras.setImporte(new BigDecimal(d.toString()));
+                }
                 _impuestosTraslados.add(tras);
             }
 
