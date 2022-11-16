@@ -16,4 +16,6 @@ class PacReq {
     protected final @NonNull
     String targetUri;
 
+    protected final @NonNull
+    String trailAlias;
 }

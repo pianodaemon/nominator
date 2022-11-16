@@ -12,4 +12,6 @@ interface IStorage {
             InputStream inputStream) throws StorageError;
 
     public BufferedInputStream download(final String fileName) throws StorageError;
+
+    public String getTargetName() throws StorageError;
 }
