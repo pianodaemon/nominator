@@ -13,6 +13,8 @@ import org.javatuples.Pair;
 
 public class Producer extends Pipeline implements IIssuer {
 
+    private static final String XML_FILE_EXTENSION = ".xml";
+
     public Producer() throws StorageError {
 
         this(PacRegularStamp.setupWithEnv());
@@ -49,7 +51,7 @@ public class Producer extends Pipeline implements IIssuer {
     @Override
     protected void saveOnPersistance(IStorage st, PacRes pacResult) throws StorageError {
 
-        final String fileName = String.format("%s/%s.%s", st.getTargetName(), pacResult.getContent().getName(), ".xml");
+        final String fileName = String.format("%s/%s.%s", st.getTargetName(), pacResult.getContent().getName(), XML_FILE_EXTENSION);
         byte[] in = pacResult.getContent().getBuffer().toString().getBytes(StandardCharsets.UTF_8);
 
         st.upload("text/xml", in.length, fileName, new ByteArrayInputStream(in));
