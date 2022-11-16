@@ -28,7 +28,7 @@ class FacturaXml {
         _sw = shape();
     }
 
-    public static PacRes render(Request req, IStamp< PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
+    public static <R extends Request> PacRes render(R req, IStamp< PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
 
         FacturaXml ic = new FacturaXml((FacturaRequestDTO) req);
 
