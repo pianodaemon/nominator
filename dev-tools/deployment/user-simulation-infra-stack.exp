@@ -2,7 +2,7 @@
 
 set timeout 3
 
-spawn "./incept-infra-stack.sh" "dummy"
+spawn "./incept-infra-stack.sh" "dummy" "expected-infra-stack.sh"
 expect "Enter the enviroment :"
 send -- "dev\r"
 
