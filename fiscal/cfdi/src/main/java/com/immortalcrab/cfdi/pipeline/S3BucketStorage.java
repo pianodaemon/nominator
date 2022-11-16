@@ -45,7 +45,7 @@ class S3BucketStorage implements IStorage {
         try {
 
             _amazonS3.putObject(
-                    _target.orElseThrow(() -> new StorageError("aws bucket was not fed")),
+                    getTargetName(),
                     fileName, inputStream,
                     objectMetadata);
 
@@ -62,5 +62,10 @@ class S3BucketStorage implements IStorage {
         S3Object object = _amazonS3.getObject(gobj);
 
         return new BufferedInputStream(object.getObjectContent());
+    }
+
+    @Override
+    public String getTargetName() throws StorageError {
+        return _target.orElseThrow(() -> new StorageError("aws bucket was not fed"));
     }
 }
