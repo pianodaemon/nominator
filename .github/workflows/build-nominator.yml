@@ -40,7 +40,11 @@ jobs:
           localstack wait -t 30                     # to become ready before timing out
           echo "Startup complete"
       - name: Run some Tests against LocalStack
+        env:
+          USER_SIMULATION_SKETCH: dev-tools/deployment/user-simulation-infra-stack.exp
         run: |
-          awslocal s3 mb s3://test
+          cd $(dirname $USER_SIMULATION_SKETCH)
+          ./$(basename $USER_SIMULATION_SKETCH)
+          cd -
           awslocal s3 ls
           echo "Test Execution complete!"
