@@ -23,14 +23,13 @@ import org.junit.jupiter.api.BeforeAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junitpioneer.jupiter.SetEnvironmentVariable;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ProducerTest {
 
-    static final String DEFAULT_BUCKET = "datalake-cfdi-subscriber";
-
     FakeBucketService _fbs;
-    IStorage _storage;
-    IStamp _stamper;
+
     private ClassLoader _cloader;
 
     @BeforeAll
@@ -43,8 +42,6 @@ public class ProducerTest {
     void setup() throws StorageError {
 
         _fbs = new FakeBucketService();
-        _storage = new S3BucketStorage(_fbs.engage(), DEFAULT_BUCKET);
-        _stamper = new FakeStamp();
     }
 
     @AfterEach
@@ -53,29 +50,37 @@ public class ProducerTest {
         _fbs.shutdown();
     }
 
+    @SetEnvironmentVariable(key = "BUCKET_PERSISTANCE_TARGET", value = "datalake-cfdi-subscriber")
     @Test
     void verifyProduction() {
 
-        /*
+        IStamp stamper = new FakeStamp();
+
         try {
 
+            IStorage storage = new S3BucketStorage(_fbs.engage(), System.getenv("BUCKET_PERSISTANCE_TARGET"));
             AmazonS3 client = _fbs.getClient().orElseThrow(() -> new StorageError("aws client was never initialized"));
-            client.createBucket(DEFAULT_BUCKET);
+            client.createBucket(storage.getTargetName());
 
             InputStream is = _cloader.getResourceAsStream("jsonreqs/nominareq.json");
             InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
 
-            Pair<IDecodeStep, IXmlStep> pair = new Pair<>(reader-> new NominaRequestDTO(reader), FakeXml::render);
-            Producer producer = new Producer(_stamper, _storage, ImmutableMap.of("fake", pair));
+            Pair<IDecodeStep, IXmlStep> pair = new Pair<>(reader -> new NominaRequestDTO(reader), FakeXml::render);
+            Producer producer = new Producer(stamper, storage, ImmutableMap.of("fake", pair));
 
             producer.doIssue("fake", isr);
 
-            BufferedInputStream buff = _storage.download(DEFAULT_BUCKET + "/RRM" + "5457" + ".xml");
+            BufferedInputStream buff = storage.download(expectedNameFormer(isr, storage.getTargetName()));
             assertTrue(buff.readAllBytes().length > 0);
 
         } catch (StorageError | PipelineError | RequestError | FormatError | DecodeError | IOException ex) {
             assertNotNull(ex);
-        }*/
+        }
     }
 
+    private String expectedNameFormer(InputStreamReader isr, String bucketName) throws RequestError, DecodeError {
+
+        NominaRequestDTO req = new NominaRequestDTO(isr);
+        return String.format("%s/%s/%s.%s", bucketName, req.getDocAttributes().getSerie(), req.getDocAttributes().getFolio(), ".xml");
+    }
 }
