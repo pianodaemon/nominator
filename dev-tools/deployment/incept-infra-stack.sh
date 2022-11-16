@@ -62,7 +62,7 @@ __deploy_stack() {
 
         local deploy_cmd=$(printf 'awslocal cloudformation create-stack --stack-name %s --template-body file://%s  --capabilities CAPABILITY_NAMED_IAM --parameters %s' "${1}" "${temp}" "$(__render_params)")
 
-        $deploy_cmd
+        $deploy_cmd >> $GITHUB_OUTPUT
 }
 
 __deploy_stack $1
