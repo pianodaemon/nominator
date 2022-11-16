@@ -66,3 +66,6 @@ __deploy_stack() {
 }
 
 __deploy_stack $1
+
+# This is only required to verify the just created resources
+[[ ! -z $2 ]] && ./$2
