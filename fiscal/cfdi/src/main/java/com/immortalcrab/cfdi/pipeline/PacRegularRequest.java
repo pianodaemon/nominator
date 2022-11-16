@@ -11,7 +11,7 @@ class PacRegularRequest extends PacReq {
     public PacRegularRequest(String xmlStr) {
 
         super(xmlStr,
-                PacRegularRequest.REGULAR_URI
+                PacRegularRequest.REGULAR_URI, "algo"
         );
     }
 
