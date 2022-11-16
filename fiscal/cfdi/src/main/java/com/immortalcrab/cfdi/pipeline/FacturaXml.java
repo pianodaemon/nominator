@@ -1,7 +1,6 @@
 package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.FormatError;
-import com.immortalcrab.cfdi.error.StorageError;
 import mx.gob.sat.cfd._4.Comprobante;
 import mx.gob.sat.cfd._4.ObjectFactory;
 import mx.gob.sat.sitio_internet.cfd.catalogos.*;
@@ -26,15 +25,6 @@ class FacturaXml {
 
         _req = req;
         _sw = shape();
-    }
-
-    public static PacRes render(Request req, IStamp< PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
-
-        FacturaXml ic = new FacturaXml((FacturaRequestDTO) req);
-
-        PacRegularRequest pacReq = new PacRegularRequest(ic.toString());
-
-        return stamper.impress(pacReq);
     }
 
     @Override
