@@ -46,5 +46,3 @@ jobs:
           cd $(dirname $USER_SIMULATION_SKETCH)
           ./$(basename $USER_SIMULATION_SKETCH)
           cd -
-          awslocal s3 ls
-          echo "Test Execution complete!"
