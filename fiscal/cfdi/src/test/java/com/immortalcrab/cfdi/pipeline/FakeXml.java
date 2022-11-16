@@ -2,42 +2,34 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.FormatError;
 import com.immortalcrab.cfdi.error.StorageError;
-import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 
 public class FakeXml {
 
-    static final String DEFAULT_BUCKET = "datalake-cfdi-subscriber";
+    private final NominaRequestDTO _req;
 
-    private final Request cfdiReq;
-    private final IStorage st;
+    private final StringWriter _sw;
 
-    public static String render(Request cfdiReq, IStamp<PacReqChild, PacResChild> stamper, IStorage st) throws FormatError, StorageError {
+    public FakeXml(NominaRequestDTO req) throws FormatError {
 
-        FakeXml ic = new FakeXml(cfdiReq, st);
-
-        StringWriter cfdi = ic.shape();
-        PacReqChild pacReq = ((FakeStamp) stamper).createPacReq(cfdi.toString(), "nowhere");
-        PacResChild pacRes = stamper.impress(pacReq);
-
-        ic.save(pacRes.getContent(), (String) cfdiReq.getDs().get("serie"), (String) cfdiReq.getDs().get("folio"));
-
-        return pacRes.getReply();
+        _req = req;
+        _sw = shape();
     }
 
-    public FakeXml(Request cfdiReq, IStorage st) {
-        this.cfdiReq = cfdiReq;
-        this.st = st;
+    public static PacRes render(Request req, IStamp<PacReqChild, PacRes> stamper) throws FormatError, StorageError {
+
+        NominaRequestDTO dto = (NominaRequestDTO) req;
+        FakeXml ic = new FakeXml(dto);
+
+        String expectedName = dto.getDocAttributes().getSerie() + dto.getDocAttributes().getFolio();
+        PacReqChild pacReq = ((FakeStamp) stamper).createPacReq(ic.toString(), "nowhere", expectedName);
+
+        return stamper.impress(pacReq);
     }
 
-    private void save(StringWriter sw, String serie, String folio) throws FormatError, StorageError {
-
-        StringBuffer buf = sw.getBuffer();
-        byte[] in = buf.toString().getBytes(StandardCharsets.UTF_8);
-
-        this.st.upload("text/xml", in.length, String.format("%s/%s%s.xml", DEFAULT_BUCKET ,serie, folio), new ByteArrayInputStream(in));
-
+    @Override
+    public String toString() {
+        return _sw.toString();
     }
 
     private StringWriter shape() {
