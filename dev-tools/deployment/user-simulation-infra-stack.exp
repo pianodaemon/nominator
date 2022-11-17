@@ -1,6 +1,6 @@
 #!/usr/bin/expect -f
 
-set timeout 3
+set timeout 13
 
 spawn "./incept-infra-stack.sh" "dummy"
 expect "Enter the enviroment :"
