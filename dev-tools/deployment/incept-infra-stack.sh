@@ -41,7 +41,7 @@ __render_params() {
 }
 
 # Deploys the subscriptor stack
-__deploy_stack_cmd() {
+__deploy_stack() {
 
         __prompt_env
         __prompt_passwd
@@ -62,7 +62,7 @@ __deploy_stack_cmd() {
 
         local deploy_cmd=$(printf 'awslocal cloudformation create-stack --stack-name %s --template-body file://%s  --capabilities CAPABILITY_NAMED_IAM --parameters %s' "${1}" "${temp}" "$(__render_params)")
 
-        echo $deploy_cmd
+        $deploy_cmd
 }
 
-__deploy_stack_cmd $1
+__deploy_stack $1
