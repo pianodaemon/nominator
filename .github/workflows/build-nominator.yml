@@ -43,7 +43,10 @@ jobs:
         env:
           USER_SIMULATION_SKETCH: dev-tools/deployment/user-simulation-infra-stack.exp
         run: |
-          cd $(dirname $USER_SIMULATION_SKETCH) && ./$(basename $USER_SIMULATION_SKETCH) && cd -
+          cd $(dirname $USER_SIMULATION_SKETCH)
+          INCEPT_CMD = ./$(basename $USER_SIMULATION_SKETCH)
+          $INCEPT_CMD >> $GITHUB_OUTPUT
+          cd -
       - name: Execute verification for the pseudo aws stack
         env:
           VERIFICATION_PSEUDO_STACK: dev-tools/deployment/verify-infra-stack.sh
