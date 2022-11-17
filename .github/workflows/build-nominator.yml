@@ -25,3 +25,31 @@ jobs:
         with:
           arguments: build 
           build-root-directory: fiscal
+      - name: Install user input simulation packages
+        run: |
+          sudo apt-get install expect
+      - name: Start LocalStack
+        run: |
+          pip install pip --upgrade
+          pip install pyopenssl --upgrade
+          pip install localstack awscli-local       # install LocalStack cli and awslocal
+          docker pull localstack/localstack         # Make sure to pull the latest version of the image
+          localstack start -d                       # Start LocalStack in the background
+
+          echo "Waiting for LocalStack startup..."  # Wait 30 seconds for the LocalStack container
+          localstack wait -t 30                     # to become ready before timing out
+          echo "Startup complete"
+      - name: Gear up pseudo aws stack
+        env:
+          USER_SIMULATION_SKETCH: dev-tools/deployment/user-simulation-infra-stack.exp
+        run: |
+          cd $(dirname $USER_SIMULATION_SKETCH)
+          expect -d ./$(basename $USER_SIMULATION_SKETCH)
+          cd -
+      - name: Execute verification for the pseudo aws stack
+        env:
+          VERIFICATION_PSEUDO_STACK: dev-tools/deployment/verify-infra-stack.sh
+        run: |
+          cd $(dirname $VERIFICATION_PSEUDO_STACK)
+          ./$(basename $VERIFICATION_PSEUDO_STACK) >> $GITHUB_OUTPUT
+          cd -
