@@ -39,10 +39,8 @@ jobs:
           echo "Waiting for LocalStack startup..."  # Wait 30 seconds for the LocalStack container
           localstack wait -t 30                     # to become ready before timing out
           echo "Startup complete"
-      - name: Run some Tests against LocalStack
+      - name: Gear up pseudo aws stack
         env:
           USER_SIMULATION_SKETCH: dev-tools/deployment/user-simulation-infra-stack.exp
         run: |
-          cd $(dirname $USER_SIMULATION_SKETCH)
-          ./$(basename $USER_SIMULATION_SKETCH)
-          cd -
+          cd $(dirname $USER_SIMULATION_SKETCH) && ./$(basename $USER_SIMULATION_SKETCH) cd -
