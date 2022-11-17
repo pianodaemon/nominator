@@ -16,13 +16,13 @@
     "metodo_pago": "PUE",
     "lugar_expedicion": "67100",
     "emisor": {
-        "rfc": "RRM031001QE7",
-        "nombre": "RR MEDICA S.A. DE C.V.",
+        "rfc": "RPM061003QE6",
+        "nombre": "PP DOC S.A. DE C.V.",
         "regimen_fiscal": "601"
     },
     "receptor": {
         "rfc": "IMS421231I45",
-        "nombre": "INSTITUTO MEXICANO DEL SEGURO SOCIAL/ HOSPITAL GENERAL DE ZONA #12",
+        "nombre": "INSTITUTO MEXICANO DEL SEGURO SOCIAL",
         "domicilio_fiscal_receptor": "",
         "residencia_fiscal": "",
         "regimen_fiscal_receptor": "",
@@ -31,11 +31,11 @@
     "conceptos": [
         {
             "clave_prod_serv": "42181606",
-            "no_identificacion": "379.107.0109.00.01",
+            "no_identificacion": "34855",
             "cantidad": 1.0,
             "clave_unidad": "H87",
             "unidad": "",
-            "descripcion": "379.107.0109.00.01 BRAZALETE ADULTO ESTANDAR. MARCA: DATEX-OHMEDA. MODELO: AESTIVA. NUMERO DE CATALOGO: 572435.",
+            "descripcion": "ITEM VENDIDO",
             "valor_unitario": 100.0,
             "importe": 100.0,
             "descuento": 0.0,
