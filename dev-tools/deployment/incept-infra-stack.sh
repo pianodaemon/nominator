@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # XXX: Before run this
 # Don't forget to set AWS_PROFILE with the respective entitled profile
