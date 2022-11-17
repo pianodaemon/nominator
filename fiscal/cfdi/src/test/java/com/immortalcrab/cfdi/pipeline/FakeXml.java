@@ -16,7 +16,7 @@ public class FakeXml {
         _sw = shape();
     }
 
-    public static PacRes render(Request req, IStamp<PacReqChild, PacRes> stamper) throws FormatError, StorageError {
+    public static <R extends Request> PacRes render(R req, IStamp<PacReqChild, PacRes> stamper) throws FormatError, StorageError {
 
         NominaRequestDTO dto = (NominaRequestDTO) req;
         FakeXml ic = new FakeXml(dto);

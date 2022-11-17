@@ -13,6 +13,8 @@ import org.javatuples.Pair;
 
 public class Producer extends Pipeline implements IIssuer {
 
+    private static final String XML_FILE_EXTENSION = ".xml";
+
     public Producer() throws StorageError {
 
         this(PacRegularStamp.setupWithEnv());
@@ -30,8 +32,8 @@ public class Producer extends Pipeline implements IIssuer {
                 stamper,
                 storage,
                 Map.of(
-                        "fac", new Pair<>(reader -> new FacturaRequestDTO(reader), FacturaXml::render),
-                        "nom", new Pair<>(reader -> new NominaRequestDTO(reader), NominaXml::render))
+                        "fac", new Pair<>(reader -> new FacturaRequestDTO(reader), Wiring::fac),
+                        "nom", new Pair<>(reader -> new NominaRequestDTO(reader), Wiring::nom))
         );
     }
 
@@ -49,9 +51,24 @@ public class Producer extends Pipeline implements IIssuer {
     @Override
     protected void saveOnPersistance(IStorage st, PacRes pacResult) throws StorageError {
 
-        final String fileName = String.format("%s/%s.%s", st.getTargetName(), pacResult.getContent().getName(), ".xml");
+        final String fileName = String.format("%s/%s.%s", st.getTargetName(), pacResult.getContent().getName(), XML_FILE_EXTENSION);
         byte[] in = pacResult.getContent().getBuffer().toString().getBytes(StandardCharsets.UTF_8);
 
         st.upload("text/xml", in.length, fileName, new ByteArrayInputStream(in));
+    }
+
+    public static class Wiring {
+
+        public static <R extends Request> PacRes fac(R req, IStamp<PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
+
+            FacturaXml ic = new FacturaXml((FacturaRequestDTO) req);
+            return stamper.impress(new PacRegularRequest(ic.toString()));
+        }
+
+        public static <R extends Request> PacRes nom(R req, IStamp<PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
+
+            NominaXml ic = new NominaXml((NominaRequestDTO) req);
+            return stamper.impress(new PacRegularRequest(ic.toString()));
+        }
     }
 }

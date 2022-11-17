@@ -1,6 +1,5 @@
 package com.immortalcrab.cfdi.pipeline;
 
-import com.immortalcrab.cfdi.error.StorageError;
 import com.immortalcrab.cfdi.error.FormatError;
 
 import mx.gob.sat.cfd._4.Comprobante;
@@ -43,14 +42,6 @@ class NominaXml {
 
         _req = req;
         _sw = shape();
-    }
-
-    public static PacRes render(Request req, IStamp< PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
-
-        NominaXml ic = new NominaXml((NominaRequestDTO) req);
-
-        PacRegularRequest pacReq = new PacRegularRequest(ic.toString());
-        return stamper.impress(pacReq);
     }
 
     @Override
