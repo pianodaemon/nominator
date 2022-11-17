@@ -109,9 +109,9 @@ class FacturaRequestDTO extends JsonRequest {
 
         try {
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "emisor");
-            _emisor.setRfc((String) dic.get("rfc"));
-            _emisor.setNombre((String) dic.get("nombre"));
-            _emisor.setRegimenFiscal((String) dic.get("regimen_fiscal"));
+            _emisor.setRfc(LegoAssembler.obtainObjFromKey(dic, "rfc"));
+            _emisor.setNombre(LegoAssembler.obtainObjFromKey(dic, "nombre"));
+            _emisor.setRegimenFiscal(LegoAssembler.obtainObjFromKey(dic, "regimen_fiscal"));
 
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Emisor tag is missing");
@@ -124,12 +124,12 @@ class FacturaRequestDTO extends JsonRequest {
         try {
 
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "receptor");
-            _receptor.setRfc((String) dic.get("rfc"));
-            _receptor.setNombre((String) dic.get("nombre"));
-            _receptor.setDomicilioFiscalReceptor((String) dic.get("domicilio_fiscal_receptor"));
-            _receptor.setResidenciaFiscal((String) dic.get("residencia_fiscal"));
-            _receptor.setRegimenFiscalReceptor((String) dic.get("regimen_fiscal_receptor"));
-            _receptor.setUsoCfdi((String) dic.get("uso_cfdi"));
+            _receptor.setRfc(LegoAssembler.obtainObjFromKey(dic, "rfc"));
+            _receptor.setNombre(LegoAssembler.obtainObjFromKey(dic, "nombre"));
+            _receptor.setDomicilioFiscalReceptor(LegoAssembler.obtainObjFromKey(dic, "domicilio_fiscal_receptor"));
+            _receptor.setResidenciaFiscal(LegoAssembler.obtainObjFromKey(dic, "residencia_fiscal"));
+            _receptor.setRegimenFiscalReceptor(LegoAssembler.obtainObjFromKey(dic, "regimen_fiscal_receptor"));
+            _receptor.setUsoCfdi(LegoAssembler.obtainObjFromKey(dic, "uso_cfdi"));
 
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of Receptor tag is missing");
@@ -213,11 +213,11 @@ class FacturaRequestDTO extends JsonRequest {
         try {
             Map<String, Object> dic = LegoAssembler.obtainMapFromKey(this.getDs(), "impuestos");
             {
-                Double d = (Double) dic.get("total_impuestos_retenidos");
+                Double d = LegoAssembler.obtainObjFromKey(dic, "total_impuestos_retenidos");
                 _impuestos.setTotalImpuestosRetenidos(new BigDecimal(d.toString()));
             }
             {
-                Double d = (Double) dic.get("total_impuestos_trasladados");
+                Double d = LegoAssembler.obtainObjFromKey(dic, "total_impuestos_trasladados");
                 _impuestos.setTotalImpuestosTrasladados(new BigDecimal(d.toString()));
             }
 
