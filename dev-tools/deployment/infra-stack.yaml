@@ -1,17 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Create AWS Infra required for this project
 
-Metadata:
-  AWS::CloudFormation::Interface:
-    ParameterGroups:
-      - Label:
-          default: "Subscriptor's configuration"
-        Parameters:
-          - SubscriptorPwd
-    ParameterLabels:
-      SubscriptorPwd:
-        default: "Password for this subscriptor account"
-
 Resources:
   CfdiEventBus:
     Type: AWS::Events::EventBus
@@ -46,6 +35,8 @@ Resources:
     Type: AWS::IAM::User
     Properties:
       UserName: !Sub ${AWS::StackName}
+      LoginProfile:
+        Password: !Ref SubscriptorPwd
       Policies:
         - PolicyName: !Sub cfdi-data-access-${AWS::StackName}
           PolicyDocument:
