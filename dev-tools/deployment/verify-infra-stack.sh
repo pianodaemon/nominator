@@ -17,6 +17,12 @@ __expected_queue() {
     [[ "1" -eq $number_found ]]
 }
 
+__expected_event_bus() {
+
+    local number_found=$(jq '.EventBuses[0].Name' <(awslocal events list-event-buses --name-prefix  $1) | wc -l)
+    [[ "1" -eq $number_found ]]
+}
+
 sleep 6
 
 __deployment_verification $SUBSCRIPTOR
@@ -36,5 +42,11 @@ fi
 __expected_queue "cfdi-inqueue-${SUBSCRIPTOR}"
 if [[ $? != 0 ]]; then
     echo "Expected queue was not found"
+    exit 1
+fi
+
+__expected_event_bus "cfdi-eventbus-${SUBSCRIPTOR}"
+if [[ $? != 0 ]]; then
+    echo "Expected event bus was not found"
     exit 1
 fi
