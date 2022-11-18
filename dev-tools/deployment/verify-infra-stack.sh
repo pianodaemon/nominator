@@ -23,6 +23,12 @@ __expected_event_bus() {
     [[ "1" -eq $number_found ]]
 }
 
+__expected_lambda() {
+
+     local number_found=$(jq '.Code | length' <(awslocal lambda get-function --function-name $1))
+    [[ "1" -eq $number_found ]]
+}
+
 sleep 6
 
 __deployment_verification $SUBSCRIPTOR
@@ -48,5 +54,11 @@ fi
 __expected_event_bus "cfdi-eventbus-${SUBSCRIPTOR}"
 if [[ $? != 0 ]]; then
     echo "Expected event bus was not found"
+    exit 1
+fi
+
+ __expected_lambda "cfdi-factoryfunc-${SUBSCRIPTOR}"
+if [[ $? != 0 ]]; then
+    echo "Expected lambda was not found"
     exit 1
 fi
