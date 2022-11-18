@@ -71,6 +71,7 @@ __deployment_stack() {
 
 __deployment_verification() {
 
+    sleep 10
     local verify_status=$(jq ".Stacks[0].StackStatus" \
 	    <($(printf 'awslocal cloudformation describe-stacks --stack-name %s' "${1}"))  | sed -e 's/^"//' -e 's/"$//')
 
