@@ -46,8 +46,6 @@ Resources:
     Type: AWS::IAM::User
     Properties:
       UserName: !Sub ${AWS::StackName}
-      LoginProfile:
-        Password: !Ref SubscriptorPwd
       Policies:
         - PolicyName: !Sub cfdi-data-access-${AWS::StackName}
           PolicyDocument:
@@ -120,36 +118,6 @@ Resources:
             print(event)
             message = 'Hello Lambda World!'
             return message
-    DependsOn:
-       - Subscriptor
-
-  CfdiFactoryFuncPermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName: CfdiFactoryFunc.Arn
-      Action: lambda:InvokeFunction
-      Principal: sqs.amazonaws.com
-      SourceArn: !GetAtt CfdiInQueue.Arn
-
-  CfdiFactorySqs:
-    Type: AWS::Lambda::EventSourceMapping
-    Properties:
-      Enabled: true
-      EventSourceArn: !GetAtt CfdiInQueue.Arn
-      FunctionName: !GetAtt CfdiFactoryFunc.Arn
-
-  CfdiFactoryRule:
-    Type: AWS::Events::Rule
-    Properties:
-      Description: Factory function rule
-      EventBusName: !Ref CfdiEventBus
-      EventPattern:
-        account: [!Ref AWS::AccountId]
-      Name: !Sub cfdi-factoryrule-${AWS::StackName}
-      State: ENABLED
-      Targets:
-        - Arn: !GetAtt CfdiInQueue.Arn
-          Id: "factoryrule"
 
 Parameters:
   SubscriptorPwd:
@@ -166,3 +134,9 @@ Parameters:
       - test
       - prod
     Description: Environment in which the application will be deployed. Allowed values [dev, test, prod]
+
+Outputs:
+  AccessKeyID:
+    Value: !Ref SubscriptorKey
+  SecretAccessKey:
+    Value: !GetAtt SubscriptorKey.SecretAccessKey
