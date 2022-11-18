@@ -110,6 +110,14 @@ Resources:
             message = 'Hello Lambda World!'
             return message
 
+  CfdiFactoryFuncPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt CfdiFactoryFunc.Arn
+      Action: lambda:InvokeFunction
+      Principal: sqs.amazonaws.com
+      SourceArn: !GetAtt CfdiInQueue.Arn
+
 Parameters:
   SubscriptorPwd:
     NoEcho: true
