@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/4" xmlns:nomina12="http://www.sat.gob.mx/nomina12" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="4.0" Serie="RRM" Folio="5457" Fecha="2022-10-26T20:00:18" NoCertificado="00001000000413586324" Certificado="MIIGVzCCBD+gAwIBAgIUMDAwMDEwMDAwMDA0MTM1ODYzMjQwDQYJKoZIhvcNAQELBQAwggGyMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29kc0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVycmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMV0wWwYJKoZIhvcNAQkCDE5SZXNwb25zYWJsZTogQWRtaW5pc3RyYWNpw7NuIENlbnRyYWwgZGUgU2VydmljaW9zIFRyaWJ1dGFyaW9zIGFsIENvbnRyaWJ1eWVudGUwHhcNMTkwMjIwMTU0NjAxWhcNMjMwMjIwMTU0NjAxWjCB9zExMC8GA1UEAxMoVFJBTlNQT1JURSBJTlRFUk5BQ0lPTkFMIFJPUVVJTiBTQSBERSBDVjExMC8GA1UEKRMoVFJBTlNQT1JURSBJTlRFUk5BQ0lPTkFMIFJPUVVJTiBTQSBERSBDVjExMC8GA1UEChMoVFJBTlNQT1JURSBJTlRFUk5BQ0lPTkFMIFJPUVVJTiBTQSBERSBDVjElMCMGA1UELRMcVElSOTgxMjIzQVgzIC8gUVVCUjQ3MTIyN1VTNjEeMBwGA1UEBRMVIC8gUVVCUjQ3MTIyN0hERk5OQjAwMRUwEwYDVQQLEwxOVUVWTyBMQVJFRE8wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCBQ2gJ+ucsvQJhwXQUwpw6Uhr8VDIl2V2UXBaeNd6IOk/X9jFyYAO9B2ctnlm5VPwOwbLuSsMha/cOKj6+yK3Cv8w3lpo6c97W9+OWo/DhVxPFebVgMsTDeU9H0kHzQ2RIbYSvdZiwTM2drxcSbU33l/lzLQngq24eXKIVE/P77cQc4sn55ZmgbicN0l7XYiOhCS+KOhDZ2CdpxKKycSESBCzIVnPGt7/URp297/n1+gR1rlQaDbxPtoy0SG9cOVgSBCcbPpy6DP2WFKSaP8LQwHA9qMdkoczEbh8JgY+KVBkWWJt5kG3p/1Rn6VdL7s+kb7s7CqYGouCYZsdQiVXZAgMBAAGjHTAbMAwGA1UdEwEB/wQCMAAwCwYDVR0PBAQDAgbAMA0GCSqGSIb3DQEBCwUAA4ICAQA8GlcBz4ts/im4HFi5M9bepyA3BikzwBCEV1OBXPZ1GWQhOvAAO8Y2jvm6jmvDw9WeJQpHzHcJqTluODn+T1eoqpsZnFxpVaFvxERPZvbrl3M8gTJdjZ9S8uoXtR0SIHDmigtCiZJozwo1wedD8oC5HRHoXXycFGLEJLM20jThaWwkgVdRGNGzNK+dyFwtkOyruHjvxFWXp++NKPedEJqXyzDVT4aYywtkYQy2WBtjytRjWPX0oHi8Kd22Mm3pnEjsgrtP2ZmQ3UfCMVPfFp0ZPSz9S8YpkRwQ2EJVuqG1PEnIaq1AaoH0EYVYIbBzJdxjigHp0lZTAbOV1D1zqpZ1blHZ+oFwCSECtCBcAhafqFCQnRVFF4DcMJWR669zZmT00a8+bh3TCvvO2/CJzwyv7wgje9Rx9KNDMe5PIUuIBj0dLEIiRSEJPfWutmumMwuYHCbBGTkVv2aqzrdRvi8DAgBitGPxghRKGYcA4DBUOYZhYPysUwxtbfRAnzhSjS0yEFUIbMCem4t/dsIHryOsu4ZBbL6eEZSxynGy+T/mU1EPOM3UTwP0ln+EBMbEjRjX0O5UKeBOwxT2RRNy3tWsPCbjtcWqSbZMxxUfWYieH1VcZp/PtK0FtF1x5+/aRgJCHRebKiOBO1u/XWvyoG7w5M1YN/irhnwMFrD1OF2DUQ==" SubTotal="7185.82" Descuento="1185.82" Moneda="MXN" Total="6000.0" TipoDeComprobante="N" Exportacion="01" MetodoPago="PUE" LugarExpedicion="67100" xsi:schemaLocation="http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xsd">
+    <cfdi:Emisor Rfc="RRM031001QE7" Nombre="DOCTOS UNIDOS S.A. DE C.V." RegimenFiscal="601" />
+    <cfdi:Receptor Rfc="TARG700802KZ5" Nombre="JOSE JUAN RAMIREZ SANCHEZ" DomicilioFiscalReceptor="45625" RegimenFiscalReceptor="605" UsoCFDI="CN01" />
+    <cfdi:Conceptos>
+        <cfdi:Concepto ClaveProdServ="84111505" Cantidad="1" ClaveUnidad="ACT" Descripcion="Pago de nómina" ValorUnitario="7185.82" Importe="7185.82" Descuento="1185.82" ObjetoImp="01" />
+    </cfdi:Conceptos>
+    <cfdi:Complemento>
+        <nomina12:Nomina Version="1.2" TipoNomina="O" FechaPago="2022-10-25" FechaInicialPago="2022-10-16" FechaFinalPago="2022-10-31" NumDiasPagados="15" TotalPercepciones="7185.82" TotalDeducciones="1185.82">
+            <nomina12:Emisor RegistroPatronal="D4562908100" />
+            <nomina12:Receptor Curp="MOBO700225HDFNRM09" NumSeguridadSocial="68742002174" FechaInicioRelLaboral="2021-10-31" Antigüedad="P52W" TipoContrato="01" TipoRegimen="02" NumEmpleado="1520" RiesgoPuesto="2" PeriodicidadPago="04" SalarioDiarioIntegrado="523.34" ClaveEntFed="MEX" />
+            <nomina12:Percepciones TotalSueldos="7185.82" TotalGravado="7185.82" TotalExento="0.00">
+                <nomina12:Percepcion TipoPercepcion="001" Clave="001" Concepto="SUELDO" ImporteGravado="7185.82" ImporteExento="0.00" />
+            </nomina12:Percepciones>
+            <nomina12:Deducciones TotalOtrasDeducciones="198.20" TotalImpuestosRetenidos="987.62">
+                <nomina12:Deduccion TipoDeduccion="001" Clave="001" Concepto="IMSS" Importe="198.20" />
+                <nomina12:Deduccion TipoDeduccion="002" Clave="002" Concepto="ISR" Importe="987.62" />
+            </nomina12:Deducciones>
+            <nomina12:OtrosPagos>
+                <nomina12:OtroPago TipoOtroPago="002" Clave="4455" Concepto="otro paguito" Importe="0.00">
+                    <nomina12:SubsidioAlEmpleo SubsidioCausado="0.00" />
+                </nomina12:OtroPago>
+            </nomina12:OtrosPagos>
+        </nomina12:Nomina>
+    </cfdi:Complemento>
+</cfdi:Comprobante>
