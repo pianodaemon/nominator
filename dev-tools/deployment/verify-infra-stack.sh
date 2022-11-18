@@ -8,7 +8,7 @@ __deployment_verification() {
     local verify_status=$(jq ".Stacks[0].StackStatus" \
 	    <($(printf 'awslocal cloudformation describe-stacks --stack-name %s' "${1}"))  | sed -e 's/^"//' -e 's/"$//')
 
-    [[ "CREATE_COMPLETE" == $verify_status ]]
+    [[ "CREATE_COMPLETE" == $verify_status ]] || [[ "UPDATE_COMPLETE" == $verify_status ]]
 }
 
 __expected_queue() {
