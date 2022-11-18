@@ -1,45 +1,38 @@
 {
-    "version": "4.0",
     "serie": "RRM",
     "folio": "5457",
-    "fecha": "2022-10-11T20:37:18",
+    "fecha": "2022-11-17T20:00:30",
     "forma_pago": "03",
-    "no_certificado": "00001000000413586324",
-    "condiciones_de_pago": "",
     "subtotal": 100.0,
     "descuento": 0.0,
     "moneda": "MXN",
-    "tipo_cambio": 18.2151,
     "total": 116.0,
     "tipo_de_comprobante": "I",
     "exportacion": "01",
     "metodo_pago": "PUE",
     "lugar_expedicion": "67100",
     "emisor": {
-        "rfc": "RPM061003QE6",
-        "nombre": "PP DOC S.A. DE C.V.",
+        "rfc": "RRM031001QE7",
+        "nombre": "DOCTOS NACIONALES S.A. DE C.V.",
         "regimen_fiscal": "601"
     },
     "receptor": {
         "rfc": "IMS421231I45",
         "nombre": "INSTITUTO MEXICANO DEL SEGURO SOCIAL",
-        "domicilio_fiscal_receptor": "",
-        "residencia_fiscal": "",
-        "regimen_fiscal_receptor": "",
+        "domicilio_fiscal_receptor": "45625",
+        "regimen_fiscal_receptor": "603",
         "uso_cfdi": "G01"
     },
     "conceptos": [
         {
             "clave_prod_serv": "42181606",
-            "no_identificacion": "34855",
             "cantidad": 1.0,
             "clave_unidad": "H87",
-            "unidad": "",
-            "descripcion": "ITEM VENDIDO",
+            "descripcion": "ITEM A BUEN PRECIO",
             "valor_unitario": 100.0,
             "importe": 100.0,
             "descuento": 0.0,
-            "objeto_imp": "",
+            "objeto_imp": "02",
             "traslados": [
                 {
                     "base": 100.0,
@@ -58,6 +51,7 @@
         "retenciones": [],
         "traslados": [
             {
+                "base": 100.0,
                 "impuesto": "002",
                 "tipo_factor": "Tasa",
                 "tasa_o_cuota": 0.160000,
