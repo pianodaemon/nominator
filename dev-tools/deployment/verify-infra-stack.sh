@@ -29,6 +29,12 @@ __expected_lambda() {
     [[ "1" -eq $number_found ]]
 }
 
+__expected_policy() {
+
+    local policy_found=$(jq '.PolicyNames[]' <(awslocal iam list-user-policies --user-name dummy) | sed -e 's/^"//' -e 's/"$//' | grep $1)
+    [[ $1 == $policy_found ]]
+}
+
 sleep 6
 
 __deployment_verification $SUBSCRIPTOR
@@ -45,18 +51,17 @@ fi
     done
 }
 
-# Verification for expected policies
-{
-    expected_policies=(cfdi-data-access cfdi-inqueue-access)
-    for b in "${expected_policies[@]}"; do
-        awslocal iam list-user-policies --output text --user-name ${SUBSCRIPTOR}  \
-            | awk '{print $2}' | grep "${b}-${SUBSCRIPTOR}"
-        if [[ $? != 0 ]]; then
-            echo "Expected policy was not found"
-            exit 1
-        fi
-    done
-}
+__expected_policy "cfdi-data-access-${SUBSCRIPTOR}"
+if [[ $? != 0 ]]; then
+    echo "Expected policy was not found"
+    exit 1
+fi
+
+__expected_policy "cfdi-inqueue-access-${SUBSCRIPTOR}"
+if [[ $? != 0 ]]; then
+    echo "Expected policy was not found"
+    exit 1
+fi
 
 __expected_queue "cfdi-inqueue-${SUBSCRIPTOR}"
 if [[ $? != 0 ]]; then
