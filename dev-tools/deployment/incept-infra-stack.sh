@@ -41,7 +41,7 @@ __render_params() {
 }
 
 # Deploys the subscriptor stack
-__deploy_stack() {
+__deployment_stack() {
 
         __prompt_env
         __prompt_passwd
@@ -63,6 +63,21 @@ __deploy_stack() {
         local deploy_cmd=$(printf 'awslocal cloudformation create-stack --stack-name %s --template-body file://%s  --capabilities CAPABILITY_NAMED_IAM --parameters %s' "${1}" "${temp}" "$(__render_params)")
 
         $deploy_cmd
+	local verify_cmd=$(printf 'awslocal cloudformation describe-stacks --stack-name %s | jq ".Stacks[0].StackStatus"' "${1}")
+        
+	[[ "CREATE_COMPLETE" == $($verify_cmd | sed -e 's/^"//' -e 's/"$//') ]]
+	
 }
 
-__deploy_stack $1
+__deployment_verification() {
+
+    local verify_status=$(jq ".Stacks[0].StackStatus" \
+	    <($(printf 'awslocal cloudformation describe-stacks --stack-name %s' "${1}"))  | sed -e 's/^"//' -e 's/"$//')
+
+    [[ "CREATE_COMPLETE" != $verify_status ]]    &&  \
+	    echo "Infra stack deployment failed" &&  \
+	    exit 1
+}
+
+__deployment_stack $1
+__deployment_verification $1
