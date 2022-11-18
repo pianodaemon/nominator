@@ -25,7 +25,7 @@ __expected_event_bus() {
 
 __expected_lambda() {
 
-     local number_found=$(jq '.Code | length' <(awslocal lambda get-function --function-name $1))
+    local number_found=$(jq '.Code | length' <(awslocal lambda get-function --function-name $1))
     [[ "1" -eq $number_found ]]
 }
 
@@ -42,6 +42,18 @@ fi
     expected_buckets=(cfdi-datalake cfdi-datares)
     for b in "${expected_buckets[@]}"; do
         awslocal s3 ls s3://${b}-${SUBSCRIPTOR}
+    done
+}
+
+# Verification for expected policies
+{
+    expected_policies=(cfdi-data-access cfdi-inqueue-access)
+    for b in "${expected_policies[@]}"; do
+        grep "${b}-${SUBSCRIPTOR}" <(awslocal iam list-user-policies --output text --user-name ${SUBSCRIPTOR})
+        if [[ $? != 0 ]]; then
+            echo "Expected policy was not found"
+            exit 1
+        fi
     done
 }
 
