@@ -65,16 +65,4 @@ __deployment_stack() {
         $deploy_cmd
 }
 
-__deployment_verification() {
-
-    sleep 10
-    local verify_status=$(jq ".Stacks[0].StackStatus" \
-	    <($(printf 'awslocal cloudformation describe-stacks --stack-name %s' "${1}"))  | sed -e 's/^"//' -e 's/"$//')
-
-    [[ "CREATE_COMPLETE" != $verify_status ]]    &&  \
-	    echo "Infra stack deployment failed" &&  \
-	    exit 1
-}
-
 __deployment_stack $1
-__deployment_verification $1
