@@ -13,6 +13,22 @@ Resources:
       FifoQueue: true
       QueueName: !Sub cfdi-inqueue-${AWS::StackName}.fifo
 
+  CfdiInQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref CfdiInQueue
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action:
+              - SQS:SendMessage
+              - SQS:ReceiveMessage
+              - SQS:DeleteMessage
+              - SQS:GetQueueAttributes
+            Resource: !GetAtt CfdiInQueue.Arn
+
   CfdiDataLake:
     Type: AWS::S3::Bucket
     Properties:
@@ -117,6 +133,13 @@ Resources:
       Action: lambda:InvokeFunction
       Principal: sqs.amazonaws.com
       SourceArn: !GetAtt CfdiInQueue.Arn
+
+  CfdiFactorySqs:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      Enabled: true
+      EventSourceArn: !GetAtt CfdiInQueue.Arn
+      FunctionName: !GetAtt CfdiFactoryFunc.Arn
 
 Parameters:
   SubscriptorPwd:
