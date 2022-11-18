@@ -49,7 +49,8 @@ fi
 {
     expected_policies=(cfdi-data-access cfdi-inqueue-access)
     for b in "${expected_policies[@]}"; do
-        grep "${b}-${SUBSCRIPTOR}" <(awslocal iam list-user-policies --output text --user-name ${SUBSCRIPTOR})
+        awslocal iam list-user-policies --output text --user-name ${SUBSCRIPTOR}  \
+            | awk '{print $2}' | grep "${b}-${SUBSCRIPTOR}"
         if [[ $? != 0 ]]; then
             echo "Expected policy was not found"
             exit 1
