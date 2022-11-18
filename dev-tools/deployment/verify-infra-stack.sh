@@ -26,7 +26,7 @@ __expected_event_bus() {
 __expected_lambda() {
 
     local number_found=$(jq '.Code | length' <(awslocal lambda get-function --function-name $1))
-    [[ "1" -eq $number_found ]]
+    [[ $number_found -gt "0" ]]
 }
 
 __expected_policy() {
