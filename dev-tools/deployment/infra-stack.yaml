@@ -126,7 +126,7 @@ Resources:
   CfdiFactoryFuncPermission:
     Type: AWS::Lambda::Permission
     Properties:
-      FunctionName: CfdiFactoryFunc.Arn
+      FunctionName: !GetAtt CfdiFactoryFunc.Arn
       Action: lambda:InvokeFunction
       Principal: sqs.amazonaws.com
       SourceArn: !GetAtt CfdiInQueue.Arn
