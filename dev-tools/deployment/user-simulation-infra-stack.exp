@@ -7,6 +7,6 @@ expect "Enter the enviroment :"
 send -- "dev\r"
 
 expect "Enter the password :"
-send -- "1234qwer\r"
+send -- "FreeBSD&12345\r"
 
 expect eof
