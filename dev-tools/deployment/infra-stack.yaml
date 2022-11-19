@@ -76,6 +76,14 @@ Resources:
               Resource:
                 - !Sub arn:aws:sqs:::${CfdiInQueue}
 
+  SubscriptorKey:
+      Type: AWS::IAM::AccessKey
+      Properties:
+        Status: Active
+        UserName: !Ref Subscriptor
+      DependsOn:
+        - Subscriptor
+
   CfdiFactoryRole:
     Type: AWS::IAM::Role
     Properties:
@@ -156,3 +164,9 @@ Parameters:
       - test
       - prod
     Description: Environment in which the application will be deployed. Allowed values [dev, test, prod]
+
+Outputs:
+  AccessKeyID:
+    Value: !Ref SubscriptorKey
+  SecretAccessKey:
+    Value: !GetAtt SubscriptorKey.SecretAccessKey
