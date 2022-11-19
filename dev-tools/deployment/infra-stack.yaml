@@ -24,6 +24,22 @@ Resources:
       FifoQueue: true
       QueueName: !Sub cfdi-inqueue-${AWS::StackName}.fifo
 
+  CfdiInQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref CfdiInQueue
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action:
+              - SQS:SendMessage
+              - SQS:ReceiveMessage
+              - SQS:DeleteMessage
+              - SQS:GetQueueAttributes
+            Resource: !GetAtt CfdiInQueue.Arn
+
   CfdiDataLake:
     Type: AWS::S3::Bucket
     Properties:
@@ -70,6 +86,14 @@ Resources:
               - sqs:*
               Resource:
                 - !Sub arn:aws:sqs:::${CfdiInQueue}
+
+  SubscriptorKey:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      Status: Active
+      UserName: !Ref Subscriptor
+    DependsOn:
+      - Subscriptor
 
   CfdiFactoryRole:
     Type: AWS::IAM::Role
@@ -120,9 +144,6 @@ Resources:
             print(event)
             message = 'Hello Lambda World!'
             return message
-    DependsOn:
-       - Subscriptor
-
   CfdiFactoryFuncPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -166,3 +187,9 @@ Parameters:
       - test
       - prod
     Description: Environment in which the application will be deployed. Allowed values [dev, test, prod]
+
+Outputs:
+  AccessKeyID:
+    Value: !Ref SubscriptorKey
+  SecretAccessKey:
+    Value: !GetAtt SubscriptorKey.SecretAccessKey
