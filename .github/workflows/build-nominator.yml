@@ -45,7 +45,8 @@ jobs:
         run: |
           cd $(dirname $USER_SIMULATION_SKETCH)
           expect -d ./$(basename $USER_SIMULATION_SKETCH)
-          cd -
+          sed -i 's/create-stack/update-stack/g' incept-infra-stack.sh  # XXX WORKAROUND
+          expect -d ./$(basename $USER_SIMULATION_SKETCH)               # At retry with update we expect to solve
       - name: Execute verification for the pseudo aws stack
         env:
           VERIFICATION_PSEUDO_STACK: dev-tools/deployment/verify-infra-stack.sh
