@@ -41,7 +41,7 @@ __render_params() {
 }
 
 # Deploys the subscriptor stack
-__deploy_stack() {
+__deployment_stack() {
 
         __prompt_env
         __prompt_passwd
@@ -65,4 +65,4 @@ __deploy_stack() {
         $deploy_cmd
 }
 
-__deploy_stack $1
+__deployment_stack $1
