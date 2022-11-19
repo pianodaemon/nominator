@@ -151,6 +151,21 @@ Resources:
       EventSourceArn: !GetAtt CfdiInQueue.Arn
       FunctionName: !GetAtt CfdiFactoryFunc.Arn
 
+  CfdiFactoryRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Factory function rule
+      EventBusName: !Ref CfdiEventBus
+      EventPattern:
+        account: [!Ref AWS::AccountId]
+      Name: !Sub cfdi-factoryrule-${AWS::StackName}
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt CfdiInQueue.Arn
+          Id: "factoryrule"
+          SqsParameters:
+            MessageGroupId: cfdiMsgGrpId # Tag that specifies the messages belong to a specific message group
+
 Parameters:
   SubscriptorPwd:
     NoEcho: true
