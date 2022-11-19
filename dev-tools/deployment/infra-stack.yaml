@@ -144,6 +144,9 @@ Resources:
             print(event)
             message = 'Hello Lambda World!'
             return message
+    DependsOn:
+      - Subscriptor
+
   CfdiFactoryFuncPermission:
     Type: AWS::Lambda::Permission
     Properties:
