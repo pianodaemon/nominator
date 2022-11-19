@@ -77,12 +77,12 @@ Resources:
                 - !Sub arn:aws:sqs:::${CfdiInQueue}
 
   SubscriptorKey:
-      Type: AWS::IAM::AccessKey
-      Properties:
-        Status: Active
-        UserName: !Ref Subscriptor
-      DependsOn:
-        - Subscriptor
+    Type: AWS::IAM::AccessKey
+    Properties:
+      Status: Active
+      UserName: !Ref Subscriptor
+    DependsOn:
+      - Subscriptor
 
   CfdiFactoryRole:
     Type: AWS::IAM::Role
