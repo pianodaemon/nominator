@@ -32,7 +32,9 @@ Resources:
         - Effect: Allow
           Principal:
             Service: events.amazonaws.com
-          Action: SQS:SendMessage
+          Action:
+            - SQS:SendMessage
+            - SQS:ReceiveMessage
           Resource:  !GetAtt CfdiInQueue.Arn
 
   CfdiDataLake:
@@ -110,9 +112,7 @@ Resources:
               - logs:*
               Resource:
                 - !Sub arn:aws:logs:*:*:*
-        - PolicyName: !Sub cfdi-inqueue-access-${AWS::StackName}
           PolicyDocument:
-            Version: '2012-10-17'
             Statement:
             - Effect: Allow
               Action:
@@ -120,8 +120,7 @@ Resources:
               - sqs:DeleteMessage
               - sqs:GetQueueAttributes
               - sqs:ChangeMessageVisibility
-              Resource:
-                - !Sub arn:aws:sqs:::${CfdiInQueue}
+              Resource: !Sub ${CfdiInQueue.Arn}
 
   CfdiFactoryFunc:
     Type: AWS::Lambda::Function
@@ -141,7 +140,7 @@ Resources:
               payload = record["body"]
               print(str(payload))
     DependsOn:
-      - Subscriptor
+      - CfdiFactoryRole
 
   CfdiFactoryFuncLogGroup:
     Type: AWS::Logs::LogGroup
@@ -180,7 +179,7 @@ Resources:
           - 'cfdi-issuer-client'
       Targets:
         - Arn: !GetAtt CfdiInQueue.Arn
-          Id: SQSqueue
+          Id: QueueTarget
         - Arn: !GetAtt CfdiFactoryRuleLogGroupForEvents.Arn
           Id: LogTarget
 
