@@ -3,7 +3,6 @@ import json
 
 client = boto3.client('events')
 _bus = 'cfdi-eventbus-dummy'
-#_bus = "test-bus"
 payload=dict([("username", "j4nusx"), ("city", "SJO"), ("age", "42")])
 detailJsonString = json.dumps(payload)
 
