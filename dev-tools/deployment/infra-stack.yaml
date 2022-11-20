@@ -18,36 +18,22 @@ Resources:
     Properties:
       Name: !Sub cfdi-eventbus-${AWS::StackName}
 
-  CfdiInQueueDLQ:
-    Type: AWS::SQS::Queue
-    Properties:
-      FifoQueue: true
-      QueueName: !Sub cfdi-inqueue-dlq-${AWS::StackName}.fifo
-
   CfdiInQueue:
     Type: AWS::SQS::Queue
-    Properties:
-      FifoQueue: true
-      QueueName: !Sub cfdi-inqueue-${AWS::StackName}.fifo
-      RedrivePolicy:
-        deadLetterTargetArn: !GetAtt CfdiInQueueDLQ.Arn
-        maxReceiveCount: 2
 
+  # Allow EventBridge to invoke SQS
   CfdiInQueuePolicy:
     Type: AWS::SQS::QueuePolicy
     Properties:
       Queues:
-        - !Ref CfdiInQueue
+        - Ref: CfdiInQueue
       PolicyDocument:
         Statement:
-          - Effect: Allow
-            Principal: '*'
-            Action:
-              - SQS:SendMessage
-              - SQS:ReceiveMessage
-              - SQS:DeleteMessage
-              - SQS:GetQueueAttributes
-            Resource: !GetAtt CfdiInQueue.Arn
+        - Effect: Allow
+          Principal:
+            Service: events.amazonaws.com
+          Action: SQS:SendMessage
+          Resource:  !GetAtt CfdiInQueue.Arn
 
   CfdiDataLake:
     Type: AWS::S3::Bucket
@@ -157,38 +143,46 @@ Resources:
     DependsOn:
       - Subscriptor
 
-  CfdiFactoryFuncPermission:
-    Type: AWS::Lambda::Permission
+  CfdiFactoryFuncLogGroup:
+    Type: AWS::Logs::LogGroup
     Properties:
-      FunctionName: !GetAtt CfdiFactoryFunc.Arn
-      Action: lambda:InvokeFunction
-      Principal: sqs.amazonaws.com
-      SourceArn: !GetAtt CfdiInQueue.Arn
+      LogGroupName: !Sub "/immortalcrab/logs/lambda/${CfdiFactoryFunc}"
 
-  CfdiFactorySqs:
-    Type: AWS::Lambda::EventSourceMapping
+  CfdiFactoryFuncLogPermissions:
+    Type: AWS::IAM::Policy
     Properties:
-      Enabled: true
-      EventSourceArn: !GetAtt CfdiInQueue.Arn
-      FunctionName: !GetAtt CfdiFactoryFunc.Arn
+      Roles:
+      - !Ref CfdiFactoryRole
+      PolicyName: !Sub "${AWS::Region}-CfdiFactoryFuncLogGroup"
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - logs:CreateLogStream
+          - logs:PutLogEvents
+          Resource:
+          - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/immortalcrab/logs/lambda/${CfdiFactoryFunc}"
+          - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/immortalcrab/logs/lambda/${CfdiFactoryFunc}:*"
+          - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/immortalcrab/logs/lambda/${CfdiFactoryFunc}:*:*"
 
+  # Define the event rule to filter for events
   CfdiFactoryRule:
     Type: AWS::Events::Rule
     Properties:
       Name: !Sub cfdi-factoryrule-${AWS::StackName}
       EventBusName: !Ref CfdiEventBus
+      Description: "EventRule"
       EventPattern:
+        account:
+          - !Sub '${AWS::AccountId}'
         source:
           - 'cfdi-issuer-client'
-        account:
-          - !Ref AWS::AccountId
       Targets:
+        - Arn: !GetAtt CfdiInQueue.Arn
+          Id: SQSqueue
         - Arn: !GetAtt CfdiFactoryRuleLogGroupForEvents.Arn
           Id: LogTarget
-        - Arn: !GetAtt CfdiInQueue.Arn
-          Id: QueueTarget
-          SqsParameters:
-            MessageGroupId: cfdiMsgGrpId # Tag that specifies the messages belong to a specific message group
 
   CfdiFactoryRuleLogGroupForEvents:
     Type: AWS::Logs::LogGroup
