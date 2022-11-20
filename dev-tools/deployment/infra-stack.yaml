@@ -52,6 +52,8 @@ Resources:
   CfdiDataLake:
     Type: AWS::S3::Bucket
     Properties:
+      VersioningConfiguration:
+        Status: Enabled
       BucketName: !Sub cfdi-datalake-${AWS::StackName}
       BucketEncryption:
         ServerSideEncryptionConfiguration:
