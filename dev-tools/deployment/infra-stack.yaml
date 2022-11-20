@@ -205,7 +205,7 @@ Resources:
         account:
           - !Sub '${AWS::AccountId}'
         source:
-          - 'medica'
+          - !Sub '${AWS::StackName}'
         detail-type:
           - 'cfdi-issuer-client'
       Targets:
