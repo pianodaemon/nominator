@@ -148,7 +148,8 @@ Resources:
   CfdiFactoryFuncLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/immortalcrab/logs/lambda/${CfdiFactoryFunc}"
+      LogGroupName: !Sub "/aws/lambda/${CfdiFactoryFunc}"
+      RetentionInDays: 365
 
   CfdiFactoryFuncLogPermissions:
     Type: AWS::IAM::Policy
@@ -164,9 +165,25 @@ Resources:
           - logs:CreateLogStream
           - logs:PutLogEvents
           Resource:
-          - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/immortalcrab/logs/lambda/${CfdiFactoryFunc}"
-          - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/immortalcrab/logs/lambda/${CfdiFactoryFunc}:*"
-          - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/immortalcrab/logs/lambda/${CfdiFactoryFunc}:*:*"
+          - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${CfdiFactoryFunc}"
+          - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${CfdiFactoryFunc}:*"
+          - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${CfdiFactoryFunc}:*:*"
+
+  CfdiFactorySqs:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      Enabled: true
+      EventSourceArn: !GetAtt CfdiInQueue.Arn
+      FunctionName: !GetAtt CfdiFactoryFunc.Arn
+      BatchSize: 1
+
+  CfdiFactoryFuncPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt CfdiFactoryFunc.Arn
+      Action: lambda:InvokeFunction
+      Principal: sqs.amazonaws.com
+      SourceArn: !GetAtt CfdiInQueue.Arn
 
   # Define the event rule to filter for events
   CfdiFactoryRule:
@@ -192,6 +209,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub /immortalcrab/logs/events/cfdi-factoryrule-${AWS::StackName}
+      RetentionInDays: 365
 
   CfdiFactoryRuleLogGroupForEventsPolicy:
     Type: AWS::Logs::ResourcePolicy
