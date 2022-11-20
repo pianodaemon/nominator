@@ -205,6 +205,8 @@ Resources:
         account:
           - !Sub '${AWS::AccountId}'
         source:
+          - 'medica'
+        detail-type:
           - 'cfdi-issuer-client'
       Targets:
         - Arn: !GetAtt CfdiInQueue.Arn
@@ -223,7 +225,7 @@ Resources:
   CfdiFactoryRuleLogGroupForEventsPolicy:
     Type: AWS::Logs::ResourcePolicy
     Properties:
-      PolicyName: EventBridgeToCWLogsPolicy
+      PolicyName: !Sub cfdi-eventbus-logs-policy-${AWS::StackName}
       PolicyDocument: !Sub >
         {
           "Version": "2012-10-17",
