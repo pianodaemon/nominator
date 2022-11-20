@@ -20,6 +20,10 @@ Resources:
 
   CfdiInQueue:
     Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub cfdi-inqueue-${AWS::StackName}.fifo
+      FifoQueue: true
+      ContentBasedDeduplication: true
 
   # Allow EventBridge to invoke SQS
   CfdiInQueuePolicy:
@@ -30,8 +34,7 @@ Resources:
       PolicyDocument:
         Statement:
         - Effect: Allow
-          Principal:
-            Service: events.amazonaws.com
+          Principal: '*'
           Action:
             - SQS:SendMessage
             - SQS:ReceiveMessage
@@ -180,6 +183,8 @@ Resources:
       Targets:
         - Arn: !GetAtt CfdiInQueue.Arn
           Id: QueueTarget
+          SqsParameters:
+            MessageGroupId: cfdiMsgGrpId # Tag that specifies the messages belong to a specific message group
         - Arn: !GetAtt CfdiFactoryRuleLogGroupForEvents.Arn
           Id: LogTarget
 
