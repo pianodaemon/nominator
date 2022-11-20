@@ -24,14 +24,14 @@ Resources:
       FifoQueue: true
       QueueName: !Sub cfdi-inqueue-dlq-${AWS::StackName}.fifo
 
-   CfdiInQueue:
-     Type: AWS::SQS::Queue
-     Properties:
-       FifoQueue: true
-       QueueName: !Sub cfdi-inqueue-${AWS::StackName}.fifo
-     RedrivePolicy:
-       deadLetterTargetArn: !GetAtt CfdiInQueueDLQ.Arn
-       maxReceiveCount: 2
+  CfdiInQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      FifoQueue: true
+      QueueName: !Sub cfdi-inqueue-${AWS::StackName}.fifo
+    RedrivePolicy:
+      deadLetterTargetArn: !GetAtt CfdiInQueueDLQ.Arn
+      maxReceiveCount: 2
 
   CfdiInQueuePolicy:
     Type: AWS::SQS::QueuePolicy
