@@ -141,9 +141,10 @@ Resources:
       Code:
         ZipFile: |
           def my_handler(event, context):
-            print(event)
-            message = 'Hello Lambda World!'
-            return message
+            for record in event['Records']:
+              print("test")
+              payload = record["body"]
+              print(str(payload))
     DependsOn:
       - Subscriptor
 
@@ -165,17 +166,69 @@ Resources:
   CfdiFactoryRule:
     Type: AWS::Events::Rule
     Properties:
-      Description: Factory function rule
+      Name: !Sub cfdi-factoryrule-${AWS::StackName}
       EventBusName: !Ref CfdiEventBus
       EventPattern:
-        account: [!Ref AWS::AccountId]
-      Name: !Sub cfdi-factoryrule-${AWS::StackName}
-      State: ENABLED
+        source:
+          - 'cfdi-issuer-client'
+        account:
+          - !Ref AWS::AccountId
       Targets:
+        - Arn: !GetAtt CfdiFactoryRuleLogGroupForEvents.Arn
+          Id: LogTarget
         - Arn: !GetAtt CfdiInQueue.Arn
-          Id: "factoryrule"
+          Id: QueueTarget
           SqsParameters:
             MessageGroupId: cfdiMsgGrpId # Tag that specifies the messages belong to a specific message group
+
+  CfdiFactoryRuleLogGroupForEvents:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /immortalcrab/logs/events/cfdi-factoryrule-${AWS::StackName}
+
+  CfdiFactoryRuleLogGroupForEventsPolicy:
+    Type: AWS::Logs::ResourcePolicy
+    Properties:
+      PolicyName: EventBridgeToCWLogsPolicy
+      PolicyDocument: !Sub >
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "EventBridgetoCWLogsCreateLogStreamPolicy",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "events.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "logs:CreateLogStream"
+              ],
+              "Resource": [
+                "${CfdiFactoryRuleLogGroupForEvents.Arn}"
+              ]
+            },
+            {
+              "Sid": "EventBridgetoCWLogsPutLogEventsPolicy",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "events.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "logs:PutLogEvents"
+              ],
+              "Resource": [
+                "${CfdiFactoryRuleLogGroupForEvents.Arn}"
+              ],
+              "Condition": {
+                "ArnEquals": {"AWS:SourceArn": "${CfdiFactoryRule.Arn}"}
+              }
+            }
+          ]
+        }
 
 Parameters:
   SubscriptorPwd:
