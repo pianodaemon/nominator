@@ -1,0 +1,23 @@
+# SAM Template to generate the cloud formation template
+# aws cloudformation package --template-file  sam-template.yaml --s3-bucket cfdi-datalake-dummy  --output-template-file out.yml
+
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Lambda application that calls the Lambda API.
+Resources:
+  CfdiFactoryFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub cfdi-factoryfunc-${AWS::StackName}
+      Environment:
+        Variables:
+          ENV: !Ref SubscriptorEnv
+      Role: !GetAtt CfdiFactoryRole.Arn
+      Runtime: java11
+      Handler: com.immortalcrab.cfdi.serverless.IssueHandler
+      CodeUri: build/distributions/factory-1-SNAPSHOT.zip
+      Description: Cfdi Function Factory
+      MemorySize: 128
+      Timeout: 10
+    DependsOn:
+      - Subscriptor
