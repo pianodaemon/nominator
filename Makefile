@@ -6,9 +6,14 @@ MACROS_INCLUDE  := make.macros
 SUBSCRIPTOR     := dummy
 DEPLOY_STUFF    := $(BASE)/dev-tools/deployment
 
-all:    deploy_fiscal
+all:    deploy_infra
 
-deploy_fiscal:  compile_fiscal
+deploy_infra:
+        (export MACROS_INCLUDE=$(MACROS_INCLUDE)  &&     \
+        export OPERATIONAL=$(OPERATIONAL)         &&     \
+        cd  $(DEPLOY_STUFF) && ./incept-infra-stack.sh);
+        
+render_infra:  compile_fiscal
         (export MACROS_INCLUDE=$(MACROS_INCLUDE)  &&  \
         export OPERATIONAL=$(OPERATIONAL) &&          \
         mv $(OPERATIONAL)/fiscal/factory/build/distributions/factory-1-SNAPSHOT.zip  $(DEPLOY_STUFF)/ &&    \
