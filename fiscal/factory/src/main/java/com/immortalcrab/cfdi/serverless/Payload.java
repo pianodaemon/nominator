@@ -3,7 +3,9 @@ package com.immortalcrab.cfdi.serverless;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Objects;
+import lombok.Getter;
 
+@Getter
 class Payload implements Serializable {
 
     private static final long serialVersionUID = 1L;
