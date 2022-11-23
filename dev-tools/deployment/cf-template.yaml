@@ -26,8 +26,8 @@ Resources:
       Handler: com.immortalcrab.cfdi.serverless.IssueHandler
       CodeUri: factory-1-SNAPSHOT.zip
       Description: Cfdi Function Factory
-      MemorySize: 128
-      Timeout: 10
+      MemorySize: 512
+      Timeout: 30
     DependsOn:
       - Subscriptor
 
