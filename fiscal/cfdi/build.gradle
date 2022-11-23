@@ -57,10 +57,6 @@ dependencies {
 
     implementation "commons-codec:commons-codec:1.15"
 
-    // Use JUnit Jupiter for testing.
-    testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter}"
-    testImplementation 'org.junit-pioneer:junit-pioneer:1.8.0'
-
     testImplementation "io.findify:s3mock_2.13:0.2.6"
 
     // JAX-B dependencies for JDK 9+
