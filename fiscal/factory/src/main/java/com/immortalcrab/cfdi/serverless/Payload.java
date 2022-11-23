@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Payload implements Serializable {
+class Payload implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
