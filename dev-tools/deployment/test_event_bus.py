@@ -4,7 +4,7 @@ import json
 subscriptor="medica"
 client = boto3.client('events')
 _bus = 'cfdi-eventbus-{}'.format(subscriptor)
-payload=dict([("username", "j4nusx"), ("city", "SJO"), ("age", "42")])
+payload=dict([("kind", "fac"), ("req", "S3://mocos.json")])
 detailJsonString = json.dumps(payload)
 
 entry = {
