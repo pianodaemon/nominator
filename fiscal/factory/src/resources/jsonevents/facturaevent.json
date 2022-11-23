@@ -1,0 +1,14 @@
+{
+    "version": "0",
+    "id": "de778931-682b-8880-a05b-dfdda94dbe8a",
+    "detail-type": "cfdi-issuer-client",
+    "source": "medica",
+    "account": "646088935964",
+    "time": "2022-11-23T03:31:18Z",
+    "region": "us-east-2",
+    "resources": [],
+    "detail": {
+        "kind": "fac",
+        "req": "s3://something"
+    }
+}

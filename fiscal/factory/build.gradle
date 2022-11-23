@@ -26,6 +26,11 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
 }
 
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
+
 // This build configuration produces a deployment package
 // within the build/distributions directory.
 task buildZip(type: Zip) {
