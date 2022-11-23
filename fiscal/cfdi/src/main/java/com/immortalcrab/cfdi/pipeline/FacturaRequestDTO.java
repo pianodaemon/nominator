@@ -6,7 +6,6 @@ import com.immortalcrab.cfdi.error.RequestError;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j;
 import mx.gob.sat.cfd._4.Comprobante;
 import mx.gob.sat.cfd._4.ObjectFactory;
 import mx.gob.sat.sitio_internet.cfd.catalogos.*;
@@ -18,7 +17,9 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.*;
 
-@Log4j
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 class FacturaRequestDTO extends JsonRequest {
 
     public static final String CFDI_VER = "4.0";

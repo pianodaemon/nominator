@@ -15,9 +15,10 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.util.Optional;
 import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @AllArgsConstructor
-@Log4j
 class S3BucketStorage implements IStorage {
 
     private final @NonNull

@@ -1,4 +1,18 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
+  }
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+
 apply plugin: 'java'
+
 
 description = 'factory'
 
@@ -22,4 +36,14 @@ task buildZip(type: Zip) {
     }
 }
 
-build.dependsOn buildZip
+jar {
+    enabled = false
+}
+
+shadowJar {
+    transform(com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer)
+}
+
+buildZip.dependsOn shadowJar
+
+build.dependsOn(buildZip)

@@ -14,9 +14,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 
-@Log4j
+@Log4j2
 class NominaRequestDTO extends JsonRequest {
 
     public static final String CFDI_VER = "4.0";

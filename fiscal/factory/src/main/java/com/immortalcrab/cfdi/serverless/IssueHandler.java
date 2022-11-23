@@ -4,9 +4,9 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 
-@Log4j
+@Log4j2
 public class IssueHandler implements RequestHandler<SQSEvent, Void> {
 
     @Override
@@ -18,11 +18,11 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
 
                 log.info(msg.getBody());
 
-                AWSEvent<Payload> body = Marshaller.unmarshalEvent(msg.getBody(), Payload.class);
+                //AWSEvent<Payload> body = Marshaller.unmarshalEvent(msg.getBody(), Payload.class);
 
                 // Here we shall call 
                 // doIssue(final String kind, InputStreamReader isr)
-                log.info(body.toString());
+                //log.info(body.toString());
             }
 
         } catch (Exception ex) {
