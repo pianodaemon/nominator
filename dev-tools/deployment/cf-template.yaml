@@ -36,6 +36,18 @@ Resources:
     Properties:
       Name: !Sub cfdi-eventbus-${AWS::StackName}
 
+  CfdiEventBusPolicy:
+    Type: AWS::Events::EventBusPolicy
+    Properties:
+      EventBusName: !Ref CfdiEventBus
+      StatementId: "EventbusHappyPolicy"
+      Statement:
+        Effect: Allow
+        Principal: '*'
+        Action:
+          - events:*
+        Resource: !GetAtt CfdiEventBus.Arn
+
   CfdiInQueueDLQ:
     Type: AWS::SQS::Queue
     Properties:
