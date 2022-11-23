@@ -4,9 +4,9 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 
-@Log4j
+@Log4j2
 public class IssueHandler implements RequestHandler<SQSEvent, Void> {
 
     @Override
@@ -14,16 +14,16 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
 
         try {
 
-            event.getRecords().forEach(msg -> {
+            for (SQSEvent.SQSMessage msg : event.getRecords()) {
 
                 log.info(msg.getBody());
-                // Here we shall call 
-                // doIssue(final String kind, InputStreamReader isr)
-            });
+
+            }
+
         } catch (Exception ex) {
             log.error("Exception handling batch seed request.", ex);
-            throw ex;
         }
         return null;
     }
+
 }

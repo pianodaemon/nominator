@@ -1,4 +1,5 @@
-AWSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
 Description: Create AWS Infra required for this project
 
 Metadata:
@@ -13,6 +14,23 @@ Metadata:
         default: "Password for this subscriptor account"
 
 Resources:
+  CfdiFactoryFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub cfdi-factoryfunc-${AWS::StackName}
+      Environment:
+        Variables:
+          ENV: !Ref SubscriptorEnv
+      Role: !GetAtt CfdiFactoryRole.Arn
+      Runtime: java11
+      Handler: com.immortalcrab.cfdi.serverless.IssueHandler
+      CodeUri: factory-1-SNAPSHOT.zip
+      Description: Cfdi Function Factory
+      MemorySize: 128
+      Timeout: 10
+    DependsOn:
+      - Subscriptor
+
   CfdiEventBus:
     Type: AWS::Events::EventBus
     Properties:
@@ -135,26 +153,6 @@ Resources:
               - sqs:GetQueueAttributes
               - sqs:ChangeMessageVisibility
               Resource: !Sub ${CfdiInQueue.Arn}
-
-  CfdiFactoryFunc:
-    Type: AWS::Lambda::Function
-    Properties:
-      FunctionName: !Sub cfdi-factoryfunc-${AWS::StackName}
-      Environment:
-        Variables:
-          ENV: !Ref SubscriptorEnv
-      Role: !GetAtt CfdiFactoryRole.Arn
-      Runtime: python3.7
-      Handler: index.my_handler
-      Code:
-        ZipFile: |
-          def my_handler(event, context):
-            for record in event['Records']:
-              print("test")
-              payload = record["body"]
-              print(str(payload))
-    DependsOn:
-      - CfdiFactoryRole
 
   CfdiFactoryFuncLogGroup:
     Type: AWS::Logs::LogGroup

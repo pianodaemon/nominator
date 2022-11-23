@@ -13,9 +13,9 @@ import org.javatuples.Pair;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 
-@Log4j
+@Log4j2
 @AllArgsConstructor
 @Getter
 abstract class Pipeline {

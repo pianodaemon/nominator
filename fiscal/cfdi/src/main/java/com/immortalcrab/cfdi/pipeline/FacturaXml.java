@@ -11,9 +11,9 @@ import java.io.StringWriter;
 import java.util.List;
 
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 
-@Log4j
+@Log4j2
 class FacturaXml {
 
     private final @NonNull
