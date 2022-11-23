@@ -16,8 +16,11 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
 
             for (SQSEvent.SQSMessage msg : event.getRecords()) {
 
-                log.info(msg.getBody());
+                log.debug(msg.getBody());
 
+                AWSEvent<Payload> body = Marshaller.unmarshalEvent(msg.getBody(), Payload.class);
+
+                log.info(body.toString());
             }
 
         } catch (Exception ex) {
