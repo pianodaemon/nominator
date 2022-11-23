@@ -2,6 +2,7 @@ package com.immortalcrab.cfdi.serverless;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 
 import java.util.Date;
 import java.util.List;
@@ -207,5 +208,9 @@ class AWSEvent<T> {
         }
 
         return o.toString().replace("\n", "\n    ");
+    }
+
+    public static <T> AWSEvent<T> unmarshalEvent(String input, Class<T> type) throws IOException {
+        return Marshaller.unmarshalEvent(input, type);
     }
 }
