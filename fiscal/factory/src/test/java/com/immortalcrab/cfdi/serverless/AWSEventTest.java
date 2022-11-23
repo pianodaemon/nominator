@@ -30,7 +30,7 @@ public class AWSEventTest {
 
             InputStream is = _cloader.getResourceAsStream("jsonevents/facturaevent.json");
 
-            AWSEvent<Payload> body = Marshaller.unmarshalEvent(new String(is.readAllBytes(), StandardCharsets.UTF_8), Payload.class);
+            AWSEvent<Payload> body = AWSEvent.unmarshalEvent(new String(is.readAllBytes(), StandardCharsets.UTF_8), Payload.class);
             Payload payl = body.getDetail();
             Integer hc = payl.hashCode();
 
