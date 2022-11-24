@@ -49,13 +49,13 @@ public class FacturaRequestDTOTest {
             assertTrue("67100".equals(dto.getComprobanteAttributes().getLugarExpedicion()));
 
             // We verify the mandatory pseudo-emisor attributes
-            assertTrue("RRM031001QE7".equals(dto.getEmisorAttributes().getRfc()));
-            assertTrue("RR MEDICA S.A. DE C.V.".equals(dto.getEmisorAttributes().getNombre()));
+            assertTrue("RPM061003QE6".equals(dto.getEmisorAttributes().getRfc()));
+            assertTrue("PP DOC S.A. DE C.V.".equals(dto.getEmisorAttributes().getNombre()));
             assertTrue("601".equals(dto.getEmisorAttributes().getRegimenFiscal()));
 
             // We verify the mandatory pseudo-receptor attributes
             assertTrue("IMS421231I45".equals(dto.getReceptorAttributes().getRfc()));
-            assertTrue("INSTITUTO MEXICANO DEL SEGURO SOCIAL/ HOSPITAL GENERAL DE ZONA #12".equals(dto.getReceptorAttributes().getNombre()));
+            assertTrue("INSTITUTO MEXICANO DEL SEGURO SOCIAL".equals(dto.getReceptorAttributes().getNombre()));
             assertTrue("G01".equals(dto.getReceptorAttributes().getUsoCfdi()));
 
             // We verify the only concepto that exists
@@ -63,10 +63,10 @@ public class FacturaRequestDTOTest {
             {
                 var item = dto.getPseudoConceptos().get(firstExpected);
                 assertTrue("42181606".equals(item.getClaveProdServ()));
-                assertTrue("379.107.0109.00.01".equals(item.getNoIdentificacion()));
+                assertTrue("34855".equals(item.getNoIdentificacion()));
                 assertTrue(new BigDecimal("1.0").equals(item.getCantidad()));
                 assertTrue("H87".equals(item.getClaveUnidad()));
-                assertTrue("379.107.0109.00.01 BRAZALETE ADULTO ESTANDAR. MARCA: DATEX-OHMEDA. MODELO: AESTIVA. NUMERO DE CATALOGO: 572435.".equals(item.getDescripcion()));
+                assertTrue("ITEM VENDIDO".equals(item.getDescripcion()));
                 assertTrue(new BigDecimal("100.0").equals(item.getValorUnitario()));
                 assertTrue(new BigDecimal("100.0").equals(item.getImporte()));
 
