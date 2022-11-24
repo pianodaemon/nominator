@@ -1,5 +1,6 @@
 rootProject.name = 'fiscal'
 
+include ':pac'
 include ':sat'
 include ':cfdi'
 include ':engine'
