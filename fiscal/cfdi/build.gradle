@@ -63,6 +63,8 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+test.dependsOn 'genJaxb'
+
 dependencies {
 
     implementation project(':engine')
