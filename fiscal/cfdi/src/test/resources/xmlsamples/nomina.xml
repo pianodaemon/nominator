@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cfdi:Comprobante Version="4.0" Serie="RRM" Folio="5457" Fecha="2022-10-26T20:00:18" SubTotal="7185.82" Descuento="1185.82" Moneda="MXN" Total="6000.0" TipoDeComprobante="N" Exportacion="01" MetodoPago="PUE" LugarExpedicion="67100" xsi:schemaLocation="http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xsd" xmlns:nomina12="http://www.sat.gob.mx/nomina12" xmlns:cfdi="http://www.sat.gob.mx/cfd/4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <cfdi:Emisor Rfc="RRM031001QE7" Nombre="DOCTOS UNIDOS S.A. DE C.V." RegimenFiscal="601"/>
+    <cfdi:Receptor Rfc="TARG700802KZ5" Nombre="JOSE JUAN RAMIREZ SANCHEZ" DomicilioFiscalReceptor="45625" RegimenFiscalReceptor="605" UsoCFDI="CN01"/>
+    <cfdi:Conceptos>
+        <cfdi:Concepto ClaveProdServ="84111505" Cantidad="1" ClaveUnidad="ACT" Descripcion="Pago de nómina" ValorUnitario="7185.82" Importe="7185.82" Descuento="1185.82" ObjetoImp="01"/>
+    </cfdi:Conceptos>
+    <cfdi:Complemento>
+        <nomina12:Nomina Version="1.2" TipoNomina="O" FechaPago="2022-10-25" FechaInicialPago="2022-10-16" FechaFinalPago="2022-10-31" NumDiasPagados="15" TotalPercepciones="7185.82" TotalDeducciones="1185.82">
+            <nomina12:Emisor RegistroPatronal="D4562908100"/>
+            <nomina12:Receptor Curp="MOBO700225HDFNRM09" NumSeguridadSocial="68742002174" FechaInicioRelLaboral="2021-10-31" Antigüedad="P52W" TipoContrato="01" TipoRegimen="02" NumEmpleado="1520" RiesgoPuesto="2" PeriodicidadPago="04" SalarioDiarioIntegrado="523.34" ClaveEntFed="MEX"/>
+            <nomina12:Percepciones TotalSueldos="7185.82" TotalGravado="7185.82" TotalExento="0.0">
+                <nomina12:Percepcion TipoPercepcion="001" Clave="001" Concepto="sueldo" ImporteGravado="7185.82" ImporteExento="0.0"/>
+            </nomina12:Percepciones>
+            <nomina12:Deducciones TotalOtrasDeducciones="198.2" TotalImpuestosRetenidos="987.62">
+                <nomina12:Deduccion TipoDeduccion="001" Clave="001" Concepto="IMSS" Importe="198.2"/>
+                <nomina12:Deduccion TipoDeduccion="002" Clave="002" Concepto="ISR" Importe="987.62"/>
+            </nomina12:Deducciones>
+            <nomina12:OtrosPagos>
+                <nomina12:OtroPago TipoOtroPago="002" Clave="4455" Concepto="mi otro paguito" Importe="0.0">
+                    <nomina12:SubsidioAlEmpleo SubsidioCausado="0.0"/>
+                </nomina12:OtroPago>
+            </nomina12:OtrosPagos>
+        </nomina12:Nomina>
+    </cfdi:Complemento>
+</cfdi:Comprobante>

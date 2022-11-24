@@ -48,12 +48,12 @@ public class NominaRequestDTOTest {
 
             // We verify the mandatory pseudo-emisor attributes
             assertTrue("RRM031001QE7".equals(dto.getPseudoEmisor().getRfc()));
-            assertTrue("RR MEDICA S.A. DE C.V.".equals(dto.getPseudoEmisor().getNombre()));
+            assertTrue("DOCTOS UNIDOS S.A. DE C.V.".equals(dto.getPseudoEmisor().getNombre()));
             assertTrue("601".equals(dto.getPseudoEmisor().getRegimenFiscal()));
 
             // We verify the mandatory pseudo-receptor attributes
-            assertTrue("TORG700702KZ5".equals(dto.getPseudoReceptor().getRfc()));
-            assertTrue("JOSE GUADALUPE DE LA TORRE RIOS".equals(dto.getPseudoReceptor().getNombre()));
+            assertTrue("TARG700802KZ5".equals(dto.getPseudoReceptor().getRfc()));
+            assertTrue("JOSE JUAN RAMIREZ SANCHEZ".equals(dto.getPseudoReceptor().getNombre()));
             assertTrue("45625".equals(dto.getPseudoReceptor().getDomicilioFiscal()));
             assertTrue("605".equals(dto.getPseudoReceptor().getRegimenFiscal()));
             assertTrue("CN01".equals(dto.getPseudoReceptor().getProposito()));
@@ -74,7 +74,7 @@ public class NominaRequestDTOTest {
             assertTrue("2021-10-31".equals(dto.getNomReceptorAttribs().getFechaInicioRelLaboral()));
             assertTrue("MEX".equals(dto.getNomReceptorAttribs().getClaveEntFed()));
             assertTrue("68742002174".equals(dto.getNomReceptorAttribs().getNumSeguridadSocial()));
-            assertTrue("MORO700125HDFNRM09".equals(dto.getNomReceptorAttribs().getCurp()));
+            assertTrue("MOBO700225HDFNRM09".equals(dto.getNomReceptorAttribs().getCurp()));
             assertTrue("01".equals(dto.getNomReceptorAttribs().getTipoContrato()));
             assertTrue("02".equals(dto.getNomReceptorAttribs().getTipoRegimen()));
             assertTrue("1520".equals(dto.getNomReceptorAttribs().getNumEmpleado()));
