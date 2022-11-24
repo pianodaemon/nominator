@@ -17,6 +17,7 @@ task genJaxb {
             // Create output directories
             mkdir(dir: sourcesDir)
             mkdir(dir: classesDir)
+            mkdir(dir: testClassesDir)
 
             taskdef name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.jaxb.asPath
 
