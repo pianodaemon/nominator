@@ -33,10 +33,10 @@ public class NominaXmlTest {
             InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
             NominaXml nominaGenerated = new NominaXml(new NominaRequestDTO(reader));
 
-            char[] csc0 =nominaGenerated.toString().replace("\n", "").replace("\r", "").toCharArray();
+            char[] csc0 = nominaGenerated.toString().replace("\n", "").replace("\r", "").toCharArray();
             char[] csc1 = nominaTesting.toString().replace("\n", "").replace("\r", "").toCharArray();
             for (int i = 0; i < csc0.length; i++) {
-                assertTrue(csc0[i]== csc1[i]);
+                assertTrue(csc0[i] == csc1[i]);
             }
 
         } catch (Exception ex) {
