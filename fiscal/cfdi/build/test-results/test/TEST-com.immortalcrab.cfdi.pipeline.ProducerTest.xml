@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.immortalcrab.cfdi.pipeline.ProducerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-11-24T04:18:53" hostname="LAPTOP-4RSVIK4C" time="1.55">
+  <properties/>
+  <testcase name="verifyProduction()" classname="com.immortalcrab.cfdi.pipeline.ProducerTest" time="1.55"/>
+  <system-out><![CDATA[EnvironmentVariableExtension: This extension uses reflection to mutate JDK-internal state, which is fragile. Check the Javadoc or documentation for more details.
+]]></system-out>
+  <system-err><![CDATA[SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+log4j:WARN No appenders could be found for logger (com.amazonaws.AmazonWebServiceClient).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+]]></system-err>
+</testsuite>
