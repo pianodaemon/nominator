@@ -5,10 +5,6 @@ plugins {
 
 description = 'pac'
 
-dependencies {
-
-}
-
 wsdl2java {
 
     verbose.set(true)
