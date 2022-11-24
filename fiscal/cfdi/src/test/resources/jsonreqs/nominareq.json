@@ -13,12 +13,12 @@
     "lugar_expedicion": "67100",
     "emisor": {
         "rfc": "RRM031001QE7",
-        "nombre": "RR MEDICA S.A. DE C.V.",
+        "nombre": "DOCTOS UNIDOS S.A. DE C.V.",
         "regimen_fiscal": "601"
     },
     "receptor": {
-        "rfc": "TORG700702KZ5",
-        "nombre": "JOSE GUADALUPE DE LA TORRE RIOS",
+        "rfc": "TARG700802KZ5",
+        "nombre": "JOSE JUAN RAMIREZ SANCHEZ",
         "domicilio_fiscal_receptor": "45625",
         "regimen_fiscal_receptor": "605",
         "uso_cfdi": "CN01"
@@ -48,7 +48,7 @@
             "registro_patronal": "D4562908100"
         },
         "receptor": {
-            "curp": "MORO700125HDFNRM09",
+            "curp": "MOBO700225HDFNRM09",
             "num_seguridad_social": "68742002174",
             "fecha_inicio_rel_laboral": "2021-10-31",
             "antiguedad": "P52W",
