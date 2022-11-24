@@ -1,73 +1,14 @@
 description = 'cfdi'
 
-compileJava.options.encoding = "UTF-8"
-compileTestJava.options.encoding = "UTF-8"
-
-configurations {
-    jaxb
-}
-
-task genJaxb {
-
-    ext.sourcesDir = "${buildDir}/generated-sources/jaxb"
-    ext.classesDir = "${buildDir}/classes/jaxb"
-    ext.testClassesDir = "${buildDir}/classes/java/test"
-    outputs.dir classesDir
-
-    doLast() {
-
-        project.ant {
-            // Create output directories
-            mkdir(dir: sourcesDir)
-            mkdir(dir: classesDir)
-            mkdir(dir: testClassesDir)
-
-            taskdef name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.jaxb.asPath
-
-            xjc(destdir: sourcesDir, binding: "${projectDir}/src/main/resources/cfdv40/binding.xml") {
-                schema(dir: "${projectDir}/src/main/resources/cfdv40", includes: '**/*.xsd')
-                produces(dir: sourcesDir, includes: '**/*.java')
-            }
-
-            javac(
-                destdir: classesDir, source: 11, target: 11,
-                debug: true, debugLevel: 'lines,vars,source',
-                includeantruntime: false, classpath: configurations.jaxb.asPath) {
-
-                src(path: sourcesDir)
-                include(name: '**/*.java')
-                include(name: '*.java')
-            }
-
-            copy(todir: classesDir) {
-
-                fileset(dir: sourcesDir, erroronmissingdir: false) {
-                    exclude(name: '**/*.java')
-                }
-            }
-
-            // Workaround to cover absent of the generated classes
-            // within the classes directory of testing.
-            copy(todir: testClassesDir) {
-
-                fileset(dir: classesDir, erroronmissingdir: false) {
-                    exclude(name: '**/*.java')
-                }
-            }
-        }
-    }
-}
-
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
 
-test.dependsOn 'genJaxb'
-
 dependencies {
 
     implementation project(':engine')
+    implementation project(':sat')
 
     implementation "com.amazonaws:aws-java-sdk-s3:${aws_sdk_version}"
 
@@ -78,16 +19,4 @@ dependencies {
     testImplementation 'org.junit-pioneer:junit-pioneer:1.8.0'
 
     testImplementation "io.findify:s3mock_2.13:0.2.6"
-
-    // JAX-B dependencies for JDK 9+
-    implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
-    implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
-    jaxb "com.sun.xml.bind:jaxb-xjc:2.1.7"
-    compileOnly(files(genJaxb.classesDir).builtBy(genJaxb))
-}
-
-compileJava.dependsOn 'genJaxb'
-
-jar {
-  from genJaxb.classesDir
 }

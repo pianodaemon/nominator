@@ -1,0 +1,301 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Create AWS Infra required for this project
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Subscriptor's configuration"
+        Parameters:
+          - SubscriptorPwd
+    ParameterLabels:
+      SubscriptorPwd:
+        default: "Password for this subscriptor account"
+
+Resources:
+  CfdiFactoryFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub cfdi-factoryfunc-${AWS::StackName}
+      Environment:
+        Variables:
+          ENV: !Ref SubscriptorEnv
+      Role: !GetAtt CfdiFactoryRole.Arn
+      Runtime: java11
+      Handler: com.immortalcrab.cfdi.serverless.IssueHandler
+      CodeUri: factory-1-SNAPSHOT.zip
+      Description: Cfdi Function Factory
+      MemorySize: 512
+      Timeout: 30
+    DependsOn:
+      - Subscriptor
+
+  CfdiEventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: !Sub cfdi-eventbus-${AWS::StackName}
+
+  CfdiEventBusPolicy:
+    Type: AWS::Events::EventBusPolicy
+    Properties:
+      EventBusName: !Ref CfdiEventBus
+      StatementId: "EventbusHappyPolicy"
+      Statement:
+        Effect: Allow
+        Principal: '*'
+        Action:
+          - events:*
+        Resource: !GetAtt CfdiEventBus.Arn
+
+  CfdiInQueueDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      FifoQueue: true
+      QueueName: !Sub cfdi-inqueue-dlq-${AWS::StackName}.fifo
+
+  CfdiInQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub cfdi-inqueue-${AWS::StackName}.fifo
+      FifoQueue: true
+      ContentBasedDeduplication: true
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt CfdiInQueueDLQ.Arn
+        maxReceiveCount: 3
+
+  # Allow EventBridge to invoke SQS
+  CfdiInQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - Ref: CfdiInQueue
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal: '*'
+          Action:
+            - SQS:SendMessage
+            - SQS:ReceiveMessage
+          Resource:  !GetAtt CfdiInQueue.Arn
+
+  CfdiDataLake:
+    Type: AWS::S3::Bucket
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled
+      BucketName: !Sub cfdi-datalake-${AWS::StackName}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  CfdiDataRes:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub cfdi-datares-${AWS::StackName}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  Subscriptor:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: !Sub ${AWS::StackName}
+      LoginProfile:
+        Password: !Ref SubscriptorPwd
+      Policies:
+        - PolicyName: !Sub cfdi-data-access-${AWS::StackName}
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - s3:*
+              Resource:
+                - !Sub arn:aws:s3:::${CfdiDataRes}
+                - !Sub arn:aws:s3:::${CfdiDataRes}/*
+                - !Sub arn:aws:s3:::${CfdiDataLake}
+                - !Sub arn:aws:s3:::${CfdiDataLake}/*
+        - PolicyName: !Sub cfdi-inqueue-access-${AWS::StackName}
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - sqs:*
+              Resource:
+                - !Sub arn:aws:sqs:::${CfdiInQueue}
+
+  SubscriptorKey:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      Status: Active
+      UserName: !Ref Subscriptor
+    DependsOn:
+      - Subscriptor
+
+  CfdiFactoryRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub cfdi-factoryrole-${AWS::StackName}
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub cfdi-factory-logs-${AWS::StackName}
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - logs:*
+              Resource:
+                - !Sub arn:aws:logs:*:*:*
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+              - sqs:ReceiveMessage
+              - sqs:DeleteMessage
+              - sqs:GetQueueAttributes
+              - sqs:ChangeMessageVisibility
+              Resource: !Sub ${CfdiInQueue.Arn}
+
+  CfdiFactoryFuncLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${CfdiFactoryFunc}"
+      RetentionInDays: 365
+
+  CfdiFactoryFuncLogPermissions:
+    Type: AWS::IAM::Policy
+    Properties:
+      Roles:
+      - !Ref CfdiFactoryRole
+      PolicyName: !Sub "${AWS::Region}-CfdiFactoryFuncLogGroup"
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - logs:CreateLogStream
+          - logs:PutLogEvents
+          Resource:
+          - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${CfdiFactoryFunc}"
+          - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${CfdiFactoryFunc}:*"
+          - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${CfdiFactoryFunc}:*:*"
+
+  CfdiFactorySqs:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      Enabled: true
+      EventSourceArn: !GetAtt CfdiInQueue.Arn
+      FunctionName: !GetAtt CfdiFactoryFunc.Arn
+      BatchSize: 1
+
+  CfdiFactoryFuncPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt CfdiFactoryFunc.Arn
+      Action: lambda:InvokeFunction
+      Principal: sqs.amazonaws.com
+      SourceArn: !GetAtt CfdiInQueue.Arn
+
+  # Define the event rule to filter for events
+  CfdiFactoryRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub cfdi-factoryrule-${AWS::StackName}
+      EventBusName: !Ref CfdiEventBus
+      Description: "EventRule"
+      EventPattern:
+        account:
+          - !Sub '${AWS::AccountId}'
+        source:
+          - !Sub '${AWS::StackName}'
+        detail-type:
+          - 'cfdi-issuer-client'
+      Targets:
+        - Arn: !GetAtt CfdiInQueue.Arn
+          Id: QueueTarget
+          SqsParameters:
+            MessageGroupId: cfdiMsgGrpId # Tag that specifies the messages belong to a specific message group
+        - Arn: !GetAtt CfdiFactoryRuleLogGroupForEvents.Arn
+          Id: LogTarget
+
+  CfdiFactoryRuleLogGroupForEvents:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /immortalcrab/logs/events/cfdi-factoryrule-${AWS::StackName}
+      RetentionInDays: 365
+
+  CfdiFactoryRuleLogGroupForEventsPolicy:
+    Type: AWS::Logs::ResourcePolicy
+    Properties:
+      PolicyName: !Sub cfdi-eventbus-logs-policy-${AWS::StackName}
+      PolicyDocument: !Sub >
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "EventBridgetoCWLogsCreateLogStreamPolicy",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "events.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "logs:CreateLogStream"
+              ],
+              "Resource": [
+                "${CfdiFactoryRuleLogGroupForEvents.Arn}"
+              ]
+            },
+            {
+              "Sid": "EventBridgetoCWLogsPutLogEventsPolicy",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "events.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "logs:PutLogEvents"
+              ],
+              "Resource": [
+                "${CfdiFactoryRuleLogGroupForEvents.Arn}"
+              ],
+              "Condition": {
+                "ArnEquals": {"AWS:SourceArn": "${CfdiFactoryRule.Arn}"}
+              }
+            }
+          ]
+        }
+
+Parameters:
+  SubscriptorPwd:
+    NoEcho: true
+    Description: The subscriptor account password
+    Type: String
+    MinLength: 1
+    MaxLength: 41
+
+  SubscriptorEnv:
+    Type: String
+    AllowedValues:
+      - dev
+      - test
+      - prod
+    Description: Environment in which the application will be deployed. Allowed values [dev, test, prod]
+
+Outputs:
+  AccessKeyID:
+    Value: !Ref SubscriptorKey
+  SecretAccessKey:
+    Value: !GetAtt SubscriptorKey.SecretAccessKey
