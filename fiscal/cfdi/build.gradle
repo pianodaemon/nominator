@@ -8,6 +8,7 @@ tasks.named('test') {
 dependencies {
 
     implementation project(':engine')
+    implementation project(':pac')
     implementation project(':sat')
 
     implementation "com.amazonaws:aws-java-sdk-s3:${aws_sdk_version}"
