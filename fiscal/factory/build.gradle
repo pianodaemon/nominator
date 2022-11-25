@@ -18,6 +18,7 @@ description = 'factory'
 
 dependencies {
 
+    implementation project(':engine')
     implementation project(':cfdi')
 
     implementation "com.amazonaws:aws-lambda-java-events:3.11.0"
