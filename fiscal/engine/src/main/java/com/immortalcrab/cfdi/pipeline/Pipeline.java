@@ -52,7 +52,7 @@ abstract class Pipeline {
         It stands for hand craft a valid xml at sat */
         IXmlStep sxml = stages.get().getValue1();
         PacRes pacResult = sxml.render(cfdiReq, this.getStamper());
-        saveOnPersistance(storage, pacResult);
+        saveOnPersistance(this.getStorage(), pacResult);
 
         return pacResult.getContent().getId();
     }
