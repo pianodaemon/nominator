@@ -9,7 +9,6 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
