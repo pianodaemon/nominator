@@ -20,7 +20,7 @@ import java.util.*;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-class FacturaRequestDTO extends JsonRequest {
+class FacturaRequestDTO extends Request {
 
     public static final String CFDI_VER = "4.0";
     public static final String TIPO_COMPROBANTE = "I";
