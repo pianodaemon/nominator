@@ -1,20 +1,16 @@
 {
-  "RRM031001QE7": [
-    {
-      "param": "pac_login",
-      "value": "1"
-    },
-    {
-      "param": "pac_passwd",
-      "value": "Oryx216"
-    },
-    {
-      "name": "res_prefix_ssl",
-      "value": "ssl"
-    },
-    {
-      "name": "res_prefix_xslt",
-      "value": "xslt"
+  "pac": {
+    "login": "1",
+    "passwd": "Oryx216"
+  },
+  "res": {
+    "prefix_ssl": "ssl",
+    "prefix_xslt": "xslt"
+  },
+  "rfc": {
+    "RRM031001QE7": {
+      "cer": "",
+      "key": ""
     }
-  ]
+  }
 }
