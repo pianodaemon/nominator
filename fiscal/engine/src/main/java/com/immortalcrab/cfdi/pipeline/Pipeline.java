@@ -65,7 +65,7 @@ public abstract class Pipeline {
         BufferedInputStream bf = this.getStorage().download(payload.getReq());
         InputStreamReader isr = new InputStreamReader(bf, StandardCharsets.UTF_8);
 
-        return this.engage(payload.getKind(), isr);
+        return this.doIssue(payload.getKind(), isr);
     }
 
     protected String doIssue(final String kind, InputStreamReader isr)
