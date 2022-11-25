@@ -27,6 +27,9 @@ abstract class Pipeline {
     IStorage storage;
 
     private final @NonNull
+    IStorage resources;
+
+    private final @NonNull
     Map<String, Pair<IDecodeStep, IXmlStep>> scenarios;
 
     public String issue(final String kind, InputStreamReader isr)
