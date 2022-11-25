@@ -1,0 +1,20 @@
+{
+  "RRM031001QE7": [
+    {
+      "param": "pac_login",
+      "value": "1"
+    },
+    {
+      "param": "pac_passwd",
+      "value": "Oryx216"
+    },
+    {
+      "name": "res_prefix_ssl",
+      "value": "ssl"
+    },
+    {
+      "name": "res_prefix_xslt",
+      "value": "xslt"
+    }
+  ]
+}
