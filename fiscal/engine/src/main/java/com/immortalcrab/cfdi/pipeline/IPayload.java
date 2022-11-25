@@ -1,6 +1,6 @@
 package com.immortalcrab.cfdi.pipeline;
 
-interface IPayload {
+public interface IPayload {
 
     String getReq();
 
