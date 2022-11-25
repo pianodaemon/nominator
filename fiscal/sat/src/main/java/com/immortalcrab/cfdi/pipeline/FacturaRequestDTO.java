@@ -233,6 +233,10 @@ class FacturaRequestDTO extends JsonRequest {
             List<Map<String, Object>> traslados = LegoAssembler.obtainObjFromKey(dic, "traslados");
             for (Map<String, Object> t : traslados) {
                 var tras = new ImpuestosTrasladoAttributes();
+                {
+                    Double d = (Double) t.get("base");
+                    tras.setBase(new BigDecimal(d.toString()));
+                }
                 tras.setImpuesto((String) t.get("impuesto"));
                 tras.setTipoFactor((String) t.get("tipo_factor"));
                 {
