@@ -48,12 +48,6 @@ public class Producer extends Pipeline {
         st.upload("text/xml", in.length, fileName, new ByteArrayInputStream(in));
     }
 
-    @Override
-    public String doIssue(IPayload payload) throws DecodeError, RequestError, StorageError, PipelineError, FormatError {
-
-        return super.doIssue(payload);
-    }
-
     public static class Wiring {
 
         public static <R extends Request> PacRes fac(R req, IStamp<PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
