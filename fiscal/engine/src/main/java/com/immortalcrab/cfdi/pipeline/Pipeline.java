@@ -20,7 +20,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @AllArgsConstructor
 @Getter
-abstract class Pipeline {
+public abstract class Pipeline {
 
     private final @NonNull
     IStamp stamper;
@@ -59,7 +59,7 @@ abstract class Pipeline {
         return pacResult.getContent().getId();
     }
 
-    protected String doIssue(final IPayload payload)
+    public String doIssue(final IPayload payload)
             throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
 
         BufferedInputStream bf = this.getStorage().download(payload.getReq());
