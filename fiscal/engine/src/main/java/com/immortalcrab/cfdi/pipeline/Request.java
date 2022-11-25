@@ -1,20 +1,40 @@
 package com.immortalcrab.cfdi.pipeline;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 
-@AllArgsConstructor
+@Log4j2
 @Getter
-abstract class Request {
+@AllArgsConstructor
+public class Request {
 
-    protected final @NonNull Map<String, Object> ds;
+    protected final @NonNull
+    Map<String, Object> ds;
 
-    protected abstract Map<String, Object> craftImpt() throws RequestError;
+    protected Request(InputStreamReader reader) throws RequestError, DecodeError {
+        this(Request.readFromJson(reader));
+    }
 
-    protected void captureSymbol(final String label, final Object value) {
-        this.getDs().put(label, value);
+    private static Map<String, Object> readFromJson(InputStreamReader reader) throws DecodeError {
+        ObjectMapper mapper = new ObjectMapper();
+
+        TypeReference<Map<String, Object>> tr = new TypeReference<Map<String, Object>>() {
+        };
+
+        try {
+            return (mapper.readValue(reader, tr));
+        } catch (IOException ex) {
+            log.warn(ex.getMessage());
+            throw new DecodeError("Issue found when reading json buffer", ex);
+        }
     }
 }

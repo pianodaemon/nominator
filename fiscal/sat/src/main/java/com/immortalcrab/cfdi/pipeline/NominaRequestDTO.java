@@ -17,7 +17,7 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-class NominaRequestDTO extends JsonRequest {
+class NominaRequestDTO extends Request {
 
     public static final String CFDI_VER = "4.0";
     public static final String NOMINA_VER = "1.2";
