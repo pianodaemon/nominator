@@ -1,6 +1,9 @@
 package com.immortalcrab.cfdi.pipeline;
 
+import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.FormatError;
+import com.immortalcrab.cfdi.error.PipelineError;
+import com.immortalcrab.cfdi.error.RequestError;
 import com.immortalcrab.cfdi.error.StorageError;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
@@ -11,9 +14,9 @@ public class Producer extends Pipeline {
 
     private static final String XML_FILE_EXTENSION = ".xml";
 
-    public Producer() throws StorageError {
+    public static Producer obtainSteadyPipeline() throws StorageError {
 
-        this(PacRegularStamp.setupWithEnv());
+        return new Producer(PacRegularStamp.setupWithEnv());
     }
 
     public Producer(final IStamp stamper) throws StorageError {
@@ -43,6 +46,12 @@ public class Producer extends Pipeline {
         byte[] in = pacResult.getContent().getBuffer().toString().getBytes(StandardCharsets.UTF_8);
 
         st.upload("text/xml", in.length, fileName, new ByteArrayInputStream(in));
+    }
+
+    @Override
+    public String doIssue(IPayload payload) throws DecodeError, RequestError, StorageError, PipelineError, FormatError {
+
+        return super.doIssue(payload);
     }
 
     public static class Wiring {
