@@ -7,10 +7,11 @@
     "prefix_ssl": "ssl",
     "prefix_xslt": "xslt"
   },
-  "rfc": {
+  "einvoice": {
     "RRM031001QE7": {
-      "cer": "",
-      "key": ""
+      "cer": "00001000000505709200.cer",
+      "key": "CSD_UNIDAD_RRM031001QE7_20201117_185818.key",
+      "passwd": "t0put4madr3"
     }
   }
 }
