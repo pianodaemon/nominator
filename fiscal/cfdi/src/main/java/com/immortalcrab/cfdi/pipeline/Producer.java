@@ -23,22 +23,21 @@ public class Producer extends Pipeline implements IIssuer {
     public Producer(final IStamp stamper) throws StorageError {
 
         this(stamper,
-                new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_PERSISTANCE_TARGET")));
-    }
-
-    Producer(final IStamp stamper, final IStorage storage) throws StorageError {
-
-        this(
-                stamper,
-                storage,
-                Map.of(
-                        "fac", new Pair<>(reader -> new FacturaRequestDTO(reader), Wiring::fac),
-                        "nom", new Pair<>(reader -> new NominaRequestDTO(reader), Wiring::nom))
+                new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_DATA_LAKE")),
+                new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_RESOURCES"))
         );
     }
 
-    Producer(final IStamp stamper, final IStorage storage, Map<String, Pair<IDecodeStep, IXmlStep>> scenarios) throws StorageError {
-        super(stamper, storage, scenarios);
+    Producer(final IStamp stamper, final IStorage storage, final IStorage resources) throws StorageError {
+
+        this(stamper, storage, resources,
+                Map.of(
+                        "fac", new Pair<>(reader -> new FacturaRequestDTO(reader), Wiring::fac),
+                        "nom", new Pair<>(reader -> new NominaRequestDTO(reader), Wiring::nom)));
+    }
+
+    Producer(final IStamp stamper, final IStorage storage, final IStorage resources, Map<String, Pair<IDecodeStep, IXmlStep>> scenarios) throws StorageError {
+        super(stamper, storage, resources, scenarios);
     }
 
     @Override
