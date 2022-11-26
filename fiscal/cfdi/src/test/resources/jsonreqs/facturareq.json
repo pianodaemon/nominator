@@ -11,6 +11,8 @@
     "exportacion": "01",
     "metodo_pago": "PUE",
     "lugar_expedicion": "67100",
+    "no_certificado": "00001000000413586324",
+    "tipo_cambio": 18.2151,
     "emisor": {
         "rfc": "RRM031001QE7",
         "nombre": "DOCTOS NACIONALES S.A. DE C.V.",
@@ -20,14 +22,17 @@
         "rfc": "IMS421231I45",
         "nombre": "INSTITUTO MEXICANO DEL SEGURO SOCIAL",
         "domicilio_fiscal_receptor": "45625",
+        "residencia_fiscal": "MEX",
         "regimen_fiscal_receptor": "603",
         "uso_cfdi": "G01"
     },
     "conceptos": [
         {
             "clave_prod_serv": "42181606",
+            "no_identificacion": "12345",
             "cantidad": 1.0,
             "clave_unidad": "H87",
+            "unidad": "PZA",
             "descripcion": "ITEM A BUEN PRECIO",
             "valor_unitario": 100.0,
             "importe": 100.0,
