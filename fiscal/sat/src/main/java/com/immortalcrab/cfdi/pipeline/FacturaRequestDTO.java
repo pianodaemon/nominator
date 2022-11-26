@@ -1,18 +1,10 @@
 package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
-import com.immortalcrab.cfdi.error.FormatError;
 import com.immortalcrab.cfdi.error.RequestError;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mx.gob.sat.cfd._4.Comprobante;
-import mx.gob.sat.cfd._4.ObjectFactory;
-import mx.gob.sat.sitio_internet.cfd.catalogos.*;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.*;
