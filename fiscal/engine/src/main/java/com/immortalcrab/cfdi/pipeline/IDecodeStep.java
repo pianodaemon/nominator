@@ -5,7 +5,7 @@ import com.immortalcrab.cfdi.error.RequestError;
 import java.io.InputStreamReader;
 
 @FunctionalInterface
-interface IDecodeStep {
+interface IDecodeStep<R extends Request> {
 
-    public Request render(InputStreamReader inReader) throws RequestError, DecodeError;
+    public R render(InputStreamReader ir) throws RequestError, DecodeError;
 }
