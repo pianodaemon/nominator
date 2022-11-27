@@ -14,9 +14,18 @@ public class Producer extends Pipeline {
 
     private static final String XML_FILE_EXTENSION = ".xml";
 
-    public static Producer obtainSteadyPipeline() throws StorageError {
+    public static Producer obtainSteadyPipeline() throws StorageError, DecodeError {
 
-        return new Producer(PacRegularStamp.setupWithEnv());
+        S3BucketStorage s3Resources = new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_RESOURCES"));
+        S3BucketStorage s3DataLake = new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_DATA_LAKE"));
+
+        ResourceDescriptor rdescriptor = ResourceDescriptor.fetchProfile(s3Resources, System.getenv("PROFILE_RESOURCES"));
+
+        return new Producer(
+                PacRegularStamp.setupWithEnv(),
+                s3DataLake,
+                s3Resources
+        );
     }
 
     public Producer(final IStamp stamper) throws StorageError {
