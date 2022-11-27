@@ -1,8 +1,11 @@
 package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
+import com.immortalcrab.cfdi.error.StorageError;
 import com.immortalcrab.cfdi.utils.JsonToMapHelper;
+import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -71,6 +74,12 @@ class ResourceDescriptor extends JsonToMapHelper {
             log.error("One or more of the mandatory elements of resource descriptor is missing");
             throw new DecodeError("mandatory element in resource descriptor is missing", ex);
         }
+    }
+
+    static ResourceDescriptor fetchProfile(IStorage storage, final String profile) throws StorageError, DecodeError {
+
+        BufferedInputStream isr = storage.download(profile);
+        return new ResourceDescriptor(new InputStreamReader(isr, StandardCharsets.UTF_8));
     }
 
     Prefixes getPrefixes() {
