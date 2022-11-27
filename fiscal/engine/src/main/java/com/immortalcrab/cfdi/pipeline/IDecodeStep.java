@@ -7,5 +7,5 @@ import java.io.InputStreamReader;
 @FunctionalInterface
 interface IDecodeStep<R extends Request> {
 
-    public R render(InputStreamReader ir) throws RequestError, DecodeError;
+    public R render(InputStreamReader isr) throws RequestError, DecodeError;
 }
