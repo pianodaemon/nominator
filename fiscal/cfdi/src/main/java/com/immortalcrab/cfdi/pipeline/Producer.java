@@ -8,6 +8,7 @@ import com.immortalcrab.cfdi.error.StorageError;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Optional;
 import org.javatuples.Pair;
 
 public class Producer extends Pipeline {
@@ -21,18 +22,12 @@ public class Producer extends Pipeline {
 
         ResourceDescriptor rdescriptor = ResourceDescriptor.fetchProfile(s3Resources, System.getenv("PROFILE_RESOURCES"));
 
+        Optional<ResourceDescriptor.Pac> pac = rdescriptor.getPac(System.getenv("PAC"));
+
         return new Producer(
-                PacRegularStamp.setupWithEnv(),
+                PacRegularStamp.setup(pac.orElseThrow()),
                 s3DataLake,
                 s3Resources
-        );
-    }
-
-    public Producer(final IStamp stamper) throws StorageError {
-
-        this(stamper,
-                new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_DATA_LAKE")),
-                new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_RESOURCES"))
         );
     }
 

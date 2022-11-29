@@ -13,7 +13,7 @@ public class PacRegularStamp implements IStamp<PacRegularRequest, PacRes> {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public static PacRegularStamp setupWithEnv() {
+    public static PacRegularStamp setup(ResourceDescriptor.Pac pac) {
 
         // It is still pending to add code here
         return new PacRegularStamp();
