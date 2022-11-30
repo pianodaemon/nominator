@@ -2,6 +2,7 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
+import com.immortalcrab.cfdi.utils.LegoAssembler;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.List;
@@ -135,7 +136,7 @@ class NominaRequestDTO extends Request {
 
     private List<RegularConcepto> shapePcs() throws RequestError {
 
-        Object cs = NominaRequestDTO.LegoAssembler.obtainObjFromKey(this.getDs(), "conceptos");
+        Object cs = LegoAssembler.obtainObjFromKey(this.getDs(), "conceptos");
 
         try {
 
@@ -315,7 +316,7 @@ class NominaRequestDTO extends Request {
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
                     "percepciones");
 
-            List<Map<String, Object>> lms = NominaRequestDTO.LegoAssembler.obtainObjFromKey(dic, "lista");
+            List<Map<String, Object>> lms = LegoAssembler.obtainObjFromKey(dic, "lista");
 
             Double ts = LegoAssembler.obtainObjFromKey(dic, "total_sueldos");
             Double tg = LegoAssembler.obtainObjFromKey(dic, "total_gravado");
@@ -355,7 +356,7 @@ class NominaRequestDTO extends Request {
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
                     "deducciones");
 
-            List<Map<String, Object>> lms = NominaRequestDTO.LegoAssembler.obtainObjFromKey(dic, "lista");
+            List<Map<String, Object>> lms = LegoAssembler.obtainObjFromKey(dic, "lista");
 
             Double tod = LegoAssembler.obtainObjFromKey(dic, "total_otras_deducciones");
             Double tir = LegoAssembler.obtainObjFromKey(dic, "total_impuestos_retenidos");
@@ -387,7 +388,7 @@ class NominaRequestDTO extends Request {
 
         try {
 
-            List<Map<String, Object>> lms = NominaRequestDTO.LegoAssembler.obtainObjFromKey(
+            List<Map<String, Object>> lms = LegoAssembler.obtainObjFromKey(
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
                     "otros_pagos");
 
@@ -569,16 +570,5 @@ class NominaRequestDTO extends Request {
         private String tipoOtroPago;
         private BigDecimal subsidioCausado;
         private BigDecimal importe;
-    }
-
-    private static class LegoAssembler {
-
-        private static Map<String, Object> obtainMapFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
-            return LegoAssembler.obtainObjFromKey(m, k);
-        }
-
-        private static <T> T obtainObjFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
-            return (T) Optional.ofNullable(m.get(k)).orElseThrow();
-        }
     }
 }
