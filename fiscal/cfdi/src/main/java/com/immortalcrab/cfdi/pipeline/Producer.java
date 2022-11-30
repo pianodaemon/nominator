@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.javatuples.Pair;
 
@@ -23,11 +22,12 @@ public class Producer extends Pipeline {
         S3BucketStorage s3DataLake = new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_DATA_LAKE"));
 
         ResourceDescriptor rdescriptor = ResourceDescriptor.fetchProfile(s3Resources, System.getenv("PROFILE_RESOURCES"));
+        s3Resources.setPathPrefixes(rdescriptor.getPrefixes().turnIntoMap());
 
-        Optional<ResourceDescriptor.Pac> pac = rdescriptor.getPac(System.getenv("PAC"));
+        ResourceDescriptor.Pac pac = rdescriptor.getPacSettings(System.getenv("PAC")).orElseThrow();
 
         return new Producer(
-                PacRegularStamp.setup(pac.orElseThrow()),
+                PacRegularStamp.setup(pac.getCarrier(), pac.getLogin(), pac.getPasswd()),
                 s3DataLake,
                 s3Resources
         );
