@@ -34,7 +34,7 @@ public abstract class Pipeline {
     private final @NonNull
     Map<String, Pair<IDecodeStep, IXmlStep>> scenarios;
 
-    private String engage(final String kind, InputStreamReader isr)
+    public String engage(final String kind, InputStreamReader isr)
             throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
 
         Optional<Pair<IDecodeStep, IXmlStep>> stages = Optional.ofNullable(this.getScenarios().get(kind));
@@ -65,13 +65,7 @@ public abstract class Pipeline {
         BufferedInputStream bf = this.getStorage().download(payload.getReq());
         InputStreamReader isr = new InputStreamReader(bf, StandardCharsets.UTF_8);
 
-        return this.doIssue(payload.getKind(), isr);
-    }
-
-    protected String doIssue(final String kind, InputStreamReader isr)
-            throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
-
-        return this.engage(kind, isr);
+        return this.engage(payload.getKind(), isr);
     }
 
     abstract protected void saveOnPersistance(IStorage st, PacRes pacResult) throws StorageError;
