@@ -1,4 +1,4 @@
-package com.immortalcrab.cfdi.toolbox;
+package com.immortalcrab.cfdi.utils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

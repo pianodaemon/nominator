@@ -1,4 +1,4 @@
-package com.immortalcrab.cfdi.toolbox;
+package com.immortalcrab.cfdi.utils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
