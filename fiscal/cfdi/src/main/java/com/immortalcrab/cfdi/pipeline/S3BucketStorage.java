@@ -12,23 +12,23 @@ import lombok.AllArgsConstructor;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Optional;
-import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @AllArgsConstructor
 class S3BucketStorage implements IStorage {
 
-    private final @NonNull
-    AmazonS3 _amazonS3;
+    private final AmazonS3 _amazonS3;
 
-    private final @NonNull
-    Optional<String> _target;
+    private final Optional<String> _target;
+
+    private Map<String, String> _prefixes;
 
     public S3BucketStorage(AmazonS3 amazonS3, final String target) {
 
-        this(amazonS3, Optional.ofNullable(target));
+        this(amazonS3, Optional.ofNullable(target), null);
     }
 
     @Override
@@ -67,5 +67,14 @@ class S3BucketStorage implements IStorage {
     @Override
     public String getTargetName() throws StorageError {
         return _target.orElseThrow(() -> new StorageError("aws bucket was not fed"));
+    }
+
+    @Override
+    public Optional<Map<String, String>> getPathPrefixes() {
+        return Optional.ofNullable(_prefixes);
+    }
+
+    public void setPathPrefixes(Map<String, String> pathPrefixes) {
+        _prefixes = pathPrefixes;
     }
 }
