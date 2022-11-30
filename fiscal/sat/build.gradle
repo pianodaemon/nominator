@@ -54,6 +54,7 @@ tasks.named('test') {
 
 dependencies {
 
+    implementation project(':utils')
     implementation project(':engine')
 
     // JAX-B dependencies for JDK 9+
