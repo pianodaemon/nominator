@@ -2,6 +2,7 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
+import com.immortalcrab.cfdi.utils.LegoAssembler;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -362,18 +363,5 @@ class FacturaRequestDTO extends Request {
         private String tipoFactor;
         private BigDecimal tasaOCuota;
         private BigDecimal importe;
-    }
-
-    private static class LegoAssembler {
-
-        private static Map<String, Object> obtainMapFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
-
-            Optional<Object> dict = Optional.ofNullable(m.get(k));
-            return (Map<String, Object>) dict.orElseThrow();
-        }
-
-        private static <T> T obtainObjFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
-            return (T) Optional.ofNullable(m.get(k)).orElseThrow();
-        }
     }
 }
