@@ -78,7 +78,7 @@ public class ProducerTest {
                         }, FakeXml::render);
             Producer producer = new Producer(stamper, storage, resources, ImmutableMap.of("fake", pair));
 
-            producer.doIssue("fake", isr);
+            producer.engage("fake", isr);
 
             BufferedInputStream buff = storage.download(expectedNameFormer(isr, storage.getTargetName()));
             assertTrue(buff.readAllBytes().length > 0);
