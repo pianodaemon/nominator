@@ -2,6 +2,7 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.StorageError;
+import com.immortalcrab.cfdi.pipeline.IStorage;
 import com.immortalcrab.cfdi.utils.JsonToMapHelper;
 import com.immortalcrab.cfdi.utils.LegoAssembler;
 import java.io.BufferedInputStream;
@@ -94,7 +95,7 @@ class ResourceDescriptor extends JsonToMapHelper {
         return Optional.ofNullable(_subscriptors.get(name));
     }
 
-    public Optional<Pac> getPac(final String name) {
+    public Optional<Pac> getPacSettings(final String name) {
 
         return Optional.ofNullable(_pacs.get(name));
     }
@@ -105,6 +106,11 @@ class ResourceDescriptor extends JsonToMapHelper {
 
         private final String ssl;
         private final String xslt;
+
+        public Map<String, String> turnIntoMap() {
+
+            return Map.of("ssl", ssl, "xslt", xslt);
+        }
     }
 
     @AllArgsConstructor
@@ -114,6 +120,7 @@ class ResourceDescriptor extends JsonToMapHelper {
         private final String carrier;
         private final String login;
         private final String passwd;
+
     }
 
     @AllArgsConstructor
