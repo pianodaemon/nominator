@@ -1,14 +1,13 @@
 package com.immortalcrab.cfdi.pipeline;
 
-import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
 import com.immortalcrab.cfdi.utils.LegoAssembler;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 
@@ -35,7 +34,7 @@ class NominaRequestDTO extends Request {
     NomDeduccionesAttributes _nomDeduccionesAttribs;
     NomOtrosPagosAttributes _nomOtrosPagosAttribs;
 
-    public NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
+    public NominaRequestDTO(InputStreamReader reader) throws RequestError, IOException {
 
         super(reader);
         _docAttribs = shapeDocAttribs();

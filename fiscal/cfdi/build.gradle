@@ -7,6 +7,7 @@ tasks.named('test') {
 
 dependencies {
 
+    implementation project(':utils')
     implementation project(':engine')
     implementation project(':pac')
     implementation project(':sat')

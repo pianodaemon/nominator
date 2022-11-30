@@ -1,8 +1,8 @@
 package com.immortalcrab.cfdi.pipeline;
 
-import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
 import com.immortalcrab.cfdi.utils.LegoAssembler;
+import java.io.IOException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,7 +32,7 @@ class FacturaRequestDTO extends Request {
     List<ImpuestosTrasladoAttributes> _impuestosTraslados;
     List<ImpuestosRetencionAttributes> _impuestosRetenciones;
 
-    public FacturaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
+    public FacturaRequestDTO(InputStreamReader reader) throws RequestError, IOException {
         super(reader);
         _comprobante = new ComprobanteAttributes();
         _emisor = new EmisorAttributes();

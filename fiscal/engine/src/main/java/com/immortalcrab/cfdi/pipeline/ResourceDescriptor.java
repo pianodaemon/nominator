@@ -5,6 +5,7 @@ import com.immortalcrab.cfdi.error.StorageError;
 import com.immortalcrab.cfdi.utils.JsonToMapHelper;
 import com.immortalcrab.cfdi.utils.LegoAssembler;
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -22,7 +23,7 @@ class ResourceDescriptor extends JsonToMapHelper {
     Map<String, Subscriptor> _subscriptors;
     Map<String, Pac> _pacs;
 
-    protected ResourceDescriptor(InputStreamReader reader) throws DecodeError {
+    protected ResourceDescriptor(InputStreamReader reader) throws IOException, DecodeError {
         super(JsonToMapHelper.readFromReader(reader));
 
         try {
@@ -77,7 +78,7 @@ class ResourceDescriptor extends JsonToMapHelper {
         }
     }
 
-    static ResourceDescriptor fetchProfile(IStorage storage, final String profile) throws StorageError, DecodeError {
+    static ResourceDescriptor fetchProfile(IStorage storage, final String profile) throws StorageError, DecodeError, IOException {
 
         BufferedInputStream isr = storage.download(profile);
         return new ResourceDescriptor(new InputStreamReader(isr, StandardCharsets.UTF_8));

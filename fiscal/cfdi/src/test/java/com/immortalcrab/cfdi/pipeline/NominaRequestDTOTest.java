@@ -1,7 +1,7 @@
 package com.immortalcrab.cfdi.pipeline;
 
-import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
+import java.io.IOException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -130,7 +130,7 @@ public class NominaRequestDTOTest {
                 assertTrue(new BigDecimal("0.0").equals(item.getImporte()));
                 assertTrue(new BigDecimal("0.0").equals(item.getSubsidioCausado()));
             }
-        } catch (RequestError | DecodeError ex) {
+        } catch (IOException| RequestError  ex) {
             assertNotNull(ex);
         }
     }

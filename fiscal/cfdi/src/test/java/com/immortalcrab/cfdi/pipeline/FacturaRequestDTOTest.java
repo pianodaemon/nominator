@@ -1,7 +1,7 @@
 package com.immortalcrab.cfdi.pipeline;
 
-import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -94,7 +94,7 @@ public class FacturaRequestDTOTest {
                 assertTrue(new BigDecimal("16.0").equals(impTraslItem.getImporte()));
             }
 
-        } catch (RequestError | DecodeError ex) {
+        } catch (IOException| RequestError  ex) {
             assertNotNull(ex);
         }
     }

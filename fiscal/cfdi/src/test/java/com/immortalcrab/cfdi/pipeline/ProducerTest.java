@@ -69,7 +69,13 @@ public class ProducerTest {
             InputStream is = _cloader.getResourceAsStream("jsonreqs/nominareq.json");
             InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
 
-            Pair<IDecodeStep, IXmlStep> pair = new Pair<>(reader -> new NominaRequestDTO(reader), FakeXml::render);
+            Pair<IDecodeStep, IXmlStep> pair = new Pair<>((IDecodeStep) (InputStreamReader reader) -> {
+                            try {
+                                return new NominaRequestDTO(reader);
+                            } catch (IOException ex) {
+                                throw new DecodeError("Nomina request can not be decoded");
+                            }
+                        }, FakeXml::render);
             Producer producer = new Producer(stamper, storage, resources, ImmutableMap.of("fake", pair));
 
             producer.doIssue("fake", isr);
@@ -82,7 +88,7 @@ public class ProducerTest {
         }
     }
 
-    private String expectedNameFormer(InputStreamReader isr, String bucketName) throws RequestError, DecodeError {
+    private String expectedNameFormer(InputStreamReader isr, String bucketName) throws  IOException, RequestError {
 
         NominaRequestDTO req = new NominaRequestDTO(isr);
         return String.format("%s/%s/%s.%s", bucketName, req.getDocAttributes().getSerie(), req.getDocAttributes().getFolio(), ".xml");
