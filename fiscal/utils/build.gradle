@@ -1,0 +1,11 @@
+description = 'utils'
+
+dependencies {
+
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+}
+
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
