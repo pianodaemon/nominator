@@ -82,17 +82,17 @@ class ResourceDescriptor extends JsonToMapHelper {
         return new ResourceDescriptor(new InputStreamReader(isr, StandardCharsets.UTF_8));
     }
 
-    Prefixes getPrefixes() {
+    public Prefixes getPrefixes() {
 
         return _prefixes;
     }
 
-    Optional<Subscriptor> getSubscriptor(final String name) {
+    public Optional<Subscriptor> getSubscriptor(final String name) {
 
         return Optional.ofNullable(_subscriptors.get(name));
     }
 
-    Optional<Pac> getPac(final String name) {
+    public Optional<Pac> getPac(final String name) {
 
         return Optional.ofNullable(_pacs.get(name));
     }
