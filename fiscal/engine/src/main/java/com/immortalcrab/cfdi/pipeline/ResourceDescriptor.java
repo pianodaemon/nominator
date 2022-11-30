@@ -3,6 +3,7 @@ package com.immortalcrab.cfdi.pipeline;
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.StorageError;
 import com.immortalcrab.cfdi.utils.JsonToMapHelper;
+import com.immortalcrab.cfdi.utils.LegoAssembler;
 import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -122,16 +123,5 @@ class ResourceDescriptor extends JsonToMapHelper {
         private final String cer;
         private final String key;
         private final String passwd;
-    }
-
-    private static class LegoAssembler {
-
-        private static Map<String, Object> obtainMapFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
-            return LegoAssembler.obtainObjFromKey(m, k);
-        }
-
-        private static <T> T obtainObjFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
-            return (T) Optional.ofNullable(m.get(k)).orElseThrow();
-        }
     }
 }
