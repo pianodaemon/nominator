@@ -1,6 +1,8 @@
 package com.immortalcrab.cfdi.toolbox;
 
-import com.immortalcrab.cfdi.toolbox.IToolbox;
+import com.immortalcrab.cfdi.utils.Certificate;
+import com.immortalcrab.cfdi.utils.OriginalStrExtractor;
+import com.immortalcrab.cfdi.utils.Signer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
