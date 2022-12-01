@@ -149,7 +149,7 @@ class FacturaXml {
 
                 impuestosRetenciones.getRetencion().add(impRetencion);
             }
-            if (_req.getImpuestosRetenciones().size() > 0) {
+            if (!_req.getImpuestosRetenciones().isEmpty()) {
                 impuestos.setRetenciones(impuestosRetenciones);
             }
 
@@ -166,7 +166,7 @@ class FacturaXml {
 
                 impuestosTraslados.getTraslado().add(impTraslado);
             }
-            if (_req.getImpuestosTraslados().size() > 0) {
+            if (!_req.getImpuestosTraslados().isEmpty()) {
                 impuestos.setTraslados(impuestosTraslados);
             }
             cfdi.setImpuestos(impuestos);
