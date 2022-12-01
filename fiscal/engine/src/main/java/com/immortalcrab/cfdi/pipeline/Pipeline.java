@@ -80,7 +80,7 @@ public abstract class Pipeline {
         String getReq();
     }
 
-    interface IStorage {
+    public interface IStorage {
 
         public void upload(final String cType,
                 final long len,
@@ -106,14 +106,20 @@ public abstract class Pipeline {
     }
 
     @FunctionalInterface
-    interface IDecodeStep<R extends Request> {
+    public interface IDecodeStep<R extends Request> {
 
         public R render(InputStreamReader isr) throws RequestError, DecodeError;
     }
 
     @FunctionalInterface
-    interface IXmlStep<T extends PacRes, R extends Request> {
+    public interface IXmlStep<T extends PacRes, R extends Request> {
 
         public T render(R cfdiReq, IStamp stamper) throws FormatError, StorageError;
+    }
+
+    @FunctionalInterface
+    interface IStamp<V extends PacReq, T extends PacRes> {
+
+        public T impress(final V target) throws FormatError;
     }
 }
