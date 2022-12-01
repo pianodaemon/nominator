@@ -71,6 +71,7 @@ public abstract class Pipeline {
 
     abstract protected String openPayload(final IPayload payload, Pickard pic) throws DecodeError, RequestError, PipelineError, StorageError, FormatError;
 
+    @FunctionalInterface
     public interface Pickard {
 
         String route(final String kind, final String issuer, InputStreamReader isr) throws DecodeError, RequestError, PipelineError, StorageError, FormatError;
