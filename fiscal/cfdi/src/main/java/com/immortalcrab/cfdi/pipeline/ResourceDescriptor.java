@@ -66,8 +66,8 @@ class ResourceDescriptor extends JsonToMapHelper {
 
                     return s;
 
-                }).forEachOrdered(or -> {
-                    _issuers.put(or.getRfc(), or);
+                }).forEachOrdered(o -> {
+                    _issuers.put(o.getRfc(), o);
                 });
             }
 
@@ -140,5 +140,10 @@ class ResourceDescriptor extends JsonToMapHelper {
         private final String cer;
         private final String key;
         private final String passwd;
+
+        public Map<String, String> turnIntoMap() {
+
+            return Map.of("rfc", rfc, "key", key, "cert", cer, "password", passwd);
+        }
     }
 }
