@@ -3,6 +3,7 @@ package com.immortalcrab.cfdi.pipeline;
 import com.immortalcrab.cfdi.error.FormatError;
 import com.immortalcrab.cfdi.error.StorageError;
 import com.immortalcrab.cfdi.pipeline.Pipeline.IStamp;
+import java.io.BufferedInputStream;
 import java.io.StringWriter;
 
 public class FakeXml {
@@ -17,7 +18,8 @@ public class FakeXml {
         _sw = shape();
     }
 
-    public static <R extends Request> PacRes render(R req, IStamp<PacReqChild, PacRes> stamper) throws FormatError, StorageError {
+    public static <R extends Request> PacRes render(R req, IStamp<PacReqChild, PacRes> stamper,
+            BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError, StorageError {
 
         NominaRequestDTO dto = (NominaRequestDTO) req;
         FakeXml ic = new FakeXml(dto);

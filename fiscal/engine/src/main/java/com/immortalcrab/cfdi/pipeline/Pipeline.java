@@ -53,7 +53,11 @@ public abstract class Pipeline {
         /* Second stage of the pipeline
         It stands for hand craft a valid xml at sat */
         IXmlStep sxml = stages.get().getValue1();
-        PacRes pacResult = sxml.render(cfdiReq, this.getStamper());
+
+        PacRes pacResult = sxml.render(cfdiReq, this.getStamper(),
+                this.fetchCert(this.getResources(), issuerAttribs),
+                this.fetchKey(this.getResources(), issuerAttribs));
+
         saveOnPersistance(this.getStorage(), pacResult);
 
         return pacResult.getContent().getId();
@@ -121,7 +125,8 @@ public abstract class Pipeline {
     @FunctionalInterface
     public interface IXmlStep<T extends PacRes, R extends Request> {
 
-        public T render(R cfdiReq, IStamp stamper) throws FormatError, StorageError;
+        public T render(R cfdiReq, IStamp stamper,
+                BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError, StorageError;
     }
 
     @FunctionalInterface

@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.javatuples.Pair;
@@ -32,7 +31,7 @@ public class Producer extends Pipeline {
         ResourceDescriptor rdescriptor = ResourceDescriptor.fetchProfile(s3Resources, System.getenv("PROFILE_RESOURCES"));
         s3Resources.setPathPrefixes(rdescriptor.getPrefixes().turnIntoMap());
 
-        ResourceDescriptor.Pac pac = rdescriptor.getPacSettings(System.getenv("PAC")).orElseThrow();
+        ResourceDescriptor.Pac pac = rdescriptor.getPacSettings(System.getenv("PAC")).orElseThrow(() -> new StorageError("The pac requested is not registered"));
 
         return new Producer(
                 rdescriptor,
@@ -95,26 +94,28 @@ public class Producer extends Pipeline {
     @Override
     protected BufferedInputStream fetchCert(IStorage resources, Map<String, String> issuerAttribs) throws StorageError {
 
-        return ResourceFetchHelper.obtain(resources, issuerAttribs, "prefix_ssl", "cer");
+        return ResourceFetchHelper.obtainCert(resources, issuerAttribs);
     }
 
     @Override
     protected BufferedInputStream fetchKey(IStorage resources, Map<String, String> issuerAttribs) throws StorageError {
 
-        return ResourceFetchHelper.obtain(resources, issuerAttribs, "prefix_ssl", "key");
+        return ResourceFetchHelper.obtainKey(resources, issuerAttribs);
     }
 
     private static class Wiring {
 
-        public static <R extends Request> PacRes fac(R req, IStamp<PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
+        public static <R extends Request> PacRes fac(R req, IStamp<PacRegularRequest, PacRes> stamper,
+                BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError, StorageError {
 
-            FacturaXml ic = new FacturaXml((FacturaRequestDTO) req);
+            FacturaXml ic = new FacturaXml((FacturaRequestDTO) req, certificate, signerKey);
             return stamper.impress(new PacRegularRequest(ic.toString()));
         }
 
-        public static <R extends Request> PacRes nom(R req, IStamp<PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
+        public static <R extends Request> PacRes nom(R req, IStamp<PacRegularRequest, PacRes> stamper,
+                BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError, StorageError {
 
-            NominaXml ic = new NominaXml((NominaRequestDTO) req);
+            NominaXml ic = new NominaXml((NominaRequestDTO) req, certificate, signerKey);
             return stamper.impress(new PacRegularRequest(ic.toString()));
         }
     }
