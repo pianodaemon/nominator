@@ -79,7 +79,7 @@ public class Producer extends Pipeline {
         BufferedInputStream bf = this.getStorage().download(payload.getReq());
         InputStreamReader isr = new InputStreamReader(bf, StandardCharsets.UTF_8);
 
-        return pic.route(reqMeta.getParticles()[S3ReqURLParser.URIPaticles.KIND.getIdx()], isr);
+        return pic.route(reqMeta.getParticles()[S3ReqURLParser.URIParticles.KIND.getIdx()], isr);
     }
 
     public static class Wiring {
