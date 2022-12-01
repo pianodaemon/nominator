@@ -1,6 +1,7 @@
 package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.FormatError;
+import com.immortalcrab.cfdi.pipeline.Pipeline.IStamp;
 import java.io.StringWriter;
 
 public class FakeStamp implements IStamp<PacReqChild, PacRes> {

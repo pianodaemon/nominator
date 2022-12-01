@@ -2,19 +2,27 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.FormatError;
+import com.immortalcrab.cfdi.error.PipelineError;
+import com.immortalcrab.cfdi.error.RequestError;
 import com.immortalcrab.cfdi.error.StorageError;
+import com.immortalcrab.cfdi.utils.S3ReqURLParser;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.javatuples.Pair;
 
 @Log4j2
 public class Producer extends Pipeline {
 
+    private static final String XML_MIME_TYPE = "text/xml";
     private static final String XML_FILE_EXTENSION = ".xml";
+    ResourceDescriptor rdesc;
 
     public static Producer obtainSteadyPipeline() throws StorageError, DecodeError {
 
@@ -27,15 +35,15 @@ public class Producer extends Pipeline {
         ResourceDescriptor.Pac pac = rdescriptor.getPacSettings(System.getenv("PAC")).orElseThrow();
 
         return new Producer(
+                rdescriptor,
                 PacRegularStamp.setup(pac.getCarrier(), pac.getLogin(), pac.getPasswd()),
                 s3DataLake,
-                s3Resources
-        );
+                s3Resources);
     }
 
-    Producer(final IStamp stamper, final IStorage storage, final IStorage resources) throws StorageError {
+    Producer(ResourceDescriptor rdesc, final IStamp stamper, final IStorage storage, final IStorage resources) throws StorageError {
 
-        this(stamper, storage, resources,
+        this(rdesc, stamper, storage, resources,
                 Map.of(
                         "fac", new Pair<>((IDecodeStep) (InputStreamReader reader) -> {
                             try (reader) {
@@ -53,10 +61,12 @@ public class Producer extends Pipeline {
                                 throw new DecodeError("Nomina request can not be decoded");
                             }
                         }, Wiring::nom)));
+
     }
 
-    Producer(final IStamp stamper, final IStorage storage, final IStorage resources, Map<String, Pair<IDecodeStep, IXmlStep>> scenarios) throws StorageError {
+    Producer(ResourceDescriptor rdesc, final IStamp stamper, final IStorage storage, final IStorage resources, Map<String, Pair<IDecodeStep, IXmlStep>> scenarios) throws StorageError {
         super(stamper, storage, resources, scenarios);
+        this.rdesc = rdesc;
     }
 
     @Override
@@ -65,10 +75,51 @@ public class Producer extends Pipeline {
         final String fileName = String.format("%s/%s.%s", st.getTargetName(), pacResult.getContent().getName(), XML_FILE_EXTENSION);
         byte[] in = pacResult.getContent().getBuffer().toString().getBytes(StandardCharsets.UTF_8);
 
-        st.upload("text/xml", in.length, fileName, new ByteArrayInputStream(in));
+        st.upload(XML_MIME_TYPE, in.length, fileName, new ByteArrayInputStream(in));
     }
 
-    public static class Wiring {
+    @Override
+    protected String openPayload(final IPayload payload, Pickard pic) throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
+
+        S3ReqURLParser reqMeta = S3ReqURLParser.parse(payload.getReq());
+        BufferedInputStream bf = this.getStorage().download(payload.getReq());
+        InputStreamReader instreamReader = new InputStreamReader(bf, StandardCharsets.UTF_8);
+        String[] parts = reqMeta.getParticles();
+        Optional<ResourceDescriptor.Issuer> issuer = rdesc.getIssuer(parts[S3ReqURLParser.URIParticles.ISSUER.getIdx()]);
+        return pic.route(
+                parts[S3ReqURLParser.URIParticles.KIND.getIdx()],
+                issuer.orElseThrow(() -> new RequestError("The issuer requested is not registered")).turnIntoMap(),
+                instreamReader);
+    }
+
+    @Override
+    protected BufferedInputStream fetchCert(IStorage resources, Map<String, String> issuerAttribs) throws StorageError {
+
+        Optional<String> prefixSSL = resources.getPathPrefix("prefix_ssl");
+        Optional<String> cer = Optional.ofNullable(issuerAttribs.get("cer"));
+
+        try {
+            final String signerKEY = String.format("%s/%s", prefixSSL.orElseThrow(), cer.orElseThrow());
+            return resources.download(signerKEY);
+        } catch (NoSuchElementException ex) {
+            throw new StorageError("The issuer's certificate can not be obtained");
+        }
+    }
+
+    @Override
+    protected BufferedInputStream fetchKey(IStorage resources, Map<String, String> issuerAttribs) throws StorageError {
+        Optional<String> prefixSSL = resources.getPathPrefix("prefix_ssl");
+        Optional<String> key = Optional.ofNullable(issuerAttribs.get("key"));
+
+        try {
+            final String signerKEY = String.format("%s/%s", prefixSSL.orElseThrow(), key.orElseThrow());
+            return resources.download(signerKEY);
+        } catch (NoSuchElementException ex) {
+            throw new StorageError("The issuer's priavte key can not be obtained");
+        }
+    }
+
+    private static class Wiring {
 
         public static <R extends Request> PacRes fac(R req, IStamp<PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
 

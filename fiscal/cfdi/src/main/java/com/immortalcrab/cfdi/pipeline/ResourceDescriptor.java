@@ -2,16 +2,19 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.StorageError;
+import com.immortalcrab.cfdi.pipeline.Pipeline.IStorage;
 import com.immortalcrab.cfdi.utils.JsonToMapHelper;
 import com.immortalcrab.cfdi.utils.LegoAssembler;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -20,11 +23,14 @@ import lombok.extern.log4j.Log4j2;
 class ResourceDescriptor extends JsonToMapHelper {
 
     Prefixes _prefixes;
-    Map<String, Subscriptor> _subscriptors;
+    Map<String, Issuer> _issuers;
     Map<String, Pac> _pacs;
 
     protected ResourceDescriptor(InputStreamReader reader) throws IOException, DecodeError {
         super(JsonToMapHelper.readFromReader(reader));
+
+        _issuers = new HashMap<>();
+        _pacs = new HashMap<>();
 
         try {
 
@@ -47,11 +53,11 @@ class ResourceDescriptor extends JsonToMapHelper {
             }
 
             {
-                List<Map<String, Object>> subs = LegoAssembler.obtainObjFromKey(this.getDs(), "subscriptors");
+                List<Map<String, Object>> subs = LegoAssembler.obtainObjFromKey(this.getDs(), "issuers");
 
                 subs.stream().map(i -> {
 
-                    Subscriptor s = new Subscriptor(
+                    Issuer s = new Issuer(
                             LegoAssembler.obtainObjFromKey(i, "rfc"),
                             LegoAssembler.obtainObjFromKey(i, "cer"),
                             LegoAssembler.obtainObjFromKey(i, "key"),
@@ -60,8 +66,8 @@ class ResourceDescriptor extends JsonToMapHelper {
 
                     return s;
 
-                }).forEachOrdered(or -> {
-                    _subscriptors.put(or.getRfc(), or);
+                }).forEachOrdered(o -> {
+                    _issuers.put(o.getRfc(), o);
                 });
             }
 
@@ -93,9 +99,9 @@ class ResourceDescriptor extends JsonToMapHelper {
         return _prefixes;
     }
 
-    public Optional<Subscriptor> getSubscriptor(final String name) {
+    public Optional<Issuer> getIssuer(final String name) {
 
-        return Optional.ofNullable(_subscriptors.get(name));
+        return Optional.ofNullable(_issuers.get(name));
     }
 
     public Optional<Pac> getPacSettings(final String name) {
@@ -128,11 +134,16 @@ class ResourceDescriptor extends JsonToMapHelper {
 
     @AllArgsConstructor
     @Getter
-    public static class Subscriptor {
+    public static class Issuer {
 
         private final String rfc;
         private final String cer;
         private final String key;
         private final String passwd;
+
+        public Map<String, String> turnIntoMap() {
+
+            return Map.of("rfc", rfc, "key", key, "cert", cer, "password", passwd);
+        }
     }
 }

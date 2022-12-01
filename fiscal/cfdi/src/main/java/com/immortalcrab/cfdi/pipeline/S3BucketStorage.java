@@ -7,6 +7,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
+import com.immortalcrab.cfdi.pipeline.Pipeline.IStorage;
 
 import lombok.AllArgsConstructor;
 

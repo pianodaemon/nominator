@@ -1,6 +1,6 @@
 package com.immortalcrab.cfdi.serverless;
 
-import com.immortalcrab.cfdi.pipeline.IPayload;
+import com.immortalcrab.cfdi.pipeline.Pipeline.IPayload;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Objects;

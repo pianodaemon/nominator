@@ -22,9 +22,9 @@ public class S3ReqURLParser {
         key = awsS3URI.getKey();
     }
 
-    public enum URIPaticles {
+    public enum URIParticles {
 
-        SUBSCRIPTOR(0),
+        ISSUER(0),
         GROUP_OF_RESOURCES(1),
         KIND(2),
         LABEL(3),
@@ -33,7 +33,7 @@ public class S3ReqURLParser {
 
         protected int idx;
 
-        URIPaticles(final int idx) {
+        URIParticles(final int idx) {
             this.idx = idx;
         }
 

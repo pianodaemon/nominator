@@ -8,7 +8,7 @@ import com.immortalcrab.cfdi.error.FormatError;
 import com.immortalcrab.cfdi.error.PipelineError;
 import com.immortalcrab.cfdi.error.RequestError;
 import com.immortalcrab.cfdi.error.StorageError;
-import com.immortalcrab.cfdi.pipeline.IPayload;
+import com.immortalcrab.cfdi.pipeline.Pipeline.IPayload;
 import com.immortalcrab.cfdi.pipeline.Pipeline;
 import com.immortalcrab.cfdi.pipeline.Producer;
 
