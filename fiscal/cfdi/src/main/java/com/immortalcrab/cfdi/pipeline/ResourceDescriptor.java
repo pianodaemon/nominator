@@ -2,6 +2,7 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.StorageError;
+import com.immortalcrab.cfdi.pipeline.Pipeline.IStorage;
 import com.immortalcrab.cfdi.utils.JsonToMapHelper;
 import com.immortalcrab.cfdi.utils.LegoAssembler;
 import java.io.BufferedInputStream;
