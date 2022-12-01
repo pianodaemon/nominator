@@ -94,13 +94,13 @@ public class Producer extends Pipeline {
     @Override
     protected BufferedInputStream fetchCert(IStorage resources, Map<String, String> issuerAttribs) throws StorageError {
 
-        return ResourceFetchHelper.obtain(resources, issuerAttribs, "prefix_ssl", "cer");
+        return ResourceFetchHelper.obtainCert(resources, issuerAttribs);
     }
 
     @Override
     protected BufferedInputStream fetchKey(IStorage resources, Map<String, String> issuerAttribs) throws StorageError {
 
-        return ResourceFetchHelper.obtain(resources, issuerAttribs, "prefix_ssl", "key");
+        return ResourceFetchHelper.obtainKey(resources, issuerAttribs);
     }
 
     private static class Wiring {
