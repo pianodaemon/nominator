@@ -29,7 +29,7 @@ class ResourceFetchHelper {
         return ResourceFetchHelper.obtain(resources, issuerAttribs, PREFIX_SSL, CER);
     }
 
-    public static BufferedInputStream fetchKey(Pipeline.IStorage resources, Map<String, String> issuerAttribs) throws StorageError {
+    public static BufferedInputStream obtainKey(Pipeline.IStorage resources, Map<String, String> issuerAttribs) throws StorageError {
 
         return ResourceFetchHelper.obtain(resources, issuerAttribs, PREFIX_SSL, KEY);
     }
