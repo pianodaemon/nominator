@@ -11,7 +11,6 @@ import com.immortalcrab.cfdi.error.StorageError;
 import com.immortalcrab.cfdi.pipeline.IPayload;
 import com.immortalcrab.cfdi.pipeline.Pipeline;
 import com.immortalcrab.cfdi.pipeline.Producer;
-import java.io.IOException;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -38,7 +37,7 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
         return null;
     }
 
-    private String gearUpPayload(IPayload payload) throws StorageError, DecodeError, RequestError, PipelineError, FormatError, IOException {
+    private String gearUpPayload(IPayload payload) throws StorageError, DecodeError, RequestError, PipelineError, FormatError {
 
         Pipeline pipe = Producer.obtainSteadyPipeline();
         return pipe.doIssue(payload);
