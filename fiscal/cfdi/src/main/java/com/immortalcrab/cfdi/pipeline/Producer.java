@@ -16,7 +16,7 @@ public class Producer extends Pipeline {
 
     private static final String XML_FILE_EXTENSION = ".xml";
 
-    public static Producer obtainSteadyPipeline() throws StorageError, DecodeError, IOException {
+    public static Producer obtainSteadyPipeline() throws StorageError, DecodeError {
 
         S3BucketStorage s3Resources = new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_RESOURCES"));
         S3BucketStorage s3DataLake = new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_DATA_LAKE"));
