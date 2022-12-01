@@ -53,8 +53,8 @@ public abstract class Pipeline {
         /* Second stage of the pipeline
         It stands for hand craft a valid xml at sat */
         IXmlStep sxml = stages.get().getValue1();
-        BufferedInputStream certificate = this.fetchCert(this.getResources(), issuerAttribs);
-        BufferedInputStream signerKey = this.fetchKey(this.getResources(), issuerAttribs);
+        //BufferedInputStream certificate = this.fetchCert(this.getResources(), issuerAttribs);
+        //BufferedInputStream signerKey = this.fetchKey(this.getResources(), issuerAttribs);
         PacRes pacResult = sxml.render(cfdiReq, this.getStamper());
         saveOnPersistance(this.getStorage(), pacResult);
 
