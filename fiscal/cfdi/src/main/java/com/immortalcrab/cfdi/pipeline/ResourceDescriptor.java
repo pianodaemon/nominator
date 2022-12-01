@@ -78,10 +78,14 @@ class ResourceDescriptor extends JsonToMapHelper {
         }
     }
 
-    static ResourceDescriptor fetchProfile(IStorage storage, final String profile) throws StorageError, DecodeError, IOException {
+    static ResourceDescriptor fetchProfile(IStorage storage, final String profile) throws StorageError, DecodeError {
 
-        BufferedInputStream isr = storage.download(profile);
-        return new ResourceDescriptor(new InputStreamReader(isr, StandardCharsets.UTF_8));
+        try ( BufferedInputStream isr = storage.download(profile)) {
+            return new ResourceDescriptor(new InputStreamReader(isr, StandardCharsets.UTF_8));
+        } catch (IOException ex) {
+            final String msg = String.format("Profile %s can not be loaded", profile);
+            throw new StorageError(msg);
+        }
     }
 
     public Prefixes getPrefixes() {
