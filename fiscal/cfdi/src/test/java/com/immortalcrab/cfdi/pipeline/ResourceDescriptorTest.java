@@ -35,7 +35,7 @@ public class ResourceDescriptorTest {
             assertEquals("ssl", prefixes.getSsl());
             assertEquals("xslt", prefixes.getXslt());
 
-            Optional<ResourceDescriptor.Subscriptor> subs = resDescriptor.getSubscriptor("RRM031001QE7");
+            Optional<ResourceDescriptor.Issuer> subs = resDescriptor.getIssuer("RRM031001QE7");
             assertEquals("RRM031001QE7", subs.orElseThrow().getRfc());
             assertEquals("00001000000505709200.cer", subs.orElseThrow().getCer());
             assertEquals("CSD_UNIDAD_RRM031001QE7_20201117_185818.key", subs.orElseThrow().getKey());

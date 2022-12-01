@@ -23,13 +23,13 @@ import lombok.extern.log4j.Log4j2;
 class ResourceDescriptor extends JsonToMapHelper {
 
     Prefixes _prefixes;
-    Map<String, Subscriptor> _subscriptors;
+    Map<String, Issuer> _issuers;
     Map<String, Pac> _pacs;
 
     protected ResourceDescriptor(InputStreamReader reader) throws IOException, DecodeError {
         super(JsonToMapHelper.readFromReader(reader));
 
-        _subscriptors = new HashMap<>();
+        _issuers = new HashMap<>();
         _pacs = new HashMap<>();
 
         try {
@@ -53,11 +53,11 @@ class ResourceDescriptor extends JsonToMapHelper {
             }
 
             {
-                List<Map<String, Object>> subs = LegoAssembler.obtainObjFromKey(this.getDs(), "subscriptors");
+                List<Map<String, Object>> subs = LegoAssembler.obtainObjFromKey(this.getDs(), "issuers");
 
                 subs.stream().map(i -> {
 
-                    Subscriptor s = new Subscriptor(
+                    Issuer s = new Issuer(
                             LegoAssembler.obtainObjFromKey(i, "rfc"),
                             LegoAssembler.obtainObjFromKey(i, "cer"),
                             LegoAssembler.obtainObjFromKey(i, "key"),
@@ -67,7 +67,7 @@ class ResourceDescriptor extends JsonToMapHelper {
                     return s;
 
                 }).forEachOrdered(or -> {
-                    _subscriptors.put(or.getRfc(), or);
+                    _issuers.put(or.getRfc(), or);
                 });
             }
 
@@ -99,9 +99,9 @@ class ResourceDescriptor extends JsonToMapHelper {
         return _prefixes;
     }
 
-    public Optional<Subscriptor> getSubscriptor(final String name) {
+    public Optional<Issuer> getIssuer(final String name) {
 
-        return Optional.ofNullable(_subscriptors.get(name));
+        return Optional.ofNullable(_issuers.get(name));
     }
 
     public Optional<Pac> getPacSettings(final String name) {
@@ -134,7 +134,7 @@ class ResourceDescriptor extends JsonToMapHelper {
 
     @AllArgsConstructor
     @Getter
-    public static class Subscriptor {
+    public static class Issuer {
 
         private final String rfc;
         private final String cer;

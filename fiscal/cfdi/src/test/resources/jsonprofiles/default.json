@@ -10,7 +10,7 @@
         "prefix_ssl": "ssl",
         "prefix_xslt": "xslt"
     },
-    "subscriptors": [
+    "issuers": [
         {
             "rfc": "RRM031001QE7",
             "cer": "00001000000505709200.cer",
