@@ -123,10 +123,10 @@ class FacturaXml {
 
                 var concImpuestos = cfdiFactory.createComprobanteConceptosConceptoImpuestos();
 
-                if (psTraslados.size() > 0) {
+                if (!psTraslados.isEmpty()) {
                     concImpuestos.setTraslados(traslados);
                 }
-                if (psRetenciones.size() > 0) {
+                if (!psRetenciones.isEmpty()) {
                     concImpuestos.setRetenciones(retenciones);
                 }
                 concepto.setImpuestos(concImpuestos);
