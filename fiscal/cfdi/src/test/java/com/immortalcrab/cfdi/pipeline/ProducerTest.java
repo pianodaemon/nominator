@@ -62,8 +62,8 @@ public class ProducerTest {
 
         try {
 
-            IStorage resources = new S3BucketStorage(_fbr.engage(), System.getenv("BUCKET_RESOURCES"));
-            IStorage storage = new S3BucketStorage(_fbs.engage(), System.getenv("BUCKET_DATA_LAKE"));
+            S3BucketStorage resources = new S3BucketStorage(_fbr.engage(), System.getenv("BUCKET_RESOURCES"));
+            S3BucketStorage storage = new S3BucketStorage(_fbs.engage(), System.getenv("BUCKET_DATA_LAKE"));
             AmazonS3 client = _fbs.getClient().orElseThrow(() -> new StorageError("aws client was never initialized"));
             client.createBucket(storage.getTargetName());
             client.createBucket(resources.getTargetName());
@@ -72,12 +72,12 @@ public class ProducerTest {
             InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
 
             Pair<IDecodeStep, IXmlStep> pair = new Pair<>((IDecodeStep) (InputStreamReader reader) -> {
-                            try {
-                                return new NominaRequestDTO(reader);
-                            } catch (IOException ex) {
-                                throw new DecodeError("Nomina request can not be decoded");
-                            }
-                        }, FakeXml::render);
+                try {
+                    return new NominaRequestDTO(reader);
+                } catch (IOException ex) {
+                    throw new DecodeError("Nomina request can not be decoded");
+                }
+            }, FakeXml::render);
             Producer producer = new Producer(stamper, storage, resources, ImmutableMap.of("fake", pair));
 
             producer.engage("fake", isr);
@@ -90,7 +90,7 @@ public class ProducerTest {
         }
     }
 
-    private String expectedNameFormer(InputStreamReader isr, String bucketName) throws  IOException, RequestError {
+    private String expectedNameFormer(InputStreamReader isr, String bucketName) throws IOException, RequestError {
 
         NominaRequestDTO req = new NominaRequestDTO(isr);
         return String.format("%s/%s/%s.%s", bucketName, req.getDocAttributes().getSerie(), req.getDocAttributes().getFolio(), ".xml");
