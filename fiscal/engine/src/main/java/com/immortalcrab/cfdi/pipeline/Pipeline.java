@@ -34,7 +34,7 @@ public abstract class Pipeline {
     private final @NonNull
     Map<String, Pair<IDecodeStep, IXmlStep>> scenarios;
 
-    public String engage(final String kind, InputStreamReader isr)
+    public String engage(final String kind, final String issuer, InputStreamReader isr)
             throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
 
         Optional<Pair<IDecodeStep, IXmlStep>> stages = Optional.ofNullable(this.getScenarios().get(kind));
@@ -63,7 +63,7 @@ public abstract class Pipeline {
             throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
 
         return openPayload(payload, (var kind, var issuer, var instreamReader) -> {
-            return engage(kind, instreamReader);
+            return engage(kind, issuer, instreamReader);
         });
     }
 
@@ -120,7 +120,7 @@ public abstract class Pipeline {
     }
 
     @FunctionalInterface
-    interface IStamp<V extends PacReq, T extends PacRes> {
+    public interface IStamp<V extends PacReq, T extends PacRes> {
 
         public T impress(final V target) throws FormatError;
     }
