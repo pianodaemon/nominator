@@ -24,7 +24,7 @@ public class S3ReqURLParser {
 
     public enum URIParticles {
 
-        SUBSCRIPTOR(0),
+        ISSUER(0),
         GROUP_OF_RESOURCES(1),
         KIND(2),
         LABEL(3),
