@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class AWSEventTest {
 
     // If the event were changed, this value would be modified as well
-    private static final Integer EXPECTED_HASH_CODE = -956805639;
+    private static final Integer EXPECTED_HASH_CODE = -959941537;
     private ClassLoader _cloader;
 
     @BeforeAll
