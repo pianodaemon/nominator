@@ -1,7 +1,7 @@
 package com.immortalcrab.cfdi.pipeline;
 
 @FunctionalInterface
-interface IPayload {
+public interface IPayload {
 
     String getReq();
 }
