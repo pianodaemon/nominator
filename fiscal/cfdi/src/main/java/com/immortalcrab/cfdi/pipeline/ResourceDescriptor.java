@@ -8,10 +8,12 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -25,6 +27,9 @@ class ResourceDescriptor extends JsonToMapHelper {
 
     protected ResourceDescriptor(InputStreamReader reader) throws IOException, DecodeError {
         super(JsonToMapHelper.readFromReader(reader));
+
+        _subscriptors = new HashMap<>();
+        _pacs = new HashMap<>();
 
         try {
 
