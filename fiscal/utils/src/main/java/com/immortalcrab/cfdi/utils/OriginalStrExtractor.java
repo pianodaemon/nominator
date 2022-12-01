@@ -14,7 +14,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-class OriginalStrExtractor {
+public class OriginalStrExtractor {
 
     public static String read(BufferedReader br, Source srcXslt) throws Exception {
 
