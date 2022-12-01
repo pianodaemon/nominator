@@ -87,7 +87,7 @@ public class Producer extends Pipeline {
         Optional<ResourceDescriptor.Issuer> issuer = _rdesc.getIssuer(parts[S3ReqURLParser.URIParticles.ISSUER.getIdx()]);
         return pic.route(
                 parts[S3ReqURLParser.URIParticles.KIND.getIdx()],
-                issuer.orElseThrow().turnIntoMap(),
+                issuer.orElseThrow(() -> new RequestError("The issuer requested is not registered")).turnIntoMap(),
                 instreamReader);
     }
 
