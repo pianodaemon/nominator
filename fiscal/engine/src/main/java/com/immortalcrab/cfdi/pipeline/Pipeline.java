@@ -67,9 +67,13 @@ public abstract class Pipeline {
         });
     }
 
-    abstract protected void saveOnPersistance(IStorage st, PacRes pacResult) throws StorageError;
+    protected abstract void saveOnPersistance(IStorage st, PacRes pacResult) throws StorageError;
 
-    abstract protected String openPayload(final IPayload payload, Pickard pic) throws DecodeError, RequestError, PipelineError, StorageError, FormatError;
+    protected abstract String openPayload(final IPayload payload, Pickard pic) throws DecodeError, RequestError, PipelineError, StorageError, FormatError;
+
+    protected abstract BufferedInputStream fetchCert(IStorage resources, final Map<String, String> issuerAttribs) throws StorageError;
+
+    protected abstract BufferedInputStream fetchKey(IStorage resources, final Map<String, String> issuerAttribs) throws StorageError;
 
     @FunctionalInterface
     public interface Pickard {
