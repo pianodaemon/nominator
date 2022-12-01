@@ -1,6 +1,7 @@
 package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.FormatError;
+import java.io.BufferedInputStream;
 import mx.gob.sat.cfd._4.Comprobante;
 import mx.gob.sat.cfd._4.ObjectFactory;
 import mx.gob.sat.sitio_internet.cfd.catalogos.*;
@@ -24,7 +25,7 @@ class FacturaXml {
 
     private final StringWriter _sw;
 
-    public FacturaXml(FacturaRequestDTO req) throws FormatError {
+    public FacturaXml(FacturaRequestDTO req, BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError {
 
         _req = req;
         _sw = shape();
