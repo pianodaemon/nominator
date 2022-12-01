@@ -38,7 +38,7 @@ public class Producer extends Pipeline {
         this(stamper, storage, resources,
                 Map.of(
                         "fac", new Pair<>((IDecodeStep) (InputStreamReader reader) -> {
-                            try {
+                            try (reader) {
                                 return new FacturaRequestDTO(reader);
                             } catch (IOException ex) {
                                 log.error("Factura request DTO could not see the light");
@@ -46,7 +46,7 @@ public class Producer extends Pipeline {
                             }
                         }, Wiring::fac),
                         "nom", new Pair<>((IDecodeStep) (InputStreamReader reader) -> {
-                            try {
+                            try (reader) {
                                 return new NominaRequestDTO(reader);
                             } catch (IOException ex) {
                                 log.error("Nomina request DTO could not see the light");
