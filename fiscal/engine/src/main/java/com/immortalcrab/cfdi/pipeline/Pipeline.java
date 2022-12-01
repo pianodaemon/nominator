@@ -71,4 +71,10 @@ public abstract class Pipeline {
 
         String route(final String kind, InputStreamReader isr) throws DecodeError, RequestError, PipelineError, StorageError, FormatError;
     }
+
+    @FunctionalInterface
+    interface IDecodeStep<R extends Request> {
+
+        public R render(InputStreamReader isr) throws RequestError, DecodeError;
+    }
 }
