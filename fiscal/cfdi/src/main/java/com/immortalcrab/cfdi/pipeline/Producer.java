@@ -77,9 +77,12 @@ public class Producer extends Pipeline {
 
         S3ReqURLParser reqMeta = S3ReqURLParser.parse(payload.getReq());
         BufferedInputStream bf = this.getStorage().download(payload.getReq());
-        InputStreamReader isr = new InputStreamReader(bf, StandardCharsets.UTF_8);
-
-        return pic.route(reqMeta.getParticles()[S3ReqURLParser.URIParticles.KIND.getIdx()], isr);
+        InputStreamReader instreamReader = new InputStreamReader(bf, StandardCharsets.UTF_8);
+        String[] parts = reqMeta.getParticles();
+        return pic.route(
+                parts[S3ReqURLParser.URIParticles.KIND.getIdx()],
+                parts[S3ReqURLParser.URIParticles.ISSUER.getIdx()],
+                instreamReader);
     }
 
     public static class Wiring {
