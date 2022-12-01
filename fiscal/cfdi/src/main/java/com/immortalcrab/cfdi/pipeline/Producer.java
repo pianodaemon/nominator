@@ -21,7 +21,7 @@ public class Producer extends Pipeline {
 
     private static final String XML_MIME_TYPE = "text/xml";
     private static final String XML_FILE_EXTENSION = ".xml";
-    ResourceDescriptor _rdesc;
+    ResourceDescriptor rdesc;
 
     public static Producer obtainSteadyPipeline() throws StorageError, DecodeError {
 
@@ -65,7 +65,7 @@ public class Producer extends Pipeline {
 
     Producer(ResourceDescriptor rdesc, final IStamp stamper, final IStorage storage, final IStorage resources, Map<String, Pair<IDecodeStep, IXmlStep>> scenarios) throws StorageError {
         super(stamper, storage, resources, scenarios);
-        _rdesc = rdesc;
+        this.rdesc = rdesc;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class Producer extends Pipeline {
         BufferedInputStream bf = this.getStorage().download(payload.getReq());
         InputStreamReader instreamReader = new InputStreamReader(bf, StandardCharsets.UTF_8);
         String[] parts = reqMeta.getParticles();
-        Optional<ResourceDescriptor.Issuer> issuer = _rdesc.getIssuer(parts[S3ReqURLParser.URIParticles.ISSUER.getIdx()]);
+        Optional<ResourceDescriptor.Issuer> issuer = rdesc.getIssuer(parts[S3ReqURLParser.URIParticles.ISSUER.getIdx()]);
         return pic.route(
                 parts[S3ReqURLParser.URIParticles.KIND.getIdx()],
                 issuer.orElseThrow(() -> new RequestError("The issuer requested is not registered")).turnIntoMap(),
