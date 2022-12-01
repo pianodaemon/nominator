@@ -31,7 +31,7 @@ public class Producer extends Pipeline {
         ResourceDescriptor rdescriptor = ResourceDescriptor.fetchProfile(s3Resources, System.getenv("PROFILE_RESOURCES"));
         s3Resources.setPathPrefixes(rdescriptor.getPrefixes().turnIntoMap());
 
-        ResourceDescriptor.Pac pac = rdescriptor.getPacSettings(System.getenv("PAC")).orElseThrow();
+        ResourceDescriptor.Pac pac = rdescriptor.getPacSettings(System.getenv("PAC")).orElseThrow(() -> new StorageError("The pac requested is not registered"));
 
         return new Producer(
                 rdescriptor,
