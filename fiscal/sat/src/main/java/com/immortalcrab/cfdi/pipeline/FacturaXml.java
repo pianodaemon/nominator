@@ -5,6 +5,9 @@ import mx.gob.sat.cfd._4.Comprobante;
 import mx.gob.sat.cfd._4.ObjectFactory;
 import mx.gob.sat.sitio_internet.cfd.catalogos.*;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.DatatypeConfigurationException;
 import java.io.StringWriter;
@@ -120,8 +123,12 @@ class FacturaXml {
 
                 var concImpuestos = cfdiFactory.createComprobanteConceptosConceptoImpuestos();
 
-                concImpuestos.setTraslados(traslados);
-                concImpuestos.setRetenciones(retenciones);
+                if (!psTraslados.isEmpty()) {
+                    concImpuestos.setTraslados(traslados);
+                }
+                if (!psRetenciones.isEmpty()) {
+                    concImpuestos.setRetenciones(retenciones);
+                }
                 concepto.setImpuestos(concImpuestos);
 
                 conceptos.getConcepto().add(concepto);
@@ -142,7 +149,9 @@ class FacturaXml {
 
                 impuestosRetenciones.getRetencion().add(impRetencion);
             }
-            impuestos.setRetenciones(impuestosRetenciones);
+            if (!_req.getImpuestosRetenciones().isEmpty()) {
+                impuestos.setRetenciones(impuestosRetenciones);
+            }
 
             var impuestosTraslados = cfdiFactory.createComprobanteImpuestosTraslados();
             for (FacturaRequestDTO.ImpuestosTrasladoAttributes impTras : _req.getImpuestosTraslados()) {
@@ -157,13 +166,23 @@ class FacturaXml {
 
                 impuestosTraslados.getTraslado().add(impTraslado);
             }
-            impuestos.setTraslados(impuestosTraslados);
+            if (!_req.getImpuestosTraslados().isEmpty()) {
+                impuestos.setTraslados(impuestosTraslados);
+            }
             cfdi.setImpuestos(impuestos);
 
             String contextPath = "mx.gob.sat.cfd._4";
             String schemaLocation = "http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd";
 
-        } catch (DatatypeConfigurationException ex) {
+            // Hacer el marshalling del cfdi object
+            JAXBContext context = JAXBContext.newInstance(contextPath);
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty("jaxb.schemaLocation", schemaLocation);
+            marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new CfdiNamespaceMapper());
+            marshaller.setProperty("jaxb.formatted.output", true);
+            marshaller.marshal(cfdi, sw);
+
+        } catch (JAXBException | DatatypeConfigurationException ex) {
             throw new FormatError("", ex);
         }
 

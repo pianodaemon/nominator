@@ -14,14 +14,14 @@ import com.immortalcrab.cfdi.error.StorageError;
 class FakeBucketService {
 
     private static final String FAKE_SERVICE_IP = "127.0.0.1";
-    private static final Integer FAKE_SERVICE_LOCAL_PORT = 8001;
 
+    private final Integer _fakeServiceLocalPort;
     private final S3Mock _api;
     private AmazonS3 _client;
 
-    public FakeBucketService() {
-
-        this._api = new S3Mock.Builder().withPort(FAKE_SERVICE_LOCAL_PORT).withInMemoryBackend().build();
+    public FakeBucketService(int port) {
+        _fakeServiceLocalPort = port;
+        this._api = new S3Mock.Builder().withPort(_fakeServiceLocalPort).withInMemoryBackend().build();
     }
 
     public AmazonS3 engage() throws StorageError {
@@ -37,7 +37,7 @@ class FakeBucketService {
     private AmazonS3 setupClient() throws StorageError {
 
         EndpointConfiguration endpoint = new EndpointConfiguration(
-                String.format("http://%s:%d", FAKE_SERVICE_IP, FAKE_SERVICE_LOCAL_PORT),
+                String.format("http://%s:%d", FAKE_SERVICE_IP, _fakeServiceLocalPort),
                 "us-west-2");
 
         return AmazonS3ClientBuilder

@@ -5,7 +5,9 @@ import com.immortalcrab.cfdi.error.FormatError;
 import com.immortalcrab.cfdi.error.PipelineError;
 import com.immortalcrab.cfdi.error.RequestError;
 import com.immortalcrab.cfdi.error.StorageError;
+import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Optional;
 import org.javatuples.Pair;
@@ -18,7 +20,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @AllArgsConstructor
 @Getter
-abstract class Pipeline {
+public abstract class Pipeline {
 
     private final @NonNull
     IStamp stamper;
@@ -27,9 +29,12 @@ abstract class Pipeline {
     IStorage storage;
 
     private final @NonNull
+    IStorage resources;
+
+    private final @NonNull
     Map<String, Pair<IDecodeStep, IXmlStep>> scenarios;
 
-    public String issue(final String kind, InputStreamReader isr)
+    public String engage(final String kind, InputStreamReader isr)
             throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
 
         Optional<Pair<IDecodeStep, IXmlStep>> stages = Optional.ofNullable(this.getScenarios().get(kind));
@@ -49,9 +54,18 @@ abstract class Pipeline {
         It stands for hand craft a valid xml at sat */
         IXmlStep sxml = stages.get().getValue1();
         PacRes pacResult = sxml.render(cfdiReq, this.getStamper());
-        saveOnPersistance(storage, pacResult);
+        saveOnPersistance(this.getStorage(), pacResult);
 
         return pacResult.getContent().getId();
+    }
+
+    public String doIssue(final IPayload payload)
+            throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
+
+        BufferedInputStream bf = this.getStorage().download(payload.getReq());
+        InputStreamReader isr = new InputStreamReader(bf, StandardCharsets.UTF_8);
+
+        return this.engage(payload.getKind(), isr);
     }
 
     abstract protected void saveOnPersistance(IStorage st, PacRes pacResult) throws StorageError;

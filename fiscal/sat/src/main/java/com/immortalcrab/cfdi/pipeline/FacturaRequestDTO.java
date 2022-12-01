@@ -1,18 +1,11 @@
 package com.immortalcrab.cfdi.pipeline;
 
-import com.immortalcrab.cfdi.error.DecodeError;
-import com.immortalcrab.cfdi.error.FormatError;
 import com.immortalcrab.cfdi.error.RequestError;
+import com.immortalcrab.cfdi.utils.LegoAssembler;
+import java.io.IOException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mx.gob.sat.cfd._4.Comprobante;
-import mx.gob.sat.cfd._4.ObjectFactory;
-import mx.gob.sat.sitio_internet.cfd.catalogos.*;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.*;
@@ -20,7 +13,7 @@ import java.util.*;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-class FacturaRequestDTO extends JsonRequest {
+class FacturaRequestDTO extends Request {
 
     public static final String CFDI_VER = "4.0";
     public static final String TIPO_COMPROBANTE = "I";
@@ -39,7 +32,7 @@ class FacturaRequestDTO extends JsonRequest {
     List<ImpuestosTrasladoAttributes> _impuestosTraslados;
     List<ImpuestosRetencionAttributes> _impuestosRetenciones;
 
-    public FacturaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
+    public FacturaRequestDTO(InputStreamReader reader) throws RequestError, IOException {
         super(reader);
         _comprobante = new ComprobanteAttributes();
         _emisor = new EmisorAttributes();
@@ -233,6 +226,10 @@ class FacturaRequestDTO extends JsonRequest {
             List<Map<String, Object>> traslados = LegoAssembler.obtainObjFromKey(dic, "traslados");
             for (Map<String, Object> t : traslados) {
                 var tras = new ImpuestosTrasladoAttributes();
+                {
+                    Double d = (Double) t.get("base");
+                    tras.setBase(new BigDecimal(d.toString()));
+                }
                 tras.setImpuesto((String) t.get("impuesto"));
                 tras.setTipoFactor((String) t.get("tipo_factor"));
                 {
@@ -366,18 +363,5 @@ class FacturaRequestDTO extends JsonRequest {
         private String tipoFactor;
         private BigDecimal tasaOCuota;
         private BigDecimal importe;
-    }
-
-    private static class LegoAssembler {
-
-        private static Map<String, Object> obtainMapFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
-
-            Optional<Object> dict = Optional.ofNullable(m.get(k));
-            return (Map<String, Object>) dict.orElseThrow();
-        }
-
-        private static <T> T obtainObjFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
-            return (T) Optional.ofNullable(m.get(k)).orElseThrow();
-        }
     }
 }

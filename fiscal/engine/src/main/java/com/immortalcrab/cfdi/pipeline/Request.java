@@ -1,20 +1,16 @@
 package com.immortalcrab.cfdi.pipeline;
 
-import com.immortalcrab.cfdi.error.RequestError;
-import java.util.Map;
-import lombok.AllArgsConstructor;
+import com.immortalcrab.cfdi.utils.JsonToMapHelper;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import lombok.Getter;
-import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 
-@AllArgsConstructor
+@Log4j2
 @Getter
-abstract class Request {
+public class Request extends JsonToMapHelper{
 
-    protected final @NonNull Map<String, Object> ds;
-
-    protected abstract Map<String, Object> craftImpt() throws RequestError;
-
-    protected void captureSymbol(final String label, final Object value) {
-        this.getDs().put(label, value);
+    protected Request(InputStreamReader reader) throws IOException {
+        super(JsonToMapHelper.readFromReader(reader));
     }
 }

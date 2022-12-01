@@ -1,4 +1,4 @@
-package com.immortalcrab.cfdi.toolbox;
+package com.immortalcrab.cfdi.utils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -14,7 +14,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-class OriginalStrExtractor {
+public class OriginalStrExtractor {
 
     public static String read(BufferedReader br, Source srcXslt) throws Exception {
 

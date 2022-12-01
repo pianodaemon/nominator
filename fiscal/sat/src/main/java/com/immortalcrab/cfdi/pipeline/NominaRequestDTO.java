@@ -1,13 +1,13 @@
 package com.immortalcrab.cfdi.pipeline;
 
-import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
+import com.immortalcrab.cfdi.utils.LegoAssembler;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 
@@ -17,7 +17,7 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-class NominaRequestDTO extends JsonRequest {
+class NominaRequestDTO extends Request {
 
     public static final String CFDI_VER = "4.0";
     public static final String NOMINA_VER = "1.2";
@@ -34,7 +34,7 @@ class NominaRequestDTO extends JsonRequest {
     NomDeduccionesAttributes _nomDeduccionesAttribs;
     NomOtrosPagosAttributes _nomOtrosPagosAttribs;
 
-    public NominaRequestDTO(InputStreamReader reader) throws RequestError, DecodeError {
+    public NominaRequestDTO(InputStreamReader reader) throws RequestError, IOException {
 
         super(reader);
         _docAttribs = shapeDocAttribs();
@@ -135,7 +135,7 @@ class NominaRequestDTO extends JsonRequest {
 
     private List<RegularConcepto> shapePcs() throws RequestError {
 
-        Object cs = NominaRequestDTO.LegoAssembler.obtainObjFromKey(this.getDs(), "conceptos");
+        Object cs = LegoAssembler.obtainObjFromKey(this.getDs(), "conceptos");
 
         try {
 
@@ -315,7 +315,7 @@ class NominaRequestDTO extends JsonRequest {
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
                     "percepciones");
 
-            List<Map<String, Object>> lms = NominaRequestDTO.LegoAssembler.obtainObjFromKey(dic, "lista");
+            List<Map<String, Object>> lms = LegoAssembler.obtainObjFromKey(dic, "lista");
 
             Double ts = LegoAssembler.obtainObjFromKey(dic, "total_sueldos");
             Double tg = LegoAssembler.obtainObjFromKey(dic, "total_gravado");
@@ -355,7 +355,7 @@ class NominaRequestDTO extends JsonRequest {
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
                     "deducciones");
 
-            List<Map<String, Object>> lms = NominaRequestDTO.LegoAssembler.obtainObjFromKey(dic, "lista");
+            List<Map<String, Object>> lms = LegoAssembler.obtainObjFromKey(dic, "lista");
 
             Double tod = LegoAssembler.obtainObjFromKey(dic, "total_otras_deducciones");
             Double tir = LegoAssembler.obtainObjFromKey(dic, "total_impuestos_retenidos");
@@ -387,7 +387,7 @@ class NominaRequestDTO extends JsonRequest {
 
         try {
 
-            List<Map<String, Object>> lms = NominaRequestDTO.LegoAssembler.obtainObjFromKey(
+            List<Map<String, Object>> lms = LegoAssembler.obtainObjFromKey(
                     LegoAssembler.obtainMapFromKey(this.getDs(), "nomina"),
                     "otros_pagos");
 
@@ -569,16 +569,5 @@ class NominaRequestDTO extends JsonRequest {
         private String tipoOtroPago;
         private BigDecimal subsidioCausado;
         private BigDecimal importe;
-    }
-
-    private static class LegoAssembler {
-
-        private static Map<String, Object> obtainMapFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
-            return LegoAssembler.obtainObjFromKey(m, k);
-        }
-
-        private static <T> T obtainObjFromKey(Map<String, Object> m, final String k) throws NoSuchElementException {
-            return (T) Optional.ofNullable(m.get(k)).orElseThrow();
-        }
     }
 }

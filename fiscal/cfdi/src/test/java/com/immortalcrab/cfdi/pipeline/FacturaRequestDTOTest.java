@@ -1,7 +1,7 @@
 package com.immortalcrab.cfdi.pipeline;
 
-import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.RequestError;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,7 +38,7 @@ public class FacturaRequestDTOTest {
             // We verify the mandatory document attributes
             assertTrue("RRM".equals(dto.getComprobanteAttributes().getSerie()));
             assertTrue("5457".equals(dto.getComprobanteAttributes().getFolio()));
-            assertTrue("2022-10-11T20:37:18".equals(dto.getComprobanteAttributes().getFecha()));
+            assertTrue("2022-11-17T20:00:30".equals(dto.getComprobanteAttributes().getFecha()));
             assertTrue("03".equals(dto.getComprobanteAttributes().getFormaPago()));
             assertTrue(new BigDecimal("100.0").equals(dto.getComprobanteAttributes().getSubTotal()));
             assertTrue(new BigDecimal("0.0").equals(dto.getComprobanteAttributes().getDescuento()));
@@ -49,8 +49,8 @@ public class FacturaRequestDTOTest {
             assertTrue("67100".equals(dto.getComprobanteAttributes().getLugarExpedicion()));
 
             // We verify the mandatory pseudo-emisor attributes
-            assertTrue("RPM061003QE6".equals(dto.getEmisorAttributes().getRfc()));
-            assertTrue("PP DOC S.A. DE C.V.".equals(dto.getEmisorAttributes().getNombre()));
+            assertTrue("RRM031001QE7".equals(dto.getEmisorAttributes().getRfc()));
+            assertTrue("DOCTOS NACIONALES S.A. DE C.V.".equals(dto.getEmisorAttributes().getNombre()));
             assertTrue("601".equals(dto.getEmisorAttributes().getRegimenFiscal()));
 
             // We verify the mandatory pseudo-receptor attributes
@@ -63,10 +63,10 @@ public class FacturaRequestDTOTest {
             {
                 var item = dto.getPseudoConceptos().get(firstExpected);
                 assertTrue("42181606".equals(item.getClaveProdServ()));
-                assertTrue("34855".equals(item.getNoIdentificacion()));
+                assertTrue("12345".equals(item.getNoIdentificacion()));
                 assertTrue(new BigDecimal("1.0").equals(item.getCantidad()));
                 assertTrue("H87".equals(item.getClaveUnidad()));
-                assertTrue("ITEM VENDIDO".equals(item.getDescripcion()));
+                assertTrue("ITEM A BUEN PRECIO".equals(item.getDescripcion()));
                 assertTrue(new BigDecimal("100.0").equals(item.getValorUnitario()));
                 assertTrue(new BigDecimal("100.0").equals(item.getImporte()));
 
@@ -87,13 +87,14 @@ public class FacturaRequestDTOTest {
             final int firstImpTrasl = 0;
             {
                 var impTraslItem = dto.getImpuestosTraslados().get(firstImpTrasl);
+                assertTrue(new BigDecimal("100.0").equals(impTraslItem.getBase()));
                 assertTrue("002".equals(impTraslItem.getImpuesto()));
                 assertTrue("Tasa".equals(impTraslItem.getTipoFactor()));
                 assertTrue(new BigDecimal("0.16").equals(impTraslItem.getTasaOCuota()));
                 assertTrue(new BigDecimal("16.0").equals(impTraslItem.getImporte()));
             }
 
-        } catch (RequestError | DecodeError ex) {
+        } catch (IOException| RequestError  ex) {
             assertNotNull(ex);
         }
     }

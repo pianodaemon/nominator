@@ -1,4 +1,4 @@
-package com.immortalcrab.cfdi.toolbox;
+package com.immortalcrab.cfdi.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import org.apache.commons.codec.binary.Base64;
 
-class Signer {
+public class Signer {
 
     public static String sign(BufferedReader brPrivKeyPem, String msg)
             throws IOException, GeneralSecurityException, NoSuchAlgorithmException, InvalidKeyException,

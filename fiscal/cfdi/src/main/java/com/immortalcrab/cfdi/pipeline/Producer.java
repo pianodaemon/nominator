@@ -2,50 +2,61 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.FormatError;
-import com.immortalcrab.cfdi.error.PipelineError;
-import com.immortalcrab.cfdi.error.RequestError;
 import com.immortalcrab.cfdi.error.StorageError;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import lombok.extern.log4j.Log4j2;
 import org.javatuples.Pair;
 
-public class Producer extends Pipeline implements IIssuer {
+@Log4j2
+public class Producer extends Pipeline {
 
     private static final String XML_FILE_EXTENSION = ".xml";
 
-    public Producer() throws StorageError {
+    public static Producer obtainSteadyPipeline() throws StorageError, DecodeError {
 
-        this(PacRegularStamp.setupWithEnv());
-    }
+        S3BucketStorage s3Resources = new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_RESOURCES"));
+        S3BucketStorage s3DataLake = new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_DATA_LAKE"));
 
-    public Producer(final IStamp stamper) throws StorageError {
+        ResourceDescriptor rdescriptor = ResourceDescriptor.fetchProfile(s3Resources, System.getenv("PROFILE_RESOURCES"));
+        s3Resources.setPathPrefixes(rdescriptor.getPrefixes().turnIntoMap());
 
-        this(stamper,
-                new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_PERSISTANCE_TARGET")));
-    }
+        ResourceDescriptor.Pac pac = rdescriptor.getPacSettings(System.getenv("PAC")).orElseThrow();
 
-    Producer(final IStamp stamper, final IStorage storage) throws StorageError {
-
-        this(
-                stamper,
-                storage,
-                Map.of(
-                        "fac", new Pair<>(reader -> new FacturaRequestDTO(reader), Wiring::fac),
-                        "nom", new Pair<>(reader -> new NominaRequestDTO(reader), Wiring::nom))
+        return new Producer(
+                PacRegularStamp.setup(pac.getCarrier(), pac.getLogin(), pac.getPasswd()),
+                s3DataLake,
+                s3Resources
         );
     }
 
-    Producer(final IStamp stamper, final IStorage storage, Map<String, Pair<IDecodeStep, IXmlStep>> scenarios) throws StorageError {
-        super(stamper, storage, scenarios);
+    Producer(final IStamp stamper, final IStorage storage, final IStorage resources) throws StorageError {
+
+        this(stamper, storage, resources,
+                Map.of(
+                        "fac", new Pair<>((IDecodeStep) (InputStreamReader reader) -> {
+                            try (reader) {
+                                return new FacturaRequestDTO(reader);
+                            } catch (IOException ex) {
+                                log.error("Factura request DTO could not see the light");
+                                throw new DecodeError("Factura request can not be decoded");
+                            }
+                        }, Wiring::fac),
+                        "nom", new Pair<>((IDecodeStep) (InputStreamReader reader) -> {
+                            try (reader) {
+                                return new NominaRequestDTO(reader);
+                            } catch (IOException ex) {
+                                log.error("Nomina request DTO could not see the light");
+                                throw new DecodeError("Nomina request can not be decoded");
+                            }
+                        }, Wiring::nom)));
     }
 
-    @Override
-    public String doIssue(final String kind, InputStreamReader isr)
-            throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
-
-        return this.issue(kind, isr);
+    Producer(final IStamp stamper, final IStorage storage, final IStorage resources, Map<String, Pair<IDecodeStep, IXmlStep>> scenarios) throws StorageError {
+        super(stamper, storage, resources, scenarios);
     }
 
     @Override

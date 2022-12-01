@@ -28,8 +28,7 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ProducerTest {
 
-    FakeBucketService _fbs;
-
+    private FakeBucketService _fbs, _fbr;
     private ClassLoader _cloader;
 
     @BeforeAll
@@ -41,34 +40,45 @@ public class ProducerTest {
     @BeforeEach
     void setup() throws StorageError {
 
-        _fbs = new FakeBucketService();
+        _fbs = new FakeBucketService(18001);
+        _fbr = new FakeBucketService(18002);
     }
 
     @AfterEach
     void teardown() {
 
+        _fbr.shutdown();
         _fbs.shutdown();
     }
 
-    @SetEnvironmentVariable(key = "BUCKET_PERSISTANCE_TARGET", value = "datalake-cfdi-subscriber")
+    @SetEnvironmentVariable(key = "BUCKET_RESOURCES", value = "cfdi-datares-dummy")
+    @SetEnvironmentVariable(key = "BUCKET_DATA_LAKE", value = "cfdi-datalake-dummy")
     @Test
-    void verifyProduction() {
+    void verifyProductionPipeline() {
 
         IStamp stamper = new FakeStamp();
 
         try {
 
-            IStorage storage = new S3BucketStorage(_fbs.engage(), System.getenv("BUCKET_PERSISTANCE_TARGET"));
+            IStorage resources = new S3BucketStorage(_fbr.engage(), System.getenv("BUCKET_RESOURCES"));
+            IStorage storage = new S3BucketStorage(_fbs.engage(), System.getenv("BUCKET_DATA_LAKE"));
             AmazonS3 client = _fbs.getClient().orElseThrow(() -> new StorageError("aws client was never initialized"));
             client.createBucket(storage.getTargetName());
+            client.createBucket(resources.getTargetName());
 
             InputStream is = _cloader.getResourceAsStream("jsonreqs/nominareq.json");
             InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
 
-            Pair<IDecodeStep, IXmlStep> pair = new Pair<>(reader -> new NominaRequestDTO(reader), FakeXml::render);
-            Producer producer = new Producer(stamper, storage, ImmutableMap.of("fake", pair));
+            Pair<IDecodeStep, IXmlStep> pair = new Pair<>((IDecodeStep) (InputStreamReader reader) -> {
+                            try {
+                                return new NominaRequestDTO(reader);
+                            } catch (IOException ex) {
+                                throw new DecodeError("Nomina request can not be decoded");
+                            }
+                        }, FakeXml::render);
+            Producer producer = new Producer(stamper, storage, resources, ImmutableMap.of("fake", pair));
 
-            producer.doIssue("fake", isr);
+            producer.engage("fake", isr);
 
             BufferedInputStream buff = storage.download(expectedNameFormer(isr, storage.getTargetName()));
             assertTrue(buff.readAllBytes().length > 0);
@@ -78,7 +88,7 @@ public class ProducerTest {
         }
     }
 
-    private String expectedNameFormer(InputStreamReader isr, String bucketName) throws RequestError, DecodeError {
+    private String expectedNameFormer(InputStreamReader isr, String bucketName) throws  IOException, RequestError {
 
         NominaRequestDTO req = new NominaRequestDTO(isr);
         return String.format("%s/%s/%s.%s", bucketName, req.getDocAttributes().getSerie(), req.getDocAttributes().getFolio(), ".xml");
