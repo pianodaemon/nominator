@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.javatuples.Pair;
@@ -89,6 +90,33 @@ public class Producer extends Pipeline {
                 parts[S3ReqURLParser.URIParticles.KIND.getIdx()],
                 issuer.orElseThrow(() -> new RequestError("The issuer requested is not registered")).turnIntoMap(),
                 instreamReader);
+    }
+
+    @Override
+    protected BufferedInputStream fetchCert(IStorage resources, Map<String, String> issuerAttribs) throws StorageError {
+
+        Optional<String> prefixSSL = resources.getPathPrefix("prefix_ssl");
+        Optional<String> cer = Optional.ofNullable(issuerAttribs.get("cer"));
+
+        try {
+            final String signerKEY = String.format("%s/%s", prefixSSL.orElseThrow(), cer.orElseThrow());
+            return resources.download(signerKEY);
+        } catch (NoSuchElementException ex) {
+            throw new StorageError("The issuer's certificate can not be obtained");
+        }
+    }
+
+    @Override
+    protected BufferedInputStream fetchKey(IStorage resources, Map<String, String> issuerAttribs) throws StorageError {
+        Optional<String> prefixSSL = resources.getPathPrefix("prefix_ssl");
+        Optional<String> key = Optional.ofNullable(issuerAttribs.get("key"));
+
+        try {
+            final String signerKEY = String.format("%s/%s", prefixSSL.orElseThrow(), key.orElseThrow());
+            return resources.download(signerKEY);
+        } catch (NoSuchElementException ex) {
+            throw new StorageError("The issuer's priavte key can not be obtained");
+        }
     }
 
     private static class Wiring {
