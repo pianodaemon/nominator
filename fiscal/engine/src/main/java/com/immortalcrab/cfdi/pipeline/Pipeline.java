@@ -62,7 +62,9 @@ public abstract class Pipeline {
     public String doIssue(final IPayload payload)
             throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
 
-        return openPayload(payload, (String kind, InputStreamReader instreamReader) -> engage(kind, instreamReader));
+        return openPayload(payload, (var kind, var issuer, var instreamReader) -> {
+            return engage(kind, instreamReader);
+        });
     }
 
     abstract protected void saveOnPersistance(IStorage st, PacRes pacResult) throws StorageError;
@@ -71,7 +73,7 @@ public abstract class Pipeline {
 
     public interface Pickard {
 
-        String route(final String kind, InputStreamReader isr) throws DecodeError, RequestError, PipelineError, StorageError, FormatError;
+        String route(final String kind, final String issuer, InputStreamReader isr) throws DecodeError, RequestError, PipelineError, StorageError, FormatError;
     }
 
     @FunctionalInterface
