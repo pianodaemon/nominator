@@ -19,6 +19,7 @@ import org.javatuples.Pair;
 @Log4j2
 public class Producer extends Pipeline {
 
+    private static final String XML_MIME_TYPE = "text/xml";
     private static final String XML_FILE_EXTENSION = ".xml";
     ResourceDescriptor _rdesc;
 
@@ -73,7 +74,7 @@ public class Producer extends Pipeline {
         final String fileName = String.format("%s/%s.%s", st.getTargetName(), pacResult.getContent().getName(), XML_FILE_EXTENSION);
         byte[] in = pacResult.getContent().getBuffer().toString().getBytes(StandardCharsets.UTF_8);
 
-        st.upload("text/xml", in.length, fileName, new ByteArrayInputStream(in));
+        st.upload(XML_MIME_TYPE, in.length, fileName, new ByteArrayInputStream(in));
     }
 
     @Override
