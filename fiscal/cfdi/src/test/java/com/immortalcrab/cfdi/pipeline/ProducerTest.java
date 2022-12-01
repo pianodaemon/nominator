@@ -79,9 +79,9 @@ public class ProducerTest {
                     throw new DecodeError("Nomina request can not be decoded");
                 }
             }, FakeXml::render);
-            Producer producer = new Producer(stamper, storage, resources, ImmutableMap.of("fake", pair));
+            Producer producer = new Producer(null, stamper, storage, resources, ImmutableMap.of("fake", pair));
 
-            producer.engage("fake", "RRM031001QE7", isr);
+            producer.engage("fake", null, isr);
 
             BufferedInputStream buff = storage.download(expectedNameFormer(isr, storage.getTargetName()));
             assertTrue(buff.readAllBytes().length > 0);

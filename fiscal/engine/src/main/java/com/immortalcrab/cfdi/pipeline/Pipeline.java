@@ -34,7 +34,7 @@ public abstract class Pipeline {
     private final @NonNull
     Map<String, Pair<IDecodeStep, IXmlStep>> scenarios;
 
-    public String engage(final String kind, final String issuer, InputStreamReader isr)
+    public String engage(final String kind, final Map<String, String> issuerAttribs, InputStreamReader isr)
             throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
 
         Optional<Pair<IDecodeStep, IXmlStep>> stages = Optional.ofNullable(this.getScenarios().get(kind));
@@ -74,7 +74,7 @@ public abstract class Pipeline {
     @FunctionalInterface
     public interface Pickard {
 
-        String route(final String kind, final String issuer, InputStreamReader isr) throws DecodeError, RequestError, PipelineError, StorageError, FormatError;
+        String route(final String kind, final Map<String, String> issuerAttribs, InputStreamReader isr) throws DecodeError, RequestError, PipelineError, StorageError, FormatError;
     }
 
     @FunctionalInterface

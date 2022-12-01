@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.javatuples.Pair;
 
@@ -19,6 +20,7 @@ import org.javatuples.Pair;
 public class Producer extends Pipeline {
 
     private static final String XML_FILE_EXTENSION = ".xml";
+    ResourceDescriptor _rdesc;
 
     public static Producer obtainSteadyPipeline() throws StorageError, DecodeError {
 
@@ -31,15 +33,15 @@ public class Producer extends Pipeline {
         ResourceDescriptor.Pac pac = rdescriptor.getPacSettings(System.getenv("PAC")).orElseThrow();
 
         return new Producer(
+                rdescriptor,
                 PacRegularStamp.setup(pac.getCarrier(), pac.getLogin(), pac.getPasswd()),
                 s3DataLake,
-                s3Resources
-        );
+                s3Resources);
     }
 
-    Producer(final IStamp stamper, final IStorage storage, final IStorage resources) throws StorageError {
+    Producer(ResourceDescriptor rdesc, final IStamp stamper, final IStorage storage, final IStorage resources) throws StorageError {
 
-        this(stamper, storage, resources,
+        this(rdesc, stamper, storage, resources,
                 Map.of(
                         "fac", new Pair<>((IDecodeStep) (InputStreamReader reader) -> {
                             try (reader) {
@@ -57,10 +59,12 @@ public class Producer extends Pipeline {
                                 throw new DecodeError("Nomina request can not be decoded");
                             }
                         }, Wiring::nom)));
+
     }
 
-    Producer(final IStamp stamper, final IStorage storage, final IStorage resources, Map<String, Pair<IDecodeStep, IXmlStep>> scenarios) throws StorageError {
+    Producer(ResourceDescriptor rdesc, final IStamp stamper, final IStorage storage, final IStorage resources, Map<String, Pair<IDecodeStep, IXmlStep>> scenarios) throws StorageError {
         super(stamper, storage, resources, scenarios);
+        _rdesc = rdesc;
     }
 
     @Override
@@ -79,9 +83,10 @@ public class Producer extends Pipeline {
         BufferedInputStream bf = this.getStorage().download(payload.getReq());
         InputStreamReader instreamReader = new InputStreamReader(bf, StandardCharsets.UTF_8);
         String[] parts = reqMeta.getParticles();
+        Optional<ResourceDescriptor.Issuer> issuer = _rdesc.getIssuer(parts[S3ReqURLParser.URIParticles.ISSUER.getIdx()]);
         return pic.route(
                 parts[S3ReqURLParser.URIParticles.KIND.getIdx()],
-                parts[S3ReqURLParser.URIParticles.ISSUER.getIdx()],
+                issuer.orElseThrow().turnIntoMap(),
                 instreamReader);
     }
 
