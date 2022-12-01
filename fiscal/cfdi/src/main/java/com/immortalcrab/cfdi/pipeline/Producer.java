@@ -95,28 +95,13 @@ public class Producer extends Pipeline {
     @Override
     protected BufferedInputStream fetchCert(IStorage resources, Map<String, String> issuerAttribs) throws StorageError {
 
-        Optional<String> prefixSSL = resources.getPathPrefix("prefix_ssl");
-        Optional<String> cer = Optional.ofNullable(issuerAttribs.get("cer"));
-
-        try {
-            final String signerKEY = String.format("%s/%s", prefixSSL.orElseThrow(), cer.orElseThrow());
-            return resources.download(signerKEY);
-        } catch (NoSuchElementException ex) {
-            throw new StorageError("The issuer's certificate can not be obtained");
-        }
+        return ResourceFetchHelper.obtain(resources, issuerAttribs, "prefix_ssl", "cer");
     }
 
     @Override
     protected BufferedInputStream fetchKey(IStorage resources, Map<String, String> issuerAttribs) throws StorageError {
-        Optional<String> prefixSSL = resources.getPathPrefix("prefix_ssl");
-        Optional<String> key = Optional.ofNullable(issuerAttribs.get("key"));
 
-        try {
-            final String signerKEY = String.format("%s/%s", prefixSSL.orElseThrow(), key.orElseThrow());
-            return resources.download(signerKEY);
-        } catch (NoSuchElementException ex) {
-            throw new StorageError("The issuer's priavte key can not be obtained");
-        }
+        return ResourceFetchHelper.obtain(resources, issuerAttribs, "prefix_ssl", "key");
     }
 
     private static class Wiring {
