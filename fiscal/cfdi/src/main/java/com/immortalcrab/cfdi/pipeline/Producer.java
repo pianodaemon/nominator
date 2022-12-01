@@ -2,7 +2,11 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.DecodeError;
 import com.immortalcrab.cfdi.error.FormatError;
+import com.immortalcrab.cfdi.error.PipelineError;
+import com.immortalcrab.cfdi.error.RequestError;
 import com.immortalcrab.cfdi.error.StorageError;
+import com.immortalcrab.cfdi.utils.S3ReqURLParser;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -66,6 +70,16 @@ public class Producer extends Pipeline {
         byte[] in = pacResult.getContent().getBuffer().toString().getBytes(StandardCharsets.UTF_8);
 
         st.upload("text/xml", in.length, fileName, new ByteArrayInputStream(in));
+    }
+
+    @Override
+    protected String openPayload(final IPayload payload, Pickard pic) throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
+
+        S3ReqURLParser reqMeta = S3ReqURLParser.parse(payload.getReq());
+        BufferedInputStream bf = this.getStorage().download(payload.getReq());
+        InputStreamReader isr = new InputStreamReader(bf, StandardCharsets.UTF_8);
+
+        return pic.route(reqMeta.getParticles()[S3ReqURLParser.URIPaticles.KIND.getIdx()], isr);
     }
 
     public static class Wiring {

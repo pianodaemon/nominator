@@ -5,10 +5,7 @@ import com.immortalcrab.cfdi.error.FormatError;
 import com.immortalcrab.cfdi.error.PipelineError;
 import com.immortalcrab.cfdi.error.RequestError;
 import com.immortalcrab.cfdi.error.StorageError;
-import com.immortalcrab.cfdi.utils.S3ReqURLParser;
-import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Optional;
 import org.javatuples.Pair;
@@ -63,12 +60,15 @@ public abstract class Pipeline {
     public String doIssue(final IPayload payload)
             throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
 
-        S3ReqURLParser reqMeta = S3ReqURLParser.parse(payload.getReq());
-        BufferedInputStream bf = this.getStorage().download(payload.getReq());
-        InputStreamReader isr = new InputStreamReader(bf, StandardCharsets.UTF_8);
-
-        return this.engage(reqMeta.getParticles()[S3ReqURLParser.URIPaticles.KIND.getIdx()], isr);
+        return openPayload(payload, (String kind, InputStreamReader instreamReader) -> engage(kind, instreamReader));
     }
 
     abstract protected void saveOnPersistance(IStorage st, PacRes pacResult) throws StorageError;
+
+    abstract protected String openPayload(final IPayload payload, Pickard pic) throws DecodeError, RequestError, PipelineError, StorageError, FormatError;
+
+    public interface Pickard {
+
+        String route(final String kind, InputStreamReader isr) throws DecodeError, RequestError, PipelineError, StorageError, FormatError;
+    }
 }
