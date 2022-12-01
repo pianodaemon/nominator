@@ -1,6 +1,7 @@
 package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.FormatError;
+import java.io.BufferedInputStream;
 
 import mx.gob.sat.cfd._4.Comprobante;
 import mx.gob.sat.cfd._4.ObjectFactory;
@@ -38,7 +39,7 @@ class NominaXml {
 
     private final StringWriter _sw;
 
-    public NominaXml(NominaRequestDTO req) throws FormatError {
+    public NominaXml(NominaRequestDTO req, BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError {
 
         _req = req;
         _sw = shape();
