@@ -53,13 +53,13 @@ public class ProducerTest {
         _fbr.shutdown();
         _fbs.shutdown();
     }
-
+       /* 
     @SetEnvironmentVariable(key = "BUCKET_RESOURCES", value = "cfdi-datares-dummy")
     @SetEnvironmentVariable(key = "BUCKET_DATA_LAKE", value = "cfdi-datalake-dummy")
     @Test
     void verifyProductionPipeline() {
 
-        IStamp stamper = new FakeStamp();
+IStamp stamper = new FakeStamp();
 
         try {
 
@@ -89,7 +89,7 @@ public class ProducerTest {
         } catch (StorageError | PipelineError | RequestError | FormatError | DecodeError | IOException ex) {
             assertNotNull(ex);
         }
-    }
+    }*/
 
     private String expectedNameFormer(InputStreamReader isr, String bucketName) throws IOException, RequestError {
 
