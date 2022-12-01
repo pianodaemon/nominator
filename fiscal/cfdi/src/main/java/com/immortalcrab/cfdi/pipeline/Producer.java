@@ -91,7 +91,7 @@ public class Producer extends Pipeline {
                 instreamReader);
     }
 
-    public static class Wiring {
+    private static class Wiring {
 
         public static <R extends Request> PacRes fac(R req, IStamp<PacRegularRequest, PacRes> stamper) throws FormatError, StorageError {
 
