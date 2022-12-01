@@ -77,4 +77,10 @@ public abstract class Pipeline {
 
         public R render(InputStreamReader isr) throws RequestError, DecodeError;
     }
+
+    @FunctionalInterface
+    interface IXmlStep<T extends PacRes, R extends Request> {
+
+        public T render(R cfdiReq, IStamp stamper) throws FormatError, StorageError;
+    }
 }
