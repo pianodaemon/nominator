@@ -34,4 +34,8 @@ class ResourceFetchHelper {
 
         return ResourceFetchHelper.obtain(resources, issuerAttribs, PREFIX_SSL, KEY);
     }
+
+    private ResourceFetchHelper() {
+        throw new IllegalStateException("Helper class");
+    }
 }
