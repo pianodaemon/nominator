@@ -115,14 +115,14 @@ public class Producer extends Pipeline {
         public static <R extends Request> PacRes fac(R req, IStamp<PacRegularRequest, PacRes> stamper,
                 BufferedInputStream certificate, BufferedInputStream signerKey, final String passwd) throws FormatError, StorageError {
 
-            FacturaXml ic = new FacturaXml((FacturaRequestDTO) req, certificate, signerKey);
+            FacturaXml ic = new FacturaXml((FacturaRequestDTO) req, certificate, signerKey, passwd);
             return stamper.impress(new PacRegularRequest(ic.toString()));
         }
 
         public static <R extends Request> PacRes nom(R req, IStamp<PacRegularRequest, PacRes> stamper,
                 BufferedInputStream certificate, BufferedInputStream signerKey, final String passwd) throws FormatError, StorageError {
 
-            NominaXml ic = new NominaXml((NominaRequestDTO) req, certificate, signerKey);
+            NominaXml ic = new NominaXml((NominaRequestDTO) req, certificate, signerKey, passwd);
             return stamper.impress(new PacRegularRequest(ic.toString()));
         }
     }
