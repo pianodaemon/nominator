@@ -15,11 +15,11 @@ class ResourceFetchHelper {
 
     public static BufferedInputStream obtain(Pipeline.IStorage resources, Map<String, String> issuerAttribs, String prefix, String item) throws StorageError {
         Optional<String> prefixResource = resources.getPathPrefix(prefix);
-        Optional<String> key = Optional.ofNullable(issuerAttribs.get(item));
+        Optional<String> baseName = Optional.ofNullable(issuerAttribs.get(item));
         Optional<String> issuerIdentifier = Optional.ofNullable(issuerAttribs.get(ISSUER_IDENTIFIER_ATTRIB));
         try {
-            final String signerKEY = String.format("%s/%s/%s", issuerIdentifier.orElseThrow(), prefixResource.orElseThrow(), key.orElseThrow());
-            return resources.download(signerKEY);
+            final String itemPath = String.format("%s/%s/%s", issuerIdentifier.orElseThrow(), prefixResource.orElseThrow(), baseName.orElseThrow());
+            return resources.download(itemPath);
         } catch (NoSuchElementException ex) {
             throw new StorageError("The issuer's resource can not be obtained");
         }
