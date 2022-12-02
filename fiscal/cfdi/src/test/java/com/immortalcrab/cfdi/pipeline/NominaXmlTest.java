@@ -31,7 +31,7 @@ public class NominaXmlTest {
 
             InputStream is = _cloader.getResourceAsStream("jsonreqs/nominareq.json");
             InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
-            NominaXml nominaGenerated = new NominaXml(new NominaRequestDTO(reader), null, null);
+            NominaXml nominaGenerated = new NominaXml(new NominaRequestDTO(reader), null, null, null);
 
             char[] csc0 = nominaGenerated.toString().replace("\n", "").replace("\r", "").toCharArray();
             char[] csc1 = nominaTesting.toString().replace("\n", "").replace("\r", "").toCharArray();
