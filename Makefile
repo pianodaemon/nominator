@@ -6,9 +6,7 @@ DEPLOY_STUFF    := $(BASE)/dev-tools/deployment
 all:    deploy_infra
 
 deploy_infra:   render_infra
-	(export MACROS_INCLUDE=$(MACROS_INCLUDE)  &&     \
-	export OPERATIONAL=$(OPERATIONAL)         &&     \
-	cd  $(DEPLOY_STUFF) && ./incept-infra-stack.sh "${SUBSCRIPTOR}");
+	(cd  $(DEPLOY_STUFF) && ./incept-infra-stack.sh "${SUBSCRIPTOR}");
 
 render_infra:   compile_fiscal
 	(export MACROS_INCLUDE=$(MACROS_INCLUDE)  &&  \
