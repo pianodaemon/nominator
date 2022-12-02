@@ -25,7 +25,8 @@ class FacturaXml {
 
     private final StringWriter _sw;
 
-    public FacturaXml(FacturaRequestDTO req, BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError {
+    public FacturaXml(FacturaRequestDTO req,
+            BufferedInputStream certificate, BufferedInputStream signerKey, final String passwd) throws FormatError {
 
         _req = req;
         _sw = shape();
