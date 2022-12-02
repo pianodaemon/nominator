@@ -79,6 +79,8 @@ public abstract class Pipeline {
 
     protected abstract BufferedInputStream fetchKey(IStorage resources, final Map<String, String> issuerAttribs) throws StorageError;
 
+    protected abstract String fetchPassword(final Map<String, String> issuerAttribs) throws StorageError;
+
     @FunctionalInterface
     public interface Pickard {
 
