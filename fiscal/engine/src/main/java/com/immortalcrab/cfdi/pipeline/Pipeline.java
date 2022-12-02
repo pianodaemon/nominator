@@ -50,8 +50,7 @@ public abstract class Pipeline {
         It stands for hand craft a valid xml at sat */
         PacRes pacResult = stages.orElseThrow(() -> new PipelineError("cfdi " + kind + " is unsupported"))
                 .getValue1()
-                .render(
-                        cfdiReq,
+                .render(cfdiReq,
                         this.getStamper(),
                         this.fetchCert(this.getResources(), issuerAttribs),
                         this.fetchKey(this.getResources(), issuerAttribs),
