@@ -113,14 +113,14 @@ public class Producer extends Pipeline {
     private static class Wiring {
 
         public static <R extends Request> PacRes fac(R req, IStamp<PacRegularRequest, PacRes> stamper,
-                BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError, StorageError {
+                BufferedInputStream certificate, BufferedInputStream signerKey, final String passwd) throws FormatError, StorageError {
 
             FacturaXml ic = new FacturaXml((FacturaRequestDTO) req, certificate, signerKey);
             return stamper.impress(new PacRegularRequest(ic.toString()));
         }
 
         public static <R extends Request> PacRes nom(R req, IStamp<PacRegularRequest, PacRes> stamper,
-                BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError, StorageError {
+                BufferedInputStream certificate, BufferedInputStream signerKey, final String passwd) throws FormatError, StorageError {
 
             NominaXml ic = new NominaXml((NominaRequestDTO) req, certificate, signerKey);
             return stamper.impress(new PacRegularRequest(ic.toString()));
