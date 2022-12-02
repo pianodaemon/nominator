@@ -103,19 +103,26 @@ public class Producer extends Pipeline {
         return ResourceFetchHelper.obtainKey(resources, issuerAttribs);
     }
 
+    @Override
+    protected String fetchPassword(Map<String, String> issuerAttribs) throws StorageError {
+
+        Optional<String> passwd = Optional.ofNullable(issuerAttribs.get("passwd"));
+        return passwd.orElseThrow(() -> new StorageError("The issuer requested is not having a password"));
+    }
+
     private static class Wiring {
 
         public static <R extends Request> PacRes fac(R req, IStamp<PacRegularRequest, PacRes> stamper,
-                BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError, StorageError {
+                BufferedInputStream certificate, BufferedInputStream signerKey, final String passwd) throws FormatError, StorageError {
 
-            FacturaXml ic = new FacturaXml((FacturaRequestDTO) req, certificate, signerKey);
+            FacturaXml ic = new FacturaXml((FacturaRequestDTO) req, certificate, signerKey, passwd);
             return stamper.impress(new PacRegularRequest(ic.toString()));
         }
 
         public static <R extends Request> PacRes nom(R req, IStamp<PacRegularRequest, PacRes> stamper,
-                BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError, StorageError {
+                BufferedInputStream certificate, BufferedInputStream signerKey, final String passwd) throws FormatError, StorageError {
 
-            NominaXml ic = new NominaXml((NominaRequestDTO) req, certificate, signerKey);
+            NominaXml ic = new NominaXml((NominaRequestDTO) req, certificate, signerKey, passwd);
             return stamper.impress(new PacRegularRequest(ic.toString()));
         }
     }

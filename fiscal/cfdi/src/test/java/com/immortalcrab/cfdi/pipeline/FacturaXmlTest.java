@@ -31,7 +31,7 @@ public class FacturaXmlTest {
 
             InputStream is = _cloader.getResourceAsStream("jsonreqs/facturareq.json");
             InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
-            FacturaXml facturaGenerated = new FacturaXml(new FacturaRequestDTO(reader), null, null);
+            FacturaXml facturaGenerated = new FacturaXml(new FacturaRequestDTO(reader), null, null, null);
 
             char[] csc0 = facturaGenerated.toString().replace("\n", "").replace("\r", "").toCharArray();
             char[] csc1 = facturaTesting.toString().replace("\n", "").replace("\r", "").toCharArray();

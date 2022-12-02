@@ -39,7 +39,8 @@ class NominaXml {
 
     private final StringWriter _sw;
 
-    public NominaXml(NominaRequestDTO req, BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError {
+    public NominaXml(NominaRequestDTO req,
+            BufferedInputStream certificate, BufferedInputStream signerKey, final String passwd) throws FormatError {
 
         _req = req;
         _sw = shape();

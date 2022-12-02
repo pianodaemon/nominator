@@ -56,7 +56,8 @@ public abstract class Pipeline {
 
         PacRes pacResult = sxml.render(cfdiReq, this.getStamper(),
                 this.fetchCert(this.getResources(), issuerAttribs),
-                this.fetchKey(this.getResources(), issuerAttribs));
+                this.fetchKey(this.getResources(), issuerAttribs),
+                this.fetchPassword(issuerAttribs));
 
         saveOnPersistance(this.getStorage(), pacResult);
 
@@ -78,6 +79,8 @@ public abstract class Pipeline {
     protected abstract BufferedInputStream fetchCert(IStorage resources, final Map<String, String> issuerAttribs) throws StorageError;
 
     protected abstract BufferedInputStream fetchKey(IStorage resources, final Map<String, String> issuerAttribs) throws StorageError;
+
+    protected abstract String fetchPassword(final Map<String, String> issuerAttribs) throws StorageError;
 
     @FunctionalInterface
     public interface Pickard {
@@ -126,7 +129,7 @@ public abstract class Pipeline {
     public interface IXmlStep<T extends PacRes, R extends Request> {
 
         public T render(R cfdiReq, IStamp stamper,
-                BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError, StorageError;
+                BufferedInputStream certificate, BufferedInputStream signerKey, final String passwd) throws FormatError, StorageError;
     }
 
     @FunctionalInterface
