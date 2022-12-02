@@ -56,7 +56,8 @@ public abstract class Pipeline {
 
         PacRes pacResult = sxml.render(cfdiReq, this.getStamper(),
                 this.fetchCert(this.getResources(), issuerAttribs),
-                this.fetchKey(this.getResources(), issuerAttribs));
+                this.fetchKey(this.getResources(), issuerAttribs),
+                this.fetchPassword(issuerAttribs));
 
         saveOnPersistance(this.getStorage(), pacResult);
 
@@ -128,7 +129,7 @@ public abstract class Pipeline {
     public interface IXmlStep<T extends PacRes, R extends Request> {
 
         public T render(R cfdiReq, IStamp stamper,
-                BufferedInputStream certificate, BufferedInputStream signerKey) throws FormatError, StorageError;
+                BufferedInputStream certificate, BufferedInputStream signerKey, final String passwd) throws FormatError, StorageError;
     }
 
     @FunctionalInterface
