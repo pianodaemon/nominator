@@ -63,7 +63,7 @@ public class Producer extends Pipeline {
 
     }
 
-    Producer(ResourceDescriptor rdesc, final IStamp stamper, final IStorage storage, final IStorage resources, Map<String, Pair<IDecodeStep, IXmlStep>> scenarios) throws StorageError {
+    Producer(ResourceDescriptor rdesc, final IStamp stamper, final IStorage storage, final IStorage resources, Map<String, Pair<? extends IDecodeStep, ? extends IXmlStep>> scenarios) throws StorageError {
         super(stamper, storage, resources, scenarios);
         this.rdesc = rdesc;
     }
