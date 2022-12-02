@@ -8,17 +8,18 @@ import java.util.Optional;
 
 class ResourceFetchHelper {
 
+    static final String ISSUER_IDENTIFIER_ATTRIB = "rfc";
     static final String PREFIX_SSL = "prefix_ssl";
     static final String CER = "cer";
     static final String KEY = "key";
 
     public static BufferedInputStream obtain(Pipeline.IStorage resources, Map<String, String> issuerAttribs, String prefix, String item) throws StorageError {
         Optional<String> prefixResource = resources.getPathPrefix(prefix);
-        Optional<String> baseName = Optional.ofNullable(issuerAttribs.get(item));
-
+        Optional<String> key = Optional.ofNullable(issuerAttribs.get(item));
+        Optional<String> issuerIdentifier = Optional.ofNullable(issuerAttribs.get(ISSUER_IDENTIFIER_ATTRIB));
         try {
-            final String itemPath = String.format("%s/%s", prefixResource.orElseThrow(), baseName.orElseThrow());
-            return resources.download(itemPath);
+            final String signerKEY = String.format("%s/%s/%s", issuerIdentifier.orElseThrow(), prefixResource.orElseThrow(), key.orElseThrow());
+            return resources.download(signerKEY);
         } catch (NoSuchElementException ex) {
             throw new StorageError("The issuer's resource can not be obtained");
         }
