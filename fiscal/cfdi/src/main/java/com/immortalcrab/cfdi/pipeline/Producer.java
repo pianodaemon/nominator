@@ -103,6 +103,13 @@ public class Producer extends Pipeline {
         return ResourceFetchHelper.obtainKey(resources, issuerAttribs);
     }
 
+    @Override
+    protected String fetchPassword(Map<String, String> issuerAttribs) throws StorageError {
+
+        Optional<String> passwd = Optional.ofNullable(issuerAttribs.get("passwd"));
+        return passwd.orElseThrow(() -> new StorageError("The issuer requested is not having a password"));
+    }
+
     private static class Wiring {
 
         public static <R extends Request> PacRes fac(R req, IStamp<PacRegularRequest, PacRes> stamper,
