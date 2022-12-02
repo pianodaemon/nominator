@@ -25,4 +25,8 @@ class S3ClientHelper {
 
         return AmazonS3ClientBuilder.standard().withRegion(region.get()).withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).build();
     }
+
+    private S3ClientHelper() {
+        throw new IllegalStateException("Helper class");
+    }
 }
