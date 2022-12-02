@@ -1,4 +1,3 @@
-MACROS_INCLUDE  := make.macros
 BASE            := $(shell /bin/pwd)
 OPERATIONAL     := $(BASE)
 DEPLOY_STUFF    := $(BASE)/dev-tools/deployment
