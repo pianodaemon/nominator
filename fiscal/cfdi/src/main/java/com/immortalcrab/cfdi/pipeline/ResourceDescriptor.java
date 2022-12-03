@@ -143,7 +143,7 @@ class ResourceDescriptor extends JsonToMapHelper {
 
         public Map<String, String> turnIntoMap() {
 
-            return Map.of("rfc", rfc, "key", key, "cert", cer, "password", passwd);
+            return Map.of("rfc", rfc, "key", key, "cert", cer, "passwd", passwd);
         }
     }
 }

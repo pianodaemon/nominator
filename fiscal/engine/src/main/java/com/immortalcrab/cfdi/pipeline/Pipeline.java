@@ -32,32 +32,29 @@ public abstract class Pipeline {
     IStorage resources;
 
     private final @NonNull
-    Map<String, Pair<IDecodeStep, IXmlStep>> scenarios;
+    Map<String, Pair<? extends IDecodeStep, ? extends IXmlStep>> scenarios;
 
     public String engage(final String kind, final Map<String, String> issuerAttribs, InputStreamReader isr)
             throws DecodeError, RequestError, PipelineError, StorageError, FormatError {
 
-        Optional<Pair<IDecodeStep, IXmlStep>> stages = Optional.ofNullable(this.getScenarios().get(kind));
-
-        if (stages.isEmpty()) {
-
-            throw new PipelineError("cfdi " + kind + " is unsupported");
-        }
+        Optional<Pair<? extends IDecodeStep, ? extends IXmlStep>> stages = Optional.ofNullable(this.getScenarios().get(kind));
 
         /* First stage of the pipeline
            It stands for decoding what has been read
-           from the data origin (in this case the infamous as400) */
-        IDecodeStep sdec = stages.get().getValue0();
-        Request cfdiReq = sdec.render(isr);
+           from the data origin  */
+        Request cfdiReq = stages.orElseThrow(() -> new PipelineError("cfdi " + kind + " is unsupported"))
+                .getValue0()
+                .render(isr);
 
         /* Second stage of the pipeline
         It stands for hand craft a valid xml at sat */
-        IXmlStep sxml = stages.get().getValue1();
-
-        PacRes pacResult = sxml.render(cfdiReq, this.getStamper(),
-                this.fetchCert(this.getResources(), issuerAttribs),
-                this.fetchKey(this.getResources(), issuerAttribs),
-                this.fetchPassword(issuerAttribs));
+        PacRes pacResult = stages.orElseThrow(() -> new PipelineError("cfdi " + kind + " is unsupported"))
+                .getValue1()
+                .render(cfdiReq,
+                        this.getStamper(),
+                        this.fetchCert(this.getResources(), issuerAttribs),
+                        this.fetchKey(this.getResources(), issuerAttribs),
+                        this.fetchPassword(issuerAttribs));
 
         saveOnPersistance(this.getStorage(), pacResult);
 
