@@ -11,7 +11,7 @@ public class Certificate {
 
         return new String(
                 Base64.encodeBase64(chunk),
-                StandardCharsets.UTF_8.name()
+                StandardCharsets.UTF_8
         );
     }
 }

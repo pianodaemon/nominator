@@ -120,9 +120,9 @@ public class Producer extends Pipeline {
         }
 
         public static <R extends Request> PacRes nom(R req, IStamp<PacRegularRequest, PacRes> stamper,
-                BufferedInputStream certificate, BufferedInputStream signerKey, final String passwd) throws FormatError, StorageError {
+                BufferedInputStream certificate, BufferedInputStream signerKey, final String certificateNo) throws FormatError, StorageError {
 
-            NominaXml ic = new NominaXml((NominaRequestDTO) req, certificate, signerKey, passwd);
+            NominaXml ic = new NominaXml((NominaRequestDTO) req, certificate, certificateNo);
             return stamper.impress(new PacRegularRequest(ic.toString()));
         }
     }

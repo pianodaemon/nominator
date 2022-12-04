@@ -38,9 +38,9 @@ public class Signer {
 
         Signature sign = Signature.getInstance("SHA256withRSA");
         sign.initSign(privateKey);
-        sign.update(message.getBytes(StandardCharsets.UTF_8.name()));
+        sign.update(message.getBytes(StandardCharsets.UTF_8));
 
-        return new String(Base64.encodeBase64(sign.sign()), StandardCharsets.UTF_8.name());
+        return new String(Base64.encodeBase64(sign.sign()), StandardCharsets.UTF_8);
     }
 
     private static String getKey(BufferedReader br) throws IOException {
@@ -62,8 +62,7 @@ public class Signer {
         byte[] encoded = Base64.decodeBase64(privateKeyPEM);
         KeyFactory kf = KeyFactory.getInstance("RSA");
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
-        RSAPrivateKey privKey = (RSAPrivateKey) kf.generatePrivate(keySpec);
 
-        return privKey;
+        return (RSAPrivateKey) kf.generatePrivate(keySpec);
     }
 }

@@ -60,8 +60,7 @@ class ResourceDescriptor extends JsonToMapHelper {
                     Issuer s = new Issuer(
                             LegoAssembler.obtainObjFromKey(i, "rfc"),
                             LegoAssembler.obtainObjFromKey(i, "cer"),
-                            LegoAssembler.obtainObjFromKey(i, "key"),
-                            LegoAssembler.obtainObjFromKey(i, "passwd")
+                            LegoAssembler.obtainObjFromKey(i, "pem")
                     );
 
                     return s;
@@ -138,12 +137,11 @@ class ResourceDescriptor extends JsonToMapHelper {
 
         private final String rfc;
         private final String cer;
-        private final String key;
-        private final String passwd;
+        private final String pem;
 
         public Map<String, String> turnIntoMap() {
 
-            return Map.of("rfc", rfc, "key", key, "cert", cer, "passwd", passwd);
+            return Map.of("rfc", rfc, "pem", pem, "cer", cer);
         }
     }
 }

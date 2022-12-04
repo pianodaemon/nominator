@@ -1,13 +1,19 @@
 package com.immortalcrab.cfdi.pipeline;
 
+import com.immortalcrab.cfdi.toolbox.MontesToolbox;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+import java.nio.Buffer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -22,25 +28,72 @@ public class NominaXmlTest {
         _cloader = getClass().getClassLoader();
     }
 
-    @Test
-    public void loadReqFromReader() {
+//    @Test
+//    public void loadReqFromReader() {
+//
+//        try {
+//            InputStream isTesting = _cloader.getResourceAsStream("xmlsamples/nomina.xml");
+//            String nominaTesting = new String(isTesting.readAllBytes(), StandardCharsets.UTF_8);
+//
+//            InputStream is = _cloader.getResourceAsStream("jsonreqs/nominareq.json");
+//            InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
+//            NominaXml nominaGenerated = new NominaXml(new NominaRequestDTO(reader), null, null, null);
+//
+//            char[] csc0 = nominaGenerated.toString().replace("\n", "").replace("\r", "").toCharArray();
+//            char[] csc1 = nominaTesting.toString().replace("\n", "").replace("\r", "").toCharArray();
+//            for (int i = 0; i < csc0.length; i++) {
+//                assertTrue(csc0[i] == csc1[i]);
+//            }
+//
+//        } catch (Exception ex) {
+//            assertNull(ex);
+//        }
+//    }
+
+    public static void main(String[] args) {
 
         try {
-            InputStream isTesting = _cloader.getResourceAsStream("xmlsamples/nomina.xml");
-            String nominaTesting = new String(isTesting.readAllBytes(), StandardCharsets.UTF_8);
+            byte[] profile = Files.readAllBytes(Paths.get("/home/userd/dev/nominator/fiscal/cfdi/src/test/resources/jsonprofiles/default.json"));
+            var profileBais = new ByteArrayInputStream(profile);
+            InputStreamReader profileReader = new InputStreamReader(profileBais, StandardCharsets.UTF_8);
+            ResourceDescriptor resDescriptor = new ResourceDescriptor(profileReader);
+            var issuer = resDescriptor.getIssuer("RRM031001QE7").orElseThrow();
 
-            InputStream is = _cloader.getResourceAsStream("jsonreqs/nominareq.json");
-            InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
-            NominaXml nominaGenerated = new NominaXml(new NominaRequestDTO(reader), null, null, null);
+            byte[] j = Files.readAllBytes(Paths.get("/home/userd/dev/nominator/fiscal/cfdi/src/test/resources/jsonreqs/nominareq.json"));
+            var j0 = new ByteArrayInputStream(j);
+            var reqReader = new InputStreamReader(j0, StandardCharsets.UTF_8);
 
-            char[] csc0 = nominaGenerated.toString().replace("\n", "").replace("\r", "").toCharArray();
-            char[] csc1 = nominaTesting.toString().replace("\n", "").replace("\r", "").toCharArray();
-            for (int i = 0; i < csc0.length; i++) {
-                assertTrue(csc0[i] == csc1[i]);
-            }
+            var mToolbox = new MontesToolbox();
+
+            String localPath = "/home/userd/immortalcrab/resources/ssl/RRM031001QE7/";
+            byte[] c = Files.readAllBytes(Paths.get(localPath + issuer.getCer()));
+            String c0 = mToolbox.renderCertificate(c);
+            var c1 = new ByteArrayInputStream(c0.getBytes(StandardCharsets.UTF_8));
+            var certificate = new BufferedInputStream(c1);
+
+            byte[] p = Files.readAllBytes(Paths.get(localPath + issuer.getPem()));
+            var p0 = new ByteArrayInputStream(p);
+
+            String[] certNoArr = issuer.getCer().split("\\.cer");
+            NominaXml nominaGenerated = new NominaXml(new NominaRequestDTO(reqReader), certificate, certNoArr[0]);
+            System.out.println(nominaGenerated);
+
+            String nominaXml = nominaGenerated.toString();
+            var n = new ByteArrayInputStream(nominaXml.getBytes(StandardCharsets.UTF_8));
+            var n0 = new InputStreamReader(n);
+            var n1 = new BufferedReader(n0);
+            Source xsltSource = new StreamSource(new File("/home/userd/dev/lola4/DOS/resources/b/cadenaoriginal_4_0.xslt"));
+            String originalStr = mToolbox.renderOriginalStr(n1, xsltSource);
+            System.out.println(originalStr);
+
+            var pemBr = new BufferedReader(new InputStreamReader(p0));
+            String sello = mToolbox.signOriginalStr(pemBr, originalStr);
+            System.out.println(sello);
+            nominaGenerated.setSello(sello);
+            System.out.println(nominaGenerated);
 
         } catch (Exception ex) {
-            assertNull(ex);
+            ex.printStackTrace();
         }
     }
 }

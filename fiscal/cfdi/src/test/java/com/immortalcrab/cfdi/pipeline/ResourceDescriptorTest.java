@@ -38,8 +38,7 @@ public class ResourceDescriptorTest {
             Optional<ResourceDescriptor.Issuer> subs = resDescriptor.getIssuer("RRM031001QE7");
             assertEquals("RRM031001QE7", subs.orElseThrow().getRfc());
             assertEquals("00001000000505709200.cer", subs.orElseThrow().getCer());
-            assertEquals("CSD_UNIDAD_RRM031001QE7_20201117_185818.key", subs.orElseThrow().getKey());
-            assertEquals("t0put4madr3", subs.orElseThrow().getPasswd());
+            assertEquals("CSD_UNIDAD_RRM031001QE7_20201117_185818.pem", subs.orElseThrow().getPem());
 
             Optional<ResourceDescriptor.Pac> pac = resDescriptor.getPacSettings("servisim");
             assertEquals("servisim", pac.orElseThrow().getCarrier());

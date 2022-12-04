@@ -79,6 +79,7 @@ public abstract class Pipeline {
 
     protected abstract String fetchPassword(final Map<String, String> issuerAttribs) throws StorageError;
 
+
     @FunctionalInterface
     public interface Pickard {
 
@@ -126,7 +127,7 @@ public abstract class Pipeline {
     public interface IXmlStep<T extends PacRes, R extends Request> {
 
         public T render(R cfdiReq, IStamp stamper,
-                BufferedInputStream certificate, BufferedInputStream signerKey, final String passwd) throws FormatError, StorageError;
+                        BufferedInputStream certificate, BufferedInputStream signerKey, final String certificateNo) throws FormatError, StorageError;
     }
 
     @FunctionalInterface

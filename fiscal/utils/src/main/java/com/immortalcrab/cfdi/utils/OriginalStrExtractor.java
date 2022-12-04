@@ -31,7 +31,7 @@ public class OriginalStrExtractor {
             sb.append(sCurrentLine);
         }
 
-        return sb.toString().getBytes(StandardCharsets.UTF_8.name());
+        return sb.toString().getBytes(StandardCharsets.UTF_8);
     }
 
     private static String build(byte[] chunk, Source srcXslt) throws Exception {

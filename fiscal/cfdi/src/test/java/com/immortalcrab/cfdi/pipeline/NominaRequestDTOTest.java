@@ -38,7 +38,7 @@ public class NominaRequestDTOTest {
             assertTrue("01".equals(dto.getDocAttributes().getExportacion()));
             assertTrue("RRM".equals(dto.getDocAttributes().getSerie()));
             assertTrue("5457".equals(dto.getDocAttributes().getFolio()));
-            assertTrue("2022-10-26T20:00:18".equals(dto.getDocAttributes().getFecha()));
+            assertTrue("2022-12-03T20:00:18".equals(dto.getDocAttributes().getFecha()));
             assertTrue("MXN".equals(dto.getDocAttributes().getMoneda()));
             assertTrue(new BigDecimal("1185.82").equals(dto.getDocAttributes().getDescuento()));
             assertTrue(new BigDecimal("7185.82").equals(dto.getDocAttributes().getSubtotal()));
