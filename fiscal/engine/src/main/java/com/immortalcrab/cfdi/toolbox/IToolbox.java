@@ -7,9 +7,9 @@ import javax.xml.transform.Source;
 
 public interface IToolbox {
 
-    public String renderCerticate(byte[] chunk) throws UnsupportedEncodingException, IOException;
+    public String renderCertificate(byte[] chunk) throws UnsupportedEncodingException, IOException;
 
-    public String renderOriginal(BufferedReader br, Source srcXslt) throws Exception;
+    public String renderOriginalStr(BufferedReader br, Source srcXslt) throws Exception;
 
-    public String signOriginal(BufferedReader brPrivKeyPem, String original) throws Exception;
+    public String signOriginalStr(BufferedReader brPrivKeyPem, String original) throws Exception;
 }
