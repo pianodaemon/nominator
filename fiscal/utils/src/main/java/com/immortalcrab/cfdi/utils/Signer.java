@@ -1,19 +1,13 @@
 package com.immortalcrab.cfdi.utils;
 
+import org.apache.commons.codec.binary.Base64;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
-import java.security.InvalidKeyException;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.Signature;
-import java.security.SignatureException;
-import java.security.interfaces.RSAPrivateKey;
+import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
-import org.apache.commons.codec.binary.Base64;
 
 public class Signer {
 
@@ -21,12 +15,12 @@ public class Signer {
             throws IOException, GeneralSecurityException, NoSuchAlgorithmException, InvalidKeyException,
             SignatureException, UnsupportedEncodingException {
 
-        RSAPrivateKey pkey = getPrivateKey(brPrivKeyPem);
+        PrivateKey pkey = getPrivateKey(brPrivKeyPem);
 
         return signMsg(pkey, msg);
     }
 
-    private static RSAPrivateKey getPrivateKey(BufferedReader br) throws IOException, GeneralSecurityException {
+    private static PrivateKey getPrivateKey(BufferedReader br) throws IOException, GeneralSecurityException {
 
         String privateKeyPEM = getKey(br);
 
@@ -54,7 +48,7 @@ public class Signer {
         return strKeyPEM;
     }
 
-    private static RSAPrivateKey getPrivateKeyFromString(String key) throws IOException, GeneralSecurityException {
+    private static PrivateKey getPrivateKeyFromString(String key) throws IOException, GeneralSecurityException {
         String privateKeyPEM = key;
         privateKeyPEM = privateKeyPEM.replace("-----BEGIN PRIVATE KEY-----\n", "");
         privateKeyPEM = privateKeyPEM.replace("-----END PRIVATE KEY-----", "");
@@ -63,6 +57,6 @@ public class Signer {
         KeyFactory kf = KeyFactory.getInstance("RSA");
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
 
-        return (RSAPrivateKey) kf.generatePrivate(keySpec);
+        return kf.generatePrivate(keySpec);
     }
 }
