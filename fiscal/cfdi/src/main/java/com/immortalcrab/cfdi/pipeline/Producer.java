@@ -84,9 +84,9 @@ public class Producer extends Pipeline {
         BufferedInputStream bf = this.getStorage().download(payload.getReq());
         InputStreamReader instreamReader = new InputStreamReader(bf, StandardCharsets.UTF_8);
         String[] parts = reqMeta.getParticles();
-        Optional<ResourceDescriptor.Issuer> issuer = rdesc.getIssuer(parts[S3ReqURLParser.URIParticles.ISSUER.getIdx()]);
+        Optional<ResourceDescriptor.Issuer> issuer = rdesc.getIssuer(parts[S3ReqURLParser.URIParticles.ISSUER.ordinal()]);
         return pic.route(
-                parts[S3ReqURLParser.URIParticles.KIND.getIdx()],
+                parts[S3ReqURLParser.URIParticles.KIND.ordinal()],
                 issuer.orElseThrow(() -> new RequestError("The issuer requested is not registered")).turnIntoMap(),
                 instreamReader);
     }
