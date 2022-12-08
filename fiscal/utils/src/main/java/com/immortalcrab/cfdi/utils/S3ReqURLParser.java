@@ -24,22 +24,12 @@ public class S3ReqURLParser {
 
     public enum URIParticles {
 
-        ISSUER(0),
-        GROUP_OF_RESOURCES(1),
-        KIND(2),
-        LABEL(3),
-        EVENT(4),
-        MAX_URI_PARTICLE(5);
-
-        protected int idx;
-
-        URIParticles(final int idx) {
-            this.idx = idx;
-        }
-
-        public int getIdx() {
-            return idx;
-        }
+        ISSUER,
+        GROUP_OF_RESOURCES,
+        KIND,
+        LABEL,
+        EVENT,
+        MAX_URI_PARTICLE;
     }
 
     public String getBucket() {
