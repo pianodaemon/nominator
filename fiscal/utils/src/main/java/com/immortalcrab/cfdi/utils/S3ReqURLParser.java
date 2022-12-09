@@ -4,7 +4,7 @@ import com.amazonaws.services.s3.AmazonS3URI;
 
 public class S3ReqURLParser {
 
-    private final String PATH_SEPARATOR = "/";
+    private static final String PATH_SEPARATOR = "/";
     private final String bucket;
     private final String key;
     private final String[] particles;
