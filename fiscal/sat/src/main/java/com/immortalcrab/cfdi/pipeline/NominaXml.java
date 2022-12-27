@@ -87,7 +87,6 @@ class NominaXml {
     private StringWriter shape(String certificateNo, BufferedInputStream certificate) throws FormatError {
 
         try {
-
             ObjectFactory cfdiFactory = new ObjectFactory();
 
             _cfdi.setVersion(NominaRequestDTO.CFDI_VER);

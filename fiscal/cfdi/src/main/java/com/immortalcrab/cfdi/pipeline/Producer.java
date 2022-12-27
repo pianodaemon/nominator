@@ -113,9 +113,9 @@ public class Producer extends Pipeline {
     private static class Wiring {
 
         public static <R extends Request> PacRes fac(R req, IStamp<PacRegularRequest, PacRes> stamper,
-                BufferedInputStream certificate, BufferedInputStream signerKey, final String passwd) throws FormatError, StorageError {
+                BufferedInputStream certificate, BufferedInputStream signerKey, final String certificateNo) throws FormatError, StorageError {
 
-            FacturaXml ic = new FacturaXml((FacturaRequestDTO) req, certificate, signerKey, passwd);
+            FacturaXml ic = new FacturaXml((FacturaRequestDTO) req, certificate, certificateNo);
             return stamper.impress(new PacRegularRequest(ic.toString()));
         }
 

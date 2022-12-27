@@ -2,6 +2,8 @@ package com.immortalcrab.cfdi.pipeline;
 
 import com.immortalcrab.cfdi.error.FormatError;
 import java.io.BufferedInputStream;
+
+import com.immortalcrab.cfdi.pipeline.FacturaRequestDTO;
 import mx.gob.sat.cfd._4.Comprobante;
 import mx.gob.sat.cfd._4.ObjectFactory;
 import mx.gob.sat.sitio_internet.cfd.catalogos.*;
@@ -11,6 +13,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.DatatypeConfigurationException;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 
@@ -20,16 +23,31 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 class FacturaXml {
 
-    private final @NonNull
-    FacturaRequestDTO _req;
+    private final @NonNull FacturaRequestDTO _req;
+    private StringWriter _sw;
+    private final Comprobante _cfdi;
+    private final Marshaller _marshaller;
 
-    private final StringWriter _sw;
-
-    public FacturaXml(FacturaRequestDTO req,
-            BufferedInputStream certificate, BufferedInputStream signerKey, final String certificateNo) throws FormatError {
+    public FacturaXml(FacturaRequestDTO req, BufferedInputStream certificate, final String certificateNo) throws FormatError {
 
         _req = req;
-        _sw = shape();
+        _cfdi = new ObjectFactory().createComprobante();
+
+        String contextPath = "mx.gob.sat.cfd._4";
+        String schemaLocation = "http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd";
+
+        try {
+            JAXBContext context = JAXBContext.newInstance(contextPath);
+            _marshaller = context.createMarshaller();
+            _marshaller.setProperty("jaxb.schemaLocation", schemaLocation);
+            _marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new CfdiNamespaceMapper());
+            _marshaller.setProperty("jaxb.formatted.output", true);
+
+        } catch (JAXBException ex) {
+            throw new FormatError("", ex);
+        }
+
+        _sw = shape(certificateNo, certificate);
     }
 
     @Override
@@ -37,34 +55,55 @@ class FacturaXml {
         return _sw.toString();
     }
 
-    private StringWriter shape() throws FormatError {
+    public void setSello(String sello) throws FormatError {
 
-        StringWriter sw = new StringWriter();
+        _cfdi.setSello(sello);
+        _sw = new StringWriter();
+
+        try {
+            _marshaller.marshal(_cfdi, _sw);
+
+        } catch (JAXBException ex) {
+            throw new FormatError("", ex);
+        }
+    }
+
+    private StringWriter shape(String certificateNo, BufferedInputStream certificate) throws FormatError {
 
         try {
             ObjectFactory cfdiFactory = new ObjectFactory();
-            Comprobante cfdi = cfdiFactory.createComprobante();
-            cfdi.setVersion(FacturaRequestDTO.CFDI_VER);
-            cfdi.setSerie(_req.getComprobanteAttributes().getSerie());
-            cfdi.setFolio(_req.getComprobanteAttributes().getFolio());
-            cfdi.setFecha(DatatypeFactory.newInstance().newXMLGregorianCalendar(_req.getComprobanteAttributes().getFecha()));
-            cfdi.setFormaPago(_req.getComprobanteAttributes().getFormaPago());
-            cfdi.setNoCertificado(_req.getComprobanteAttributes().getNoCertificado());
-            cfdi.setSubTotal(_req.getComprobanteAttributes().getSubTotal());
-            cfdi.setDescuento(_req.getComprobanteAttributes().getDescuento());
-            cfdi.setMoneda(CMoneda.fromValue(_req.getComprobanteAttributes().getMoneda()));
-            cfdi.setTipoCambio(_req.getComprobanteAttributes().getTipoCambio());
-            cfdi.setTotal(_req.getComprobanteAttributes().getTotal());
-            cfdi.setTipoDeComprobante(CTipoDeComprobante.fromValue(FacturaRequestDTO.TIPO_COMPROBANTE));
-            cfdi.setExportacion(_req.getComprobanteAttributes().getExportacion());
-            cfdi.setMetodoPago(CMetodoPago.fromValue(_req.getComprobanteAttributes().getMetodoPago()));
-            cfdi.setLugarExpedicion(_req.getComprobanteAttributes().getLugarExpedicion());
+
+            _cfdi.setVersion(FacturaRequestDTO.CFDI_VER);
+            _cfdi.setSerie(_req.getComprobanteAttributes().getSerie());
+            _cfdi.setFolio(_req.getComprobanteAttributes().getFolio());
+            _cfdi.setFecha(DatatypeFactory.newInstance().newXMLGregorianCalendar(_req.getComprobanteAttributes().getFecha()));
+            _cfdi.setFormaPago(_req.getComprobanteAttributes().getFormaPago());
+            _cfdi.setNoCertificado(_req.getComprobanteAttributes().getNoCertificado());
+            _cfdi.setSubTotal(_req.getComprobanteAttributes().getSubTotal());
+            _cfdi.setDescuento(_req.getComprobanteAttributes().getDescuento());
+            _cfdi.setMoneda(CMoneda.fromValue(_req.getComprobanteAttributes().getMoneda()));
+            _cfdi.setTipoCambio(_req.getComprobanteAttributes().getTipoCambio());
+            _cfdi.setTotal(_req.getComprobanteAttributes().getTotal());
+            _cfdi.setTipoDeComprobante(CTipoDeComprobante.fromValue(FacturaRequestDTO.TIPO_COMPROBANTE));
+            _cfdi.setExportacion(_req.getComprobanteAttributes().getExportacion());
+            _cfdi.setMetodoPago(CMetodoPago.fromValue(_req.getComprobanteAttributes().getMetodoPago()));
+            _cfdi.setLugarExpedicion(_req.getComprobanteAttributes().getLugarExpedicion());
+
+            byte[] contents = new byte[1024];
+            int bytesRead = 0;
+            StringBuilder certContents = new StringBuilder();
+
+            while ((bytesRead = certificate.read(contents)) != -1) {
+                certContents.append(new String(contents, 0, bytesRead));
+            }
+            _cfdi.setCertificado(certContents.toString());
+            _cfdi.setNoCertificado(certificateNo);
 
             Comprobante.Emisor emisor = cfdiFactory.createComprobanteEmisor();
             emisor.setRfc(_req.getEmisorAttributes().getRfc());
             emisor.setNombre(_req.getEmisorAttributes().getNombre());
             emisor.setRegimenFiscal(_req.getEmisorAttributes().getRegimenFiscal());
-            cfdi.setEmisor(emisor);
+            _cfdi.setEmisor(emisor);
 
             Comprobante.Receptor receptor = cfdiFactory.createComprobanteReceptor();
             receptor.setRfc(_req.getReceptorAttributes().getRfc());
@@ -73,7 +112,7 @@ class FacturaXml {
             receptor.setResidenciaFiscal(CPais.fromValue(_req.getReceptorAttributes().getResidenciaFiscal()));
             receptor.setRegimenFiscalReceptor(_req.getReceptorAttributes().getRegimenFiscalReceptor());
             receptor.setUsoCFDI(CUsoCFDI.fromValue(_req.getReceptorAttributes().getUsoCfdi()));
-            cfdi.setReceptor(receptor);
+            _cfdi.setReceptor(receptor);
 
             // Conceptos
             Comprobante.Conceptos conceptos = cfdiFactory.createComprobanteConceptos();
@@ -135,7 +174,7 @@ class FacturaXml {
 
                 conceptos.getConcepto().add(concepto);
             }
-            cfdi.setConceptos(conceptos);
+            _cfdi.setConceptos(conceptos);
 
             var impuestos = cfdiFactory.createComprobanteImpuestos();
             impuestos.setTotalImpuestosRetenidos(_req.getImpuestosAttributes().getTotalImpuestosRetenidos());
@@ -171,23 +210,16 @@ class FacturaXml {
             if (!_req.getImpuestosTraslados().isEmpty()) {
                 impuestos.setTraslados(impuestosTraslados);
             }
-            cfdi.setImpuestos(impuestos);
+            _cfdi.setImpuestos(impuestos);
 
-            String contextPath = "mx.gob.sat.cfd._4";
-            String schemaLocation = "http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd";
+            // Marshalling
+            StringWriter swriter = new StringWriter();
+            _marshaller.marshal(_cfdi, swriter);
 
-            // Hacer el marshalling del cfdi object
-            JAXBContext context = JAXBContext.newInstance(contextPath);
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty("jaxb.schemaLocation", schemaLocation);
-            marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new CfdiNamespaceMapper());
-            marshaller.setProperty("jaxb.formatted.output", true);
-            marshaller.marshal(cfdi, sw);
+            return swriter;
 
-        } catch (JAXBException | DatatypeConfigurationException ex) {
+        } catch (JAXBException | DatatypeConfigurationException | IOException ex) {
             throw new FormatError("", ex);
         }
-
-        return sw;
     }
 }
