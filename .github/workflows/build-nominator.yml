@@ -20,8 +20,8 @@ jobs:
         with:
           arguments: build 
           build-root-directory: nominator
-      - name: Build fiscal
+      - name: Build cfdiengine
         uses: gradle/gradle-build-action@v2
         with:
           arguments: build 
-          build-root-directory: fiscal
+          build-root-directory: cfdiengine
