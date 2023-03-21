@@ -23,7 +23,7 @@ Resources:
           ENV: !Ref SubscriptorEnv
       Role: !GetAtt CfdiFactoryRole.Arn
       Runtime: java11
-      Handler: com.immortalcrab.cfdi.serverless.IssueHandler
+      Handler: com.immortalcrab.cfdi.processor.IssueHandler
       CodeUri: factory-1-SNAPSHOT.zip
       Description: Cfdi Function Factory
       MemorySize: 512
