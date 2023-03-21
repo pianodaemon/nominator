@@ -1,0 +1,65 @@
+description = 'elemental'
+
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
+configurations {
+    jaxb
+}
+
+task genJaxb {
+
+    ext.sourcesDir = "${buildDir}/generated-sources/jaxb"
+    ext.classesDir = "${buildDir}/classes/jaxb"
+    outputs.dir classesDir
+
+    doLast() {
+
+        project.ant {
+            // Create output directories
+            mkdir(dir: sourcesDir)
+            mkdir(dir: classesDir)
+
+            taskdef name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.jaxb.asPath
+
+            xjc(destdir: sourcesDir, binding: "${projectDir}/src/main/resources/cfdv40/binding.xml") {
+                schema(dir: "${projectDir}/src/main/resources/cfdv40", includes: '**/*.xsd')
+                produces(dir: sourcesDir, includes: '**/*.java')
+            }
+
+            javac(
+                destdir: classesDir, source: 11, target: 11,
+                debug: true, debugLevel: 'lines,vars,source',
+                includeantruntime: false, classpath: configurations.jaxb.asPath) {
+
+                src(path: sourcesDir)
+                include(name: '**/*.java')
+                include(name: '*.java')
+            }
+
+            copy(todir: classesDir) {
+
+                fileset(dir: sourcesDir, erroronmissingdir: false) {
+                    exclude(name: '**/*.java')
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation "commons-codec:commons-codec:1.15"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+
+    // JAX-B dependencies for JDK 9+
+    implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
+    implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
+    jaxb "com.sun.xml.bind:jaxb-xjc:2.1.7"
+    compileOnly(files(genJaxb.classesDir).builtBy(genJaxb))
+}
+
+compileJava.dependsOn 'genJaxb'
+
+jar {
+  from genJaxb.classesDir
+}

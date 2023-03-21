@@ -1,8 +1,0 @@
-rootProject.name = 'fiscal'
-
-include ':utils'
-include ':pac'
-include ':sat'
-include ':cfdi'
-include ':engine'
-include ':factory'
