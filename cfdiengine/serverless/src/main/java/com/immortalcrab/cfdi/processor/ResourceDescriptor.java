@@ -51,7 +51,7 @@ class ResourceDescriptor extends JsonToMapHelper {
                     LegoAssembler.obtainObjFromKey(i, Issuer.kRFC),
                     LegoAssembler.obtainObjFromKey(i, Issuer.kCERT),
                     LegoAssembler.obtainObjFromKey(i, Issuer.kPRIVATEKEY),
-                    LegoAssembler.obtainObjFromKey(i, Issuer.kPASSWD)
+                    LegoAssembler.obtainObjFromKey(i, Issuer.kPEM)
             )).forEachOrdered(o -> issuers.put(o.getRfc(), o));
 
             Map<String, Object> mres = LegoAssembler.obtainMapFromKey(this.getDs(), "res");
@@ -127,16 +127,16 @@ class ResourceDescriptor extends JsonToMapHelper {
         private static String kRFC = "rfc";
         private static String kPRIVATEKEY = "pk";
         private static String kCERT = "cert";
-        private static String kPASSWD = "passwd";
+        private static String kPEM = "pem";
 
         private final String rfc;
         private final String cert;
         private final String key;
-        private final String passwd;
+        private final String pem;
 
         public Map<String, String> turnIntoMap() {
 
-            return Map.of(kRFC, rfc, kPRIVATEKEY, key, kCERT, cert, kPASSWD, passwd);
+            return Map.of(kRFC, rfc, kPRIVATEKEY, key, kCERT, cert, kPEM, pem);
         }
     }
 }
