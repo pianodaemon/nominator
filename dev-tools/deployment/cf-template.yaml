@@ -21,6 +21,8 @@ Resources:
       Environment:
         Variables:
           ENV: !Ref SubscriptorEnv
+          BUCKET_RESOURCES: !Ref CfdiDataRes
+          BUCKET_DATALAKE: !Ref CfdiDataLake
       Role: !GetAtt CfdiFactoryRole.Arn
       Runtime: java11
       Handler: com.immortalcrab.cfdi.processor.IssueHandler

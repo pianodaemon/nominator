@@ -25,12 +25,22 @@ public class Producer extends Processor {
     private static final String XML_FILE_EXTENSION = ".xml";
     ResourceDescriptor rdesc;
 
+    private static String findMandatoryEnv(final String variableEnv) throws EngineError {
+
+        var value = Optional.ofNullable(System.getenv(variableEnv))
+                .orElseThrow(() -> new EngineError(String.format("mandatory %s env variable was not found", variableEnv),
+                ErrorCodes.PIPELINE_NOT_SPINNED_UP));
+
+        log.info(String.format("Found mandatory env var [%s => %s]", variableEnv, value));
+        return value;
+    }
+
     public static Producer obtainSteadyPipeline() throws EngineError {
 
-        S3BucketStorage s3Resources = new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_RESOURCES"));
-        S3BucketStorage s3DataLake = new S3BucketStorage(S3ClientHelper.setupWithEnv(), System.getenv("BUCKET_DATA_LAKE"));
+        S3BucketStorage s3Resources = new S3BucketStorage(S3ClientHelper.setupWithEnv(), findMandatoryEnv("BUCKET_RESOURCES"));
+        S3BucketStorage s3DataLake = new S3BucketStorage(S3ClientHelper.setupWithEnv(), findMandatoryEnv("BUCKET_DATA_LAKE"));
 
-        ResourceDescriptor rdescriptor = ResourceDescriptor.fetchProfile(s3Resources, System.getenv("PROFILE_RESOURCES"));
+        ResourceDescriptor rdescriptor = ResourceDescriptor.fetchProfile(s3Resources, findMandatoryEnv("PROFILE_RESOURCES"));
         s3Resources.setPathPrefixes(rdescriptor.getPrefixes().turnIntoMap());
 
         ResourceDescriptor.Pac pac = rdescriptor.getPacSettings(System.getenv("PAC")).orElseThrow(() -> new EngineError("The pac requested is not registered", ErrorCodes.PIPELINE_NOT_SPINNED_UP));
