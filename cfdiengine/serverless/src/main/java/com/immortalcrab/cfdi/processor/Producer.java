@@ -38,7 +38,7 @@ public class Producer extends Processor {
     public static Producer obtainSteadyPipeline() throws EngineError {
 
         S3BucketStorage s3Resources = new S3BucketStorage(S3ClientHelper.setupWithEnv(), findMandatoryEnv("BUCKET_RESOURCES"));
-        S3BucketStorage s3DataLake = new S3BucketStorage(S3ClientHelper.setupWithEnv(), findMandatoryEnv("BUCKET_DATA_LAKE"));
+        S3BucketStorage s3DataLake = new S3BucketStorage(S3ClientHelper.setupWithEnv(), findMandatoryEnv("BUCKET_DATALAKE"));
 
         ResourceDescriptor rdescriptor = ResourceDescriptor.fetchProfile(s3Resources, findMandatoryEnv("PROFILE_RESOURCES"));
         s3Resources.setPathPrefixes(rdescriptor.getPrefixes().turnIntoMap());
