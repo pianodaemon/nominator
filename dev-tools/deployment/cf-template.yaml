@@ -20,7 +20,9 @@ Resources:
       FunctionName: !Sub cfdi-factoryfunc-${AWS::StackName}
       Environment:
         Variables:
-          ENV: !Ref SubscriptorEnv
+          PROFILE_RESOURCES: !Sub
+            - '${Env}.json'
+            - Env: !Ref SubscriptorEnv
           BUCKET_RESOURCES: !Ref CfdiDataRes
           BUCKET_DATALAKE: !Ref CfdiDataLake
       Role: !GetAtt CfdiFactoryRole.Arn
