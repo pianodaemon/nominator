@@ -14,6 +14,10 @@ public class S3ClientHelper {
 
     public static AmazonS3 setupWithEnv() throws EngineError {
 
+        if (!seekout) {
+            return AmazonS3ClientBuilder.standard().build();
+        }
+
         Optional<String> region = Optional.ofNullable(System.getenv("AWS_REGION"));
         Optional<String> key = Optional.ofNullable(System.getenv("AWS_ACCESS_KEY_ID"));
         Optional<String> secret = Optional.ofNullable(System.getenv("AWS_SECRET_ACCESS_KEY"));
