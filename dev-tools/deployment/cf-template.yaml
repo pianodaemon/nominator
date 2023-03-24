@@ -32,6 +32,15 @@ Resources:
       Description: Cfdi Function Factory
       MemorySize: 512
       Timeout: 30
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:*
+              Resource:
+                - !GetAtt CfdiDataRes.Arn
     DependsOn:
       - Subscriptor
 
