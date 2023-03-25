@@ -32,18 +32,6 @@ Resources:
       Description: Cfdi Function Factory
       MemorySize: 512
       Timeout: 30
-      Policies:
-        - AWSLambdaBasicExecutionRole
-        - Version: '2012-10-17'
-          Statement:
-            - Effect: Allow
-              Action:
-                - s3:*
-              Resource:
-                - !Sub arn:aws:s3:::${CfdiDataRes}
-                - !Sub arn:aws:s3:::${CfdiDataRes}/*
-                - !Sub arn:aws:s3:::${CfdiDataLake}
-                - !Sub arn:aws:s3:::${CfdiDataLake}/*
     DependsOn:
       - Subscriptor
 
@@ -181,6 +169,17 @@ Resources:
               - sqs:GetQueueAttributes
               - sqs:ChangeMessageVisibility
               Resource: !Sub ${CfdiInQueue.Arn}
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+                - s3:*
+              Resource:
+                - !Sub arn:aws:s3:::${CfdiDataRes}
+                - !Sub arn:aws:s3:::${CfdiDataRes}/*
+                - !Sub arn:aws:s3:::${CfdiDataLake}
+                - !Sub arn:aws:s3:::${CfdiDataLake}/*
+
 
   CfdiFactoryFuncLogGroup:
     Type: AWS::Logs::LogGroup
