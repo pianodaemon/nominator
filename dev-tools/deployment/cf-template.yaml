@@ -25,6 +25,7 @@ Resources:
             - Env: !Ref SubscriptorEnv
           BUCKET_RESOURCES: !Ref CfdiDataRes
           BUCKET_DATALAKE: !Ref CfdiDataLake
+          PAC: "servisim"
       Role: !GetAtt CfdiFactoryRole.Arn
       Runtime: java11
       Handler: com.immortalcrab.cfdi.processor.IssueHandler::handleRequest
@@ -169,6 +170,17 @@ Resources:
               - sqs:GetQueueAttributes
               - sqs:ChangeMessageVisibility
               Resource: !Sub ${CfdiInQueue.Arn}
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+                - s3:*
+              Resource:
+                - !Sub arn:aws:s3:::${CfdiDataRes}
+                - !Sub arn:aws:s3:::${CfdiDataRes}/*
+                - !Sub arn:aws:s3:::${CfdiDataLake}
+                - !Sub arn:aws:s3:::${CfdiDataLake}/*
+
 
   CfdiFactoryFuncLogGroup:
     Type: AWS::Logs::LogGroup

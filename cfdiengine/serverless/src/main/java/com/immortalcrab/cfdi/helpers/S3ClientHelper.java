@@ -12,7 +12,11 @@ import java.util.Optional;
 
 public class S3ClientHelper {
 
-    public static AmazonS3 setupWithEnv() throws EngineError {
+    public static AmazonS3 setupWithEnv(boolean seekout) throws EngineError {
+
+        if (!seekout) {
+            return AmazonS3ClientBuilder.standard().build();
+        }
 
         Optional<String> region = Optional.ofNullable(System.getenv("AWS_REGION"));
         Optional<String> key = Optional.ofNullable(System.getenv("AWS_ACCESS_KEY_ID"));
