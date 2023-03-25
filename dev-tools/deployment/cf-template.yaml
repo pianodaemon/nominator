@@ -25,6 +25,7 @@ Resources:
             - Env: !Ref SubscriptorEnv
           BUCKET_RESOURCES: !Ref CfdiDataRes
           BUCKET_DATALAKE: !Ref CfdiDataLake
+          PAC: "servisim"
       Role: !GetAtt CfdiFactoryRole.Arn
       Runtime: java11
       Handler: com.immortalcrab.cfdi.processor.IssueHandler::handleRequest
