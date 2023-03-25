@@ -1,0 +1,20 @@
+{
+    "pac": [
+        {
+            "carrier": "servisim",
+            "login": "1",
+            "passwd": "Oryx216"
+        }
+    ],
+    "res": {
+        "prefix_ssl": "ssl",
+        "prefix_xslt": "xslt"
+    },
+    "issuers": [
+        {
+            "rfc": "RRM031001QE7",
+            "cer": "00001000000505709200.cer",
+            "pem": "CSD_UNIDAD_RRM031001QE7_20201117_185818.pem"
+        }
+    ]
+}
