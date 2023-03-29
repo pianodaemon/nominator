@@ -94,12 +94,14 @@ public class ResourceDescriptor extends JsonToMapHelper {
     @Getter
     public static class Prefixes {
 
+        public static final String K_PREFIX_SSL = "prefix_ssl";
+
         private final String ssl;
         private final String xslt;
 
         public Map<String, String> turnIntoMap() {
 
-            return Map.of("prefix_ssl", ssl, "prefix_xslt", xslt);
+            return Map.of(K_PREFIX_SSL, ssl, "prefix_xslt", xslt);
         }
     }
 
