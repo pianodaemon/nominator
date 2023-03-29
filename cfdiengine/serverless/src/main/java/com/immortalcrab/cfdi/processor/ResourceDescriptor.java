@@ -99,7 +99,7 @@ class ResourceDescriptor extends JsonToMapHelper {
 
         public Map<String, String> turnIntoMap() {
 
-            return Map.of("ssl", ssl, "xslt", xslt);
+            return Map.of("prefix_ssl", ssl, "prefix_xslt", xslt);
         }
     }
 
