@@ -13,7 +13,6 @@ import java.util.Optional;
 public class S3ResourceFetchHelper {
 
     static final String ISSUER_IDENTIFIER_ATTRIB = "rfc";
-    static final String PREFIX_SSL = "prefix_ssl";
 
     public static BufferedInputStream obtain(Processor.IStorage resources, Map<String, String> issuerAttribs, String prefix, String item) throws EngineError {
         Optional<String> prefixResource = resources.getPathPrefix(prefix);
@@ -29,12 +28,12 @@ public class S3ResourceFetchHelper {
 
     public static BufferedInputStream obtainCert(Processor.IStorage resources, final Map<String, String> issuerAttribs) throws EngineError {
 
-        return S3ResourceFetchHelper.obtain(resources, issuerAttribs, PREFIX_SSL, Issuer.K_CER);
+        return S3ResourceFetchHelper.obtain(resources, issuerAttribs, Prefixes.K_PREFIX_SSL, Issuer.K_CER);
     }
 
     public static BufferedInputStream obtainKey(Processor.IStorage resources, Map<String, String> issuerAttribs) throws EngineError {
 
-        return S3ResourceFetchHelper.obtain(resources, issuerAttribs, PREFIX_SSL, Issuer.K_PEM);
+        return S3ResourceFetchHelper.obtain(resources, issuerAttribs, Prefixes.K_PREFIX_SSL, Issuer.K_PEM);
     }
 
     private S3ResourceFetchHelper() {
