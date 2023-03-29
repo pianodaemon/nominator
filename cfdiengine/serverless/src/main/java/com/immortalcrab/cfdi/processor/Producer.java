@@ -86,7 +86,7 @@ public class Producer extends Processor {
     protected PacReply.Content openPayload(final IPayload payload, Pickard pic) throws EngineError {
 
         S3ReqURLParser reqMeta = S3ReqURLParser.parse(payload.getReq());
-        BufferedInputStream bf = this.getStorage().download(payload.getReq());
+        BufferedInputStream bf = this.getStorage().download(reqMeta.getKey());
         InputStreamReader instreamReader = new InputStreamReader(bf, StandardCharsets.UTF_8);
         String[] parts = reqMeta.getParticles();
         Optional<ResourceDescriptor.Issuer> issuer = rdesc.getIssuer(parts[S3ReqURLParser.URIParticles.ISSUER.ordinal()]);
