@@ -56,8 +56,8 @@ public class ResourceDescriptor extends JsonToMapHelper {
             Map<String, Object> mres = LegoAssembler.obtainMapFromKey(this.getDs(), "res");
 
             prefixes = new Prefixes(
-                    LegoAssembler.obtainObjFromKey(mres, "prefix_ssl"),
-                    LegoAssembler.obtainObjFromKey(mres, "prefix_xslt"));
+                    LegoAssembler.obtainObjFromKey(mres, Prefixes.K_PREFIX_SSL),
+                    LegoAssembler.obtainObjFromKey(mres, Prefixes.K_PREFIX_XSLT));
 
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of resource descriptor is missing");
@@ -95,13 +95,14 @@ public class ResourceDescriptor extends JsonToMapHelper {
     public static class Prefixes {
 
         public static final String K_PREFIX_SSL = "prefix_ssl";
+        public static final String K_PREFIX_XSLT = "prefix_xslt";
 
         private final String ssl;
         private final String xslt;
 
         public Map<String, String> turnIntoMap() {
 
-            return Map.of(K_PREFIX_SSL, ssl, "prefix_xslt", xslt);
+            return Map.of(K_PREFIX_SSL, ssl, K_PREFIX_XSLT, xslt);
         }
     }
 
