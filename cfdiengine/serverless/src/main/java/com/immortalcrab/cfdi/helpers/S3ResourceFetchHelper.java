@@ -14,7 +14,7 @@ public class S3ResourceFetchHelper {
     static final String ISSUER_IDENTIFIER_ATTRIB = "rfc";
     static final String PREFIX_SSL = "prefix_ssl";
     static final String CER = "cer";
-    static final String KEY = "key";
+    static final String PEM = "pem";
 
     public static BufferedInputStream obtain(Processor.IStorage resources, Map<String, String> issuerAttribs, String prefix, String item) throws EngineError {
         Optional<String> prefixResource = resources.getPathPrefix(prefix);
@@ -35,7 +35,7 @@ public class S3ResourceFetchHelper {
 
     public static BufferedInputStream obtainKey(Processor.IStorage resources, Map<String, String> issuerAttribs) throws EngineError {
 
-        return S3ResourceFetchHelper.obtain(resources, issuerAttribs, PREFIX_SSL, KEY);
+        return S3ResourceFetchHelper.obtain(resources, issuerAttribs, PREFIX_SSL, PEM);
     }
 
     private S3ResourceFetchHelper() {
