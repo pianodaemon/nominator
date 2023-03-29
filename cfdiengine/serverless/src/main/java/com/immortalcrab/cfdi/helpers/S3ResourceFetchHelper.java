@@ -12,12 +12,10 @@ import java.util.Optional;
 
 public class S3ResourceFetchHelper {
 
-    static final String ISSUER_IDENTIFIER_ATTRIB = "rfc";
-
     public static BufferedInputStream obtain(Processor.IStorage resources, Map<String, String> issuerAttribs, String prefix, String item) throws EngineError {
         Optional<String> prefixResource = resources.getPathPrefix(prefix);
         Optional<String> baseName = Optional.ofNullable(issuerAttribs.get(item));
-        Optional<String> issuerIdentifier = Optional.ofNullable(issuerAttribs.get(ISSUER_IDENTIFIER_ATTRIB));
+        Optional<String> issuerIdentifier = Optional.ofNullable(issuerAttribs.get(Issuer.K_RFC));
         try {
             final String itemPath = String.format("%s/%s/%s", issuerIdentifier.orElseThrow(), prefixResource.orElseThrow(), baseName.orElseThrow());
             return resources.download(itemPath);
