@@ -22,7 +22,7 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-class ResourceDescriptor extends JsonToMapHelper {
+public class ResourceDescriptor extends JsonToMapHelper {
 
     Prefixes prefixes;
     Map<String, Issuer> issuers;
@@ -48,16 +48,16 @@ class ResourceDescriptor extends JsonToMapHelper {
             List<Map<String, Object>> subs = LegoAssembler.obtainObjFromKey(this.getDs(), "issuers");
 
             subs.stream().map(i -> new Issuer(
-                    LegoAssembler.obtainObjFromKey(i, Issuer.kRFC),
-                    LegoAssembler.obtainObjFromKey(i, Issuer.kCER),
-                    LegoAssembler.obtainObjFromKey(i, Issuer.kPEM)
+                    LegoAssembler.obtainObjFromKey(i, Issuer.K_RFC),
+                    LegoAssembler.obtainObjFromKey(i, Issuer.K_CER),
+                    LegoAssembler.obtainObjFromKey(i, Issuer.K_PEM)
             )).forEachOrdered(o -> issuers.put(o.getRfc(), o));
 
             Map<String, Object> mres = LegoAssembler.obtainMapFromKey(this.getDs(), "res");
 
             prefixes = new Prefixes(
-                    LegoAssembler.obtainObjFromKey(mres, "prefix_ssl"),
-                    LegoAssembler.obtainObjFromKey(mres, "prefix_xslt"));
+                    LegoAssembler.obtainObjFromKey(mres, Prefixes.K_PREFIX_SSL),
+                    LegoAssembler.obtainObjFromKey(mres, Prefixes.K_PREFIX_XSLT));
 
         } catch (NoSuchElementException ex) {
             log.error("One or more of the mandatory elements of resource descriptor is missing");
@@ -94,12 +94,15 @@ class ResourceDescriptor extends JsonToMapHelper {
     @Getter
     public static class Prefixes {
 
+        public static final String K_PREFIX_SSL = "prefix_ssl";
+        public static final String K_PREFIX_XSLT = "prefix_xslt";
+
         private final String ssl;
         private final String xslt;
 
         public Map<String, String> turnIntoMap() {
 
-            return Map.of("ssl", ssl, "xslt", xslt);
+            return Map.of(K_PREFIX_SSL, ssl, K_PREFIX_XSLT, xslt);
         }
     }
 
@@ -123,9 +126,9 @@ class ResourceDescriptor extends JsonToMapHelper {
     @Getter
     public static class Issuer {
 
-        private static String kRFC = "rfc";
-        private static String kCER = "cer";
-        private static String kPEM = "pem";
+        public static final String K_RFC = "rfc";
+        public static final String K_CER = "cer";
+        public static final String K_PEM = "pem";
 
         private final String rfc;
         private final String cer;
@@ -133,7 +136,7 @@ class ResourceDescriptor extends JsonToMapHelper {
 
         public Map<String, String> turnIntoMap() {
 
-            return Map.of(kRFC, rfc, kCER, cer, kPEM, pem);
+            return Map.of(K_RFC, rfc, K_CER, cer, K_PEM, pem);
         }
     }
 }

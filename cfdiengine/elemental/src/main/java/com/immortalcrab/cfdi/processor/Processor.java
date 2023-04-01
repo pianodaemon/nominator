@@ -63,9 +63,7 @@ public abstract class Processor {
     public PacReply.Content doIssue(final IPayload payload)
             throws EngineError {
 
-        return openPayload(payload, (var kind, var issuer, var instreamReader) -> {
-            return engage(kind, issuer, instreamReader);
-        });
+        return openPayload(payload, this::engage);
     }
 
     protected abstract void saveOnPersistance(IStorage st, PacReply pacResult) throws EngineError;
