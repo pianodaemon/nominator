@@ -82,6 +82,9 @@ Resources:
           Action:
             - SQS:SendMessage
             - SQS:ReceiveMessage
+            - sqs:DeleteMessage
+            - sqs:GetQueueAttributes
+            - sqs:ChangeMessageVisibility
           Resource:  !GetAtt CfdiInQueue.Arn
 
   CfdiDataLake:
