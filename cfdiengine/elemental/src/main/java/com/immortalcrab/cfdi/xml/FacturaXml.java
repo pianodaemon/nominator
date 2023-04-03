@@ -3,8 +3,14 @@ package com.immortalcrab.cfdi.xml;
 import com.immortalcrab.cfdi.dtos.FacturaRequestDTO;
 import com.immortalcrab.cfdi.errors.EngineError;
 import com.immortalcrab.cfdi.toolbox.IToolbox;
-import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.List;
+
 import mx.gob.sat.cfd._4.Comprobante;
 import mx.gob.sat.cfd._4.ObjectFactory;
 import mx.gob.sat.sitio_internet.cfd.catalogos.*;
@@ -15,8 +21,9 @@ import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.transform.stream.StreamSource;
-import java.io.*;
-import java.util.List;
+
+import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class FacturaXml {
@@ -26,11 +33,11 @@ public class FacturaXml {
 
     private final StringWriter sw;
 
-    private ClassLoader _cloader;
+    private ClassLoader cloader;
 
     public void setUpClass() {
 
-        _cloader = getClass().getClassLoader();
+        cloader = getClass().getClassLoader();
     }
 
     public FacturaXml(FacturaRequestDTO req,
@@ -45,7 +52,8 @@ public class FacturaXml {
         return sw.toString();
     }
 
-    private StringWriter shape(String certificateNo, BufferedInputStream certificate, BufferedInputStream signerKey) throws EngineError {
+    private StringWriter shape(String certificateNo,
+            BufferedInputStream certificate, BufferedInputStream signerKey) throws EngineError {
 
         StringWriter swriter = new StringWriter();
 
@@ -207,8 +215,10 @@ public class FacturaXml {
             // Marshalling (including issuer signature)
             var pemKeyBr = new BufferedReader(new InputStreamReader(signerKey));
             var cfdiBr = new BufferedReader(new StringReader(swriter.toString()));
-            var xsltSource = new StreamSource(_cloader.getResourceAsStream("cfdv40/cadenaoriginal_4_0.xslt"));
-            var toolbox = new CfdiToolBox();
+            var xsltSource = new StreamSource(cloader.getResourceAsStream("cfdv40/cadenaoriginal_4_0.xslt"));
+            IToolbox toolbox = new IToolbox() {
+            };
+
             String originalStr = toolbox.renderOriginal(cfdiBr, xsltSource);
             String sello = toolbox.signOriginal(pemKeyBr, originalStr);
             cfdi.setSello(sello);
@@ -223,5 +233,3 @@ public class FacturaXml {
         return swriter;
     }
 }
-
-class CfdiToolBox implements IToolbox {}
