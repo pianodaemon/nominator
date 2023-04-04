@@ -65,7 +65,6 @@ public class FacturaXml {
             cfdi.setFolio(req.getComprobanteAttributes().getFolio());
             cfdi.setFecha(DatatypeFactory.newInstance().newXMLGregorianCalendar(req.getComprobanteAttributes().getFecha()));
             cfdi.setFormaPago(req.getComprobanteAttributes().getFormaPago());
-            cfdi.setNoCertificado(req.getComprobanteAttributes().getNoCertificado());
             cfdi.setSubTotal(req.getComprobanteAttributes().getSubTotal());
             cfdi.setDescuento(req.getComprobanteAttributes().getDescuento());
             cfdi.setMoneda(CMoneda.fromValue(req.getComprobanteAttributes().getMoneda()));

@@ -86,7 +86,6 @@ public class FacturaRequestDTO extends ClientRequest {
             String folio = LegoAssembler.obtainObjFromKey(this.getDs(), "folio");
             String fecha = LegoAssembler.obtainObjFromKey(this.getDs(), "fecha");
             String formaPago = LegoAssembler.obtainObjFromKey(this.getDs(), "forma_pago");
-            String noCertificado = LegoAssembler.obtainObjFromKey(this.getDs(), "no_certificado");
             Double subTotal = LegoAssembler.obtainObjFromKey(this.getDs(), "subtotal");
             Double descuento = LegoAssembler.obtainObjFromKey(this.getDs(), "descuento");
             String moneda = LegoAssembler.obtainObjFromKey(this.getDs(), "moneda");
@@ -100,7 +99,6 @@ public class FacturaRequestDTO extends ClientRequest {
             _comprobante.setFolio(folio);
             _comprobante.setFecha(fecha);
             _comprobante.setFormaPago(formaPago);
-            _comprobante.setNoCertificado(noCertificado);
             _comprobante.setSubTotal(new BigDecimal(subTotal.toString()));
             _comprobante.setDescuento(new BigDecimal(descuento.toString()));
             _comprobante.setMoneda(moneda);
@@ -275,7 +273,6 @@ public class FacturaRequestDTO extends ClientRequest {
         private String folio;
         private String fecha;
         private String formaPago;
-        private String noCertificado;
         private BigDecimal subTotal;
         private BigDecimal descuento;
         private String moneda;
