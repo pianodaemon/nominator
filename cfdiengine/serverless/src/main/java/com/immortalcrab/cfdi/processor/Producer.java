@@ -6,6 +6,7 @@ import com.immortalcrab.cfdi.errors.ErrorCodes;
 import com.immortalcrab.cfdi.helpers.S3ClientHelper;
 import com.immortalcrab.cfdi.helpers.S3ReqURLParser;
 import com.immortalcrab.cfdi.helpers.S3ResourceFetchHelper;
+import com.immortalcrab.cfdi.processor.ResourceDescriptor.*;
 import com.immortalcrab.cfdi.xml.FacturaXml;
 
 import java.io.BufferedInputStream;
@@ -110,10 +111,16 @@ public class Producer extends Processor {
     }
 
     @Override
-    protected String fetchPassword(Map<String, String> issuerAttribs) throws EngineError {
+    protected String fetchCertNumber(Map<String, String> issuerAttribs) throws EngineError {
 
-        Optional<String> passwd = Optional.ofNullable(issuerAttribs.get("passwd"));
-        return passwd.orElseThrow(() -> new EngineError("The issuer requested is not having a password", ErrorCodes.PIPELINE_NOT_SPINNED_UP));
+        Optional<String> baseName = Optional.ofNullable(issuerAttribs.get(Issuer.K_PEM));
+        String cName = baseName.orElseThrow(() -> new EngineError("The issuer's resource can not be obtained", ErrorCodes.PIPELINE_NOT_SPINNED_UP));
+        int pos = cName.lastIndexOf('.');
+        if (pos > -1) {
+            return cName.substring(0, pos);
+        }
+
+        return cName;
     }
 
     private static class Wiring {
