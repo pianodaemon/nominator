@@ -32,13 +32,7 @@ public class FacturaXml {
     FacturaRequestDTO req;
 
     private final StringWriter sw;
-
-    private ClassLoader cloader;
-
-    public void setUpClass() {
-
-        cloader = getClass().getClassLoader();
-    }
+    private final ClassLoader cloader = getClass().getClassLoader();
 
     public FacturaXml(FacturaRequestDTO req,
             BufferedInputStream certificate, BufferedInputStream signerKey, final String certificateNo) throws EngineError {
