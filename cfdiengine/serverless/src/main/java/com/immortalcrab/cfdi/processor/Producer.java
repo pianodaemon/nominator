@@ -113,7 +113,7 @@ public class Producer extends Processor {
     @Override
     protected String fetchCertNumber(Map<String, String> issuerAttribs) throws EngineError {
 
-        Optional<String> baseName = Optional.ofNullable(issuerAttribs.get(Issuer.K_PEM));
+        Optional<String> baseName = Optional.ofNullable(issuerAttribs.get(Issuer.K_CER));
         String cName = baseName.orElseThrow(() -> new EngineError("The issuer's resource can not be obtained", ErrorCodes.PIPELINE_NOT_SPINNED_UP));
         int pos = cName.lastIndexOf('.');
         if (pos > -1) {
