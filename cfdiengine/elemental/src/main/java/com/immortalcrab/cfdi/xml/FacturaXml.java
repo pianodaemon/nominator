@@ -207,6 +207,8 @@ public class FacturaXml {
 
             // Marshalling (including issuer signature)
             final String xmlPriorToSignature = swriter.toString();
+            log.debug(String.format("This how the xml looks prior to signature -- {{ %s }}", xmlPriorToSignature));
+
             var pemKeyBr = new BufferedReader(new InputStreamReader(signerKey));
             var cfdiBr = new BufferedReader(new StringReader(xmlPriorToSignature));
             var xsltSource = new StreamSource(cloader.getResourceAsStream("cfdv40/cadenaoriginal_4_0.xslt"));
