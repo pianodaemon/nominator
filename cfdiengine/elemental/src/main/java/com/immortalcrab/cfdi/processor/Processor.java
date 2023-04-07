@@ -53,7 +53,7 @@ public abstract class Processor {
                         this.getStamper(),
                         this.fetchCert(this.getResources(), issuerAttribs),
                         this.fetchKey(this.getResources(), issuerAttribs),
-                        this.fetchPassword(issuerAttribs));
+                        this.fetchCertNumber(issuerAttribs));
 
         saveOnPersistance(this.getStorage(), reply);
 
@@ -74,7 +74,7 @@ public abstract class Processor {
 
     protected abstract BufferedInputStream fetchKey(IStorage resources, final Map<String, String> issuerAttribs) throws EngineError;
 
-    protected abstract String fetchPassword(final Map<String, String> issuerAttribs) throws EngineError;
+    protected abstract String fetchCertNumber(final Map<String, String> issuerAttribs) throws EngineError;
 
     public interface IStorage {
 
