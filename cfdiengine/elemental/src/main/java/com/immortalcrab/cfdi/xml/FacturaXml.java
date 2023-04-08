@@ -33,6 +33,8 @@ public class FacturaXml {
 
     private final StringWriter sw;
     private final ClassLoader cloader = getClass().getClassLoader();
+    private final IToolbox toolbox = new IToolbox() {
+    };
 
     public FacturaXml(FacturaRequestDTO req,
             BufferedInputStream certificate, BufferedInputStream signerKey, final String certificateNo) throws EngineError {
@@ -69,14 +71,7 @@ public class FacturaXml {
             cfdi.setMetodoPago(CMetodoPago.fromValue(req.getComprobanteAttributes().getMetodoPago()));
             cfdi.setLugarExpedicion(req.getComprobanteAttributes().getLugarExpedicion());
 
-            byte[] contents = new byte[1024];
-            int bytesRead;
-            StringBuilder certContents = new StringBuilder();
-
-            while ((bytesRead = certificate.read(contents)) != -1) {
-                certContents.append(new String(contents, 0, bytesRead));
-            }
-            cfdi.setCertificado(certContents.toString());
+            cfdi.setCertificado(toolbox.renderCerticate(certificate.readAllBytes()));
             cfdi.setNoCertificado(certificateNo);
 
             Comprobante.Emisor emisor = cfdiFactory.createComprobanteEmisor();
@@ -212,8 +207,6 @@ public class FacturaXml {
             var pemKeyBr = new BufferedReader(new InputStreamReader(signerKey));
             var cfdiBr = new BufferedReader(new StringReader(xmlPriorToSignature));
             var xsltSource = new StreamSource(cloader.getResourceAsStream("cfdv40/cadenaoriginal_4_0.xslt"));
-            IToolbox toolbox = new IToolbox() {
-            };
 
             String originalStr = toolbox.renderOriginal(cfdiBr, xsltSource);
             String sello = toolbox.signOriginal(pemKeyBr, originalStr);
