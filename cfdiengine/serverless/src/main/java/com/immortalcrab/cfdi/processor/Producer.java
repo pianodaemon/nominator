@@ -129,7 +129,9 @@ public class Producer extends Processor {
                 BufferedInputStream certificate, BufferedInputStream signerKey, final String certificateNo) throws EngineError {
 
             var ic = new FacturaXml((FacturaRequestDTO) req, certificate, signerKey, certificateNo);
-            return stamper.impress(ic.toString());
+            final String xmlPriorToStamp = ic.toString();
+            log.debug(String.format("This how the xml looks prior to stamp -- {{ %s }}", xmlPriorToStamp));
+            return stamper.impress(xmlPriorToStamp);
         }
     }
 }
