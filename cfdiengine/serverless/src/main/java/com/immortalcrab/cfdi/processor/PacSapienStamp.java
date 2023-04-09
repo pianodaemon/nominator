@@ -36,6 +36,8 @@ public class PacSapienStamp implements IStamp<PacReply> {
     private static final String PASSWORD_HEADER_NAME = "password";
     private static final String CONT_TYPE_HEADER_NAME = "Content-Type";
     private static final String AUTH_HEADER_NAME = "Authorization";
+    private static final String AUTH_URL = "https://services.test.sw.com.mx/security/authenticate";
+    private static final String AUTH_STAMP_URL = "https://services.test.sw.com.mx/cfdi33/stamp/json/v4";
 
     private @NonNull
     final String login;
@@ -45,18 +47,18 @@ public class PacSapienStamp implements IStamp<PacReply> {
 
     @Override
     public PacReply impress(final String payload) throws EngineError {
-        
-        TargetConfDto targetDto = new TargetConfDto(login, passwd, "https://services.test.sw.com.mx/security/authenticate");
+
+        TargetConfDto targetDto = new TargetConfDto(login, passwd, AUTH_URL);
         SubmitionParamsDto spaDto = PacSapienStamp.ask4Token(HttpClients.createDefault(), targetDto, (final Map<String, Object> m) -> {
             if (((String) m.get("status")).equals("success")) {
                 var dataMap = (Map<String, Object>) m.get("data");
                 var token = (String) dataMap.get("token");
-                return new SubmitionParamsDto(payload, token, "https://services.test.sw.com.mx/cfdi33/stamp/json/v4");
+                return new SubmitionParamsDto(payload, token, AUTH_STAMP_URL);
             }
-            
+
             throw new EngineError(String.format("%s", m.get("messageDetail")), ErrorCodes.PAC_PARTY_ISSUES);
         });
-        
+
         return submit4Stamp(HttpClients.createDefault(), spaDto, (final Map<String, Object> m) -> {
             if (((String) m.get("status")).equals("success")) {
                 var dataMap = (Map<String, String>) m.get("data");
@@ -65,7 +67,7 @@ public class PacSapienStamp implements IStamp<PacReply> {
                 var cont = new PacReply.Content(buffer.append(dataMap.get("cfdi")), "", "");
                 return new PacReply(0, cont);
             }
-            
+
             throw new EngineError(String.format("%s", m.get("messageDetail")), ErrorCodes.PAC_PARTY_ISSUES);
         });
     }
