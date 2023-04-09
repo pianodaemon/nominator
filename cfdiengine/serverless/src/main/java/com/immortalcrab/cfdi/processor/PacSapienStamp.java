@@ -57,7 +57,7 @@ public class PacSapienStamp implements IStamp<PacReply> {
                 return new SubmitionParamsDto(payload, token, AUTH_STAMP_URL);
             }
 
-            throw new EngineError(String.format("%s", m.get("messageDetail")), ErrorCodes.PAC_PARTY_ISSUES);
+            throw new EngineError(String.format("%s (%s)", m.get("message"), m.get("messageDetail")), ErrorCodes.PAC_PARTY_ISSUES);
         });
 
         return submit4Stamp(HttpClients.createDefault(), spaDto, (final Map<String, Object> m) -> {
@@ -69,7 +69,7 @@ public class PacSapienStamp implements IStamp<PacReply> {
                 return new PacReply(0, cont);
             }
 
-            throw new EngineError(String.format("%s", m.get("messageDetail")), ErrorCodes.PAC_PARTY_ISSUES);
+            throw new EngineError(String.format("%s (%s)", m.get("message"), m.get("messageDetail")), ErrorCodes.PAC_PARTY_ISSUES);
         });
     }
 
