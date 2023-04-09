@@ -1,6 +1,7 @@
 package com.immortalcrab.cfdi.processor;
 
 import com.immortalcrab.cfdi.errors.EngineError;
+import com.immortalcrab.cfdi.errors.ErrorCodes;
 import com.immortalcrab.cfdi.processor.Processor.IStamp;
 
 import com.immortalcrab.cfdi.helpers.JsonToMapHelper;
@@ -61,15 +62,17 @@ public class PacSapienStamp implements IStamp<PacReply> {
         return interaction(httpclient, setupStampPost(target), etmpl, cpa);
     }
 
-    private static <T> T interaction(CloseableHttpClient httpclient, HttpPost stedyPost, String etmpl, ContentMapParser<T> cpa) {
-        Map<String, Object> contMap = null;
+    private static <T> T interaction(CloseableHttpClient httpclient, HttpPost stedyPost, String etmpl, ContentMapParser<T> cpa) throws EngineError {
         try ( CloseableHttpResponse response = httpclient.execute(stedyPost)) {
-            contMap = doPost(response);
+            if (response.getCode() == HttpStatus.SC_OK) {
+                Map<String, Object> contMap = percolateContent(response);
+                return cpa.parse(contMap);
+            }
+            final String emsg = String.format("Pac replied with an unexpected http code %s", response.getCode());
+            throw new EngineError(String.format(etmpl, emsg), ErrorCodes.PAC_PARTY_ISSUES);
         } catch (IOException ex) {
-            log.error(String.format(etmpl, ex.getMessage()));
+            throw new EngineError(String.format(etmpl, ex.getMessage()), ErrorCodes.PAC_PARTY_ISSUES);
         }
-
-        return cpa.parse(contMap);
     }
 
     private static HttpPost setupTokenPost(final TargetConfDto target) {
