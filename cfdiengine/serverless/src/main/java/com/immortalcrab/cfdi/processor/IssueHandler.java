@@ -20,7 +20,9 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
         try {
             var producer = Producer.obtainSteadyPipeline();
             for (SQSEvent.SQSMessage msg : event.getRecords()) {
-                producer.doIssue(percolatePayload(msg));
+                var details = producer.doIssue(percolatePayload(msg));
+                log.debug(String.format("Issue for %s is attained {%s}",
+                        details.getName(), details.getBuffer().toString()));
             }
         } catch (EngineError ex) {
             log.error("Exception handling batch seed request.", ex);
