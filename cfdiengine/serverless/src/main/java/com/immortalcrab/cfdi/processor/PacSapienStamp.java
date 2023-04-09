@@ -96,7 +96,7 @@ public class PacSapienStamp implements IStamp<PacReply> {
         return httpPost;
     }
 
-    private static Map<String, Object> doPost(CloseableHttpResponse response) throws IOException {
+    private static Map<String, Object> percolateContent(CloseableHttpResponse response) throws IOException {
         HttpEntity entity = response.getEntity();
         InputStream content = entity.getContent();
         InputStream reader = new ByteArrayInputStream(content.readAllBytes());
