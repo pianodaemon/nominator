@@ -45,6 +45,7 @@ public class PacSapienStamp implements IStamp<PacReply> {
 
     @Override
     public PacReply impress(final String payload) throws EngineError {
+        
         TargetConfDto targetDto = new TargetConfDto(login, passwd, "https://services.test.sw.com.mx/security/authenticate");
         SubmitionParamsDto spaDto = PacSapienStamp.ask4Token(HttpClients.createDefault(), targetDto, (final Map<String, Object> m) -> {
             if (((String) m.get("status")).equals("success")) {
@@ -52,11 +53,20 @@ public class PacSapienStamp implements IStamp<PacReply> {
                 var token = (String) dataMap.get("token");
                 return new SubmitionParamsDto(payload, token, "https://services.test.sw.com.mx/cfdi33/stamp/json/v4");
             }
-
+            
             throw new EngineError(String.format("%s", m.get("messageDetail")), ErrorCodes.PAC_PARTY_ISSUES);
         });
-
-        throw new UnsupportedOperationException("Not supported yet.");
+        
+        return submit4Stamp(HttpClients.createDefault(), spaDto, (final Map<String, Object> m) -> {
+            if (((String) m.get("status")).equals("success")) {
+                var dataMap = (Map<String, String>) m.get("data");
+                StringBuilder buffer = new StringBuilder();
+                var cont = new PacReply.Content(buffer.append(dataMap.get("cfdi")), "", "");
+                return new PacReply(0, cont);
+            }
+            
+            throw new EngineError(String.format("%s", m.get("messageDetail")), ErrorCodes.PAC_PARTY_ISSUES);
+        });
     }
 
     public static PacSapienStamp setup(final String carrier, final String login, final String passwd) {
