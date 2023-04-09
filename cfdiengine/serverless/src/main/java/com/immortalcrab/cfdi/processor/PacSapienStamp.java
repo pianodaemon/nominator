@@ -49,6 +49,7 @@ public class PacSapienStamp implements IStamp<PacReply> {
     public PacReply impress(final String payload) throws EngineError {
 
         TargetConfDto targetDto = new TargetConfDto(login, passwd, AUTH_URL);
+        log.debug(String.format("Asking for a token with this parameters %s", targetDto.toString()));
         SubmitionParamsDto spaDto = PacSapienStamp.ask4Token(HttpClients.createDefault(), targetDto, (final Map<String, Object> m) -> {
             if (((String) m.get("status")).equals("success")) {
                 var dataMap = (Map<String, Object>) m.get("data");
@@ -138,6 +139,11 @@ public class PacSapienStamp implements IStamp<PacReply> {
         private String login;
         private String passwd;
         private String targetURL;
+
+        @Override
+        public String toString() {
+            return String.format("Pac { user: %s, password: %s, target_url: %s }", login, passwd, targetURL);
+        }
     }
 
     @AllArgsConstructor
