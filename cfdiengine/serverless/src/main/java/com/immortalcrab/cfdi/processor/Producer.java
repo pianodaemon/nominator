@@ -77,14 +77,14 @@ public class Producer extends Processor {
     @Override
     protected void saveOnPersistance(IStorage st, PacReply pacResult) throws EngineError {
 
-        final String fileName = String.format("%s/%s.%s", st.getTargetName(), pacResult.getContent().getName(), XML_FILE_EXTENSION);
-        byte[] in = pacResult.getContent().getBuffer().toString().getBytes(StandardCharsets.UTF_8);
+        final String fileName = String.format("%s/%s.%s", st.getTargetName(), pacResult.getName(), XML_FILE_EXTENSION);
+        byte[] in = pacResult.getBuffer().toString().getBytes(StandardCharsets.UTF_8);
 
         st.upload(XML_MIME_TYPE, in.length, fileName, new ByteArrayInputStream(in));
     }
 
     @Override
-    protected PacReply.Content openPayload(final IPayload payload, Pickard pic) throws EngineError {
+    protected PacReply openPayload(final IPayload payload, Pickard pic) throws EngineError {
 
         S3ReqURLParser reqMeta = S3ReqURLParser.parse(payload.getReq());
         BufferedInputStream bf = this.getStorage().download(reqMeta.getKey());
