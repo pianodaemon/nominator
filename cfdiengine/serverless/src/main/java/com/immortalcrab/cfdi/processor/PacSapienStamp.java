@@ -19,6 +19,8 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.http.HttpStatus;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -43,6 +45,16 @@ public class PacSapienStamp implements IStamp<PacReply> {
 
     @Override
     public PacReply impress(final String payload) throws EngineError {
+        TargetConfDto targetDto = new TargetConfDto(login, passwd, "https://services.test.sw.com.mx/security/authenticate");
+        SubmitionParamsDto spaDto = PacSapienStamp.ask4Token(HttpClients.createDefault(), targetDto, (final Map<String, Object> m) -> {
+            if (((String) m.get("status")).equals("success")) {
+                var dataMap = (Map<String, Object>) m.get("data");
+                var token = (String) dataMap.get("token");
+                return new SubmitionParamsDto(payload, token, "https://services.test.sw.com.mx/cfdi33/stamp/json/v4");
+            }
+
+            throw new EngineError(String.format("%s", m.get("messageDetail")), ErrorCodes.PAC_PARTY_ISSUES);
+        });
 
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -52,12 +64,12 @@ public class PacSapienStamp implements IStamp<PacReply> {
         return new PacSapienStamp(login, passwd);
     }
 
-    public static <T> T ask4Token(CloseableHttpClient httpclient, final TargetConfDto target, ContentMapParser<T> cpa) throws NoSuchElementException {
+    public static <T> T ask4Token(CloseableHttpClient httpclient, final TargetConfDto target, ContentMapParser<T> cpa) throws EngineError {
         final String etmpl = "Sapien SSO interaction was not successful : %s";
         return interaction(httpclient, setupTokenPost(target), etmpl, cpa);
     }
 
-    public static <T> T submit4Stamp(CloseableHttpClient httpclient, final SubmitionParamsDto target, ContentMapParser<T> cpa) throws NoSuchElementException {
+    public static <T> T submit4Stamp(CloseableHttpClient httpclient, final SubmitionParamsDto target, ContentMapParser<T> cpa) throws EngineError {
         final String etmpl = "Sapien stamping was not successful : %s";
         return interaction(httpclient, setupStampPost(target), etmpl, cpa);
     }
@@ -127,6 +139,6 @@ public class PacSapienStamp implements IStamp<PacReply> {
     @FunctionalInterface
     public interface ContentMapParser<T> {
 
-        T parse(final Map<String, Object> m) throws NoSuchElementException;
+        T parse(final Map<String, Object> m) throws EngineError;
     }
 }
