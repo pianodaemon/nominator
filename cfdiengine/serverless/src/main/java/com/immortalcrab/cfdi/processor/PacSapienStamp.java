@@ -94,7 +94,7 @@ public class PacSapienStamp implements IStamp<PacReply> {
                 Map<String, Object> contMap = percolateContent(response);
                 return cpa.parse(contMap);
             }
-            final String emsg = String.format("Pac replied with an unexpected http code %s", response.getCode());
+            final String emsg = String.format("Pac replied with an unexpected http code %s (%s)", response.getCode(), response.getReasonPhrase());
             throw new EngineError(String.format(etmpl, emsg), ErrorCodes.PAC_PARTY_ISSUES);
         } catch (IOException ex) {
             throw new EngineError(String.format(etmpl, ex.getMessage()), ErrorCodes.PAC_PARTY_ISSUES);
