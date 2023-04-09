@@ -7,6 +7,13 @@ buildscript {
   dependencies {
     classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
   }
+  sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', 'src/main/wsdl2java']
+        }
+    }
+  }
 }
 
 plugins {
@@ -33,6 +40,7 @@ wsdl2java {
 
     verbose.set(true)
     wsdlDir.set(layout.projectDirectory.dir("src/main/resources/wsdls/servisim"))
+    generatedSourceDir.set(layout.projectDirectory.dir("src/main/wsdl2java"))
 }
 
 tasks.named('test') {
