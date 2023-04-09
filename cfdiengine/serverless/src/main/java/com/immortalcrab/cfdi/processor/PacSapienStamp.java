@@ -60,6 +60,7 @@ public class PacSapienStamp implements IStamp<PacReply> {
         return submit4Stamp(HttpClients.createDefault(), spaDto, (final Map<String, Object> m) -> {
             if (((String) m.get("status")).equals("success")) {
                 var dataMap = (Map<String, String>) m.get("data");
+                dataMap.forEach((key, value) -> log.debug(String.format("Stamp data reply -> %s:%s", key, value)));
                 StringBuilder buffer = new StringBuilder();
                 var cont = new PacReply.Content(buffer.append(dataMap.get("cfdi")), "", "");
                 return new PacReply(0, cont);
