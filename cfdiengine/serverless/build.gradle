@@ -39,7 +39,7 @@ dependencies {
 wsdl2java {
 
     verbose.set(true)
-    wsdlDir.set(layout.projectDirectory.dir("src/main/resources/wsdls/servisim"))
+    wsdlDir.set(layout.projectDirectory.dir("src/main/resources"))
     generatedSourceDir.set(layout.projectDirectory.dir("src/main/wsdl2java"))
 }
 
