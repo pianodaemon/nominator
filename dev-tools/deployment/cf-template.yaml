@@ -85,6 +85,7 @@ Resources:
             - sqs:DeleteMessage
             - sqs:GetQueueAttributes
             - sqs:ChangeMessageVisibility
+            - SQS:PurgeQueue
           Resource:  !GetAtt CfdiInQueue.Arn
 
   CfdiDataLake:
