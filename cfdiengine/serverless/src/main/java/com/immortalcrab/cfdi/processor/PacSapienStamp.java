@@ -40,7 +40,7 @@ public class PacSapienStamp implements IStamp<PacReply> {
 
         if (tres.getCodigo() != 0) {
             final String emsg = String.format("Pac stamp experimenting problems: %s (%d)",
-                    tres.getDescripcion(),
+                    tres.getDescripcion().getValue(),
                     tres.getCodigo());
             throw new EngineError(emsg, ErrorCodes.PAC_PARTY_ISSUES);
         }
