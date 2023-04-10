@@ -29,8 +29,9 @@ public class PacSapienStamp implements IStamp<PacReply> {
 
         CFDI client = new CFDI();
         TimbradoCFDIRequest treq = new TimbradoCFDIRequest();
+        treq.setUser(login);
+        treq.setPass(passwd);
         // SIGNED BY CUSTOMER
-
         treq.setTipoPeticion(1);
         treq.setXml(payload);
         treq.setIdComprobante("0001");
