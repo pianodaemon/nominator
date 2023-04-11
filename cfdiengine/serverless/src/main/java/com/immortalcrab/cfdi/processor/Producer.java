@@ -22,8 +22,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Producer extends Processor {
 
-    private static final String XML_MIME_TYPE = "text/xml";
-    private static final String XML_FILE_EXTENSION = ".xml";
+    private static final String XML_FILE_EXTENSION = "xml";
+    private static final String XML_MIME_TYPE = String.format("text/%s", XML_FILE_EXTENSION);
     ResourceDescriptor rdesc;
 
     private static String findMandatoryEnv(final String variableEnv) throws EngineError {
