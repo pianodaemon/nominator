@@ -63,8 +63,13 @@ public class FacturaXml {
             cfdi.setFormaPago(req.getComprobanteAttributes().getFormaPago());
             cfdi.setSubTotal(req.getComprobanteAttributes().getSubTotal());
             cfdi.setDescuento(req.getComprobanteAttributes().getDescuento());
-            cfdi.setMoneda(CMoneda.fromValue(req.getComprobanteAttributes().getMoneda()));
-            cfdi.setTipoCambio(req.getComprobanteAttributes().getTipoCambio());
+
+            final CMoneda currency = CMoneda.fromValue(req.getComprobanteAttributes().getMoneda());
+            cfdi.setMoneda(currency);
+            if (currency != CMoneda.MXN) {
+                cfdi.setTipoCambio(req.getComprobanteAttributes().getTipoCambio());
+            }
+
             cfdi.setTotal(req.getComprobanteAttributes().getTotal());
             cfdi.setTipoDeComprobante(CTipoDeComprobante.fromValue(FacturaRequestDTO.TIPO_COMPROBANTE));
             cfdi.setExportacion(req.getComprobanteAttributes().getExportacion());
