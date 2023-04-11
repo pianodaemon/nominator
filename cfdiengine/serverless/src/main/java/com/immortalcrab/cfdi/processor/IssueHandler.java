@@ -23,23 +23,26 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
     @Override
     public Void handleRequest(SQSEvent event, Context context) {
 
-        try {
-            var producer = Producer.obtainSteadyPipeline();
-            for (SQSEvent.SQSMessage msg : event.getRecords()) {
-                Arn theArn = Arn.fromString(msg.getEventSourceArn());
-                var queueName = theArn.getResourceAsString();
-                SqsClient sqsClient = SqsClient.builder().region(Region.of(theArn.getRegion())).build();
-                log.info(String.format("We've got a message to process from queue %s", queueName));
-                var details = producer.doIssue(percolatePayload(msg));
-                log.debug(String.format("Issue for %s is attained {%s}",
-                        details.getName(), details.getBuffer().toString()));
-                erradicateMessageFromQueue(sqsClient, queueName, msg.getReceiptHandle());
+        for (SQSEvent.SQSMessage msg : event.getRecords()) {
+            try {
+                handleMessage(Producer.obtainSteadyPipeline(), msg);
+            } catch (EngineError ex) {
+                log.error("Exception handling batch seed request.", ex);
             }
-        } catch (EngineError ex) {
-            log.error("Exception handling batch seed request.", ex);
         }
 
         return null;
+    }
+
+    private void handleMessage(Producer producer, SQSEvent.SQSMessage msg) throws EngineError {
+        Arn theArn = Arn.fromString(msg.getEventSourceArn());
+        var queueName = theArn.getResourceAsString();
+        SqsClient sqsClient = SqsClient.builder().region(Region.of(theArn.getRegion())).build();
+        log.info(String.format("We've got a message to process from queue %s", queueName));
+        var details = producer.doIssue(percolatePayload(msg));
+        log.debug(String.format("Issue for %s is attained {%s}",
+                details.getName(), details.getBuffer().toString()));
+        erradicateMessageFromQueue(sqsClient, queueName, msg.getReceiptHandle());
     }
 
     private Payload percolatePayload(SQSEvent.SQSMessage msg) throws EngineError {
