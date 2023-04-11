@@ -7,6 +7,8 @@ import com.immortalcrab.cfdi.helpers.Payload;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
+import software.amazon.awssdk.regions.Region;
+import com.amazonaws.arn.Arn;
 import com.immortalcrab.cfdi.errors.ErrorCodes;
 
 import lombok.extern.log4j.Log4j2;
@@ -20,7 +22,9 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
         try {
             var producer = Producer.obtainSteadyPipeline();
             for (SQSEvent.SQSMessage msg : event.getRecords()) {
-                var queueName = extractQueueNameFromMessage(msg);
+                Arn theArn = Arn.fromString(msg.getEventSourceArn());
+                var queueName = theArn.getResourceAsString();
+                SqsClient sqsClient = SqsClient.builder().region(Region.of(theArn.getRegion())).build();
                 log.info(String.format("We've got a message to process from queue %s", queueName));
                 var details = producer.doIssue(percolatePayload(msg));
                 log.debug(String.format("Issue for %s is attained {%s}",
@@ -31,11 +35,6 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
         }
 
         return null;
-    }
-
-    private String extractQueueNameFromMessage(SQSEvent.SQSMessage msg) {
-        String[] particles = msg.getEventSourceArn().split(":");
-        return particles[particles.length - 1];
     }
 
     private Payload percolatePayload(SQSEvent.SQSMessage msg) throws EngineError {
