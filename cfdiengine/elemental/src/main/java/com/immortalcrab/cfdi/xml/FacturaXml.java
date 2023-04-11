@@ -28,6 +28,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class FacturaXml {
 
+    private static final String RFC_FOREIGNER = "XEXX010101000";
+
     private final @NonNull
     FacturaRequestDTO req;
 
@@ -85,11 +87,14 @@ public class FacturaXml {
             emisor.setRegimenFiscal(req.getEmisorAttributes().getRegimenFiscal());
             cfdi.setEmisor(emisor);
 
+            final String rfcReceptor = req.getReceptorAttributes().getRfc();
             Comprobante.Receptor receptor = cfdiFactory.createComprobanteReceptor();
-            receptor.setRfc(req.getReceptorAttributes().getRfc());
+            receptor.setRfc(rfcReceptor);
             receptor.setNombre(req.getReceptorAttributes().getNombre());
             receptor.setDomicilioFiscalReceptor(req.getReceptorAttributes().getDomicilioFiscalReceptor());
-            receptor.setResidenciaFiscal(CPais.fromValue(req.getReceptorAttributes().getResidenciaFiscal()));
+            if (RFC_FOREIGNER.equals(rfcReceptor)) {
+                receptor.setResidenciaFiscal(CPais.fromValue(req.getReceptorAttributes().getResidenciaFiscal()));
+            }
             receptor.setRegimenFiscalReceptor(req.getReceptorAttributes().getRegimenFiscalReceptor());
             receptor.setUsoCFDI(CUsoCFDI.fromValue(req.getReceptorAttributes().getUsoCfdi()));
             cfdi.setReceptor(receptor);
