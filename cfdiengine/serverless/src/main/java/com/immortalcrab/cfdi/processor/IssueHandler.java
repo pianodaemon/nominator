@@ -8,6 +8,9 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
+import software.amazon.awssdk.services.sqs.model.GetQueueUrlRequest;
+import software.amazon.awssdk.services.sqs.model.GetQueueUrlResponse;
 import software.amazon.awssdk.regions.Region;
 import com.amazonaws.arn.Arn;
 import com.immortalcrab.cfdi.errors.ErrorCodes;
@@ -30,6 +33,7 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
                 var details = producer.doIssue(percolatePayload(msg));
                 log.debug(String.format("Issue for %s is attained {%s}",
                         details.getName(), details.getBuffer().toString()));
+                erradicateMessageFromQueue(sqsClient, queueName, msg.getReceiptHandle());
             }
         } catch (EngineError ex) {
             log.error("Exception handling batch seed request.", ex);
@@ -50,5 +54,16 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
         } catch (IOException ex) {
             throw new EngineError("Event could not be unmarshall", ex, ErrorCodes.REQUEST_INVALID);
         }
+    }
+
+    private static void erradicateMessageFromQueue(SqsClient sqsClient, final String queueName, final String receiptHandle) {
+
+        GetQueueUrlResponse getQueueUrlResponse = sqsClient.getQueueUrl(GetQueueUrlRequest.builder().queueName(queueName).build());
+
+        DeleteMessageRequest deleteMessageRequest = DeleteMessageRequest.builder()
+                .queueUrl(getQueueUrlResponse.queueUrl())
+                .receiptHandle(receiptHandle)
+                .build();
+        sqsClient.deleteMessage(deleteMessageRequest);
     }
 }
