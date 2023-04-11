@@ -27,6 +27,8 @@ public class PacSapienStamp implements IStamp<PacReply> {
     @Override
     public PacReply impress(final String xid, final String payload) throws EngineError {
 
+        log.info(String.format("Asking to PAC for stamping of %s", xid));
+
         CFDI client = new CFDI();
         TimbradoCFDIRequest treq = new TimbradoCFDIRequest();
         treq.setUser(Integer.parseInt(login));
