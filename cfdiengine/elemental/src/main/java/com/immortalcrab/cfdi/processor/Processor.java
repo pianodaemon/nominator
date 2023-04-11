@@ -31,7 +31,7 @@ public abstract class Processor {
     private final @NonNull
     Map<String, Stages<? extends IDecodeStep, ? extends IXmlStep>> scenarios;
 
-    public PacReply engage(final String kind, final Map<String, String> issuerAttribs, InputStreamReader isr)
+    public PacReply engage(final String kind, final String label, final Map<String, String> issuerAttribs, InputStreamReader isr)
             throws EngineError {
 
         Optional<Stages<? extends IDecodeStep, ? extends IXmlStep>> stages = Optional.ofNullable(this.getScenarios().get(kind));
@@ -50,6 +50,7 @@ public abstract class Processor {
                 () -> new EngineError("cfdi " + kind + " is unsupported", ErrorCodes.REQUEST_INVALID))
                 .getXmlStep()
                 .render(cfdiReq,
+                        label,
                         this.getStamper(),
                         this.fetchCert(this.getResources(), issuerAttribs),
                         this.fetchKey(this.getResources(), issuerAttribs),
@@ -103,7 +104,7 @@ public abstract class Processor {
     @FunctionalInterface
     public interface Pickard {
 
-        PacReply route(final String kind, final Map<String, String> issuerAttribs, InputStreamReader isr) throws EngineError;
+        PacReply route(final String kind, final String label, final Map<String, String> issuerAttribs, InputStreamReader isr) throws EngineError;
     }
 
     @FunctionalInterface
@@ -115,7 +116,7 @@ public abstract class Processor {
     @FunctionalInterface
     public interface IStamp<T extends PacReply> {
 
-        public T impress(final String payload) throws EngineError;
+        public T impress(final String label, final String payload) throws EngineError;
     }
 
     @FunctionalInterface
@@ -127,7 +128,7 @@ public abstract class Processor {
     @FunctionalInterface
     public interface IXmlStep<T extends PacReply, R extends ClientRequest> {
 
-        public T render(R cfdiReq, IStamp<? extends PacReply> stamper,
+        public T render(R cfdiReq, final String label, IStamp<? extends PacReply> stamper,
                 BufferedInputStream certificate, BufferedInputStream signerKey, final String certificateNo) throws EngineError;
     }
 }

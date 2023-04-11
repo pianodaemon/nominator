@@ -77,7 +77,7 @@ public class Producer extends Processor {
     @Override
     protected void saveOnPersistance(IStorage st, PacReply pacResult) throws EngineError {
 
-        final String fileName = String.format("%s/%s.%s", st.getTargetName(), pacResult.getName(), XML_FILE_EXTENSION);
+        final String fileName = String.format("%s/%s", st.getTargetName(), pacResult.getName());
         byte[] in = pacResult.getBuffer().toString().getBytes(StandardCharsets.UTF_8);
 
         st.upload(XML_MIME_TYPE, in.length, fileName, new ByteArrayInputStream(in));
@@ -93,6 +93,7 @@ public class Producer extends Processor {
         Optional<ResourceDescriptor.Issuer> issuer = rdesc.getIssuer(parts[S3ReqURLParser.URIParticles.ISSUER.ordinal()]);
         return pic.route(
                 parts[S3ReqURLParser.URIParticles.KIND.ordinal()],
+                parts[S3ReqURLParser.URIParticles.LABEL.ordinal()],
                 issuer.orElseThrow(
                         () -> new EngineError("The issuer requested is not registered",
                                 ErrorCodes.REQUEST_INVALID)).turnIntoMap(), instreamReader);
@@ -125,13 +126,13 @@ public class Producer extends Processor {
 
     private static class Wiring {
 
-        public static <R extends ClientRequest> PacReply fac(R req, IStamp<PacReply> stamper,
+        public static <R extends ClientRequest> PacReply fac(R req, final String label, IStamp<PacReply> stamper,
                 BufferedInputStream certificate, BufferedInputStream signerKey, final String certificateNo) throws EngineError {
 
             var ic = new FacturaXml((FacturaRequestDTO) req, certificate, signerKey, certificateNo);
             final String xmlPriorToStamp = ic.toString();
             log.debug(String.format("This how the xml looks prior to stamp -- {{ %s }}", xmlPriorToStamp));
-            return stamper.impress(xmlPriorToStamp);
+            return stamper.impress(String.format("%s.%s", label, XML_FILE_EXTENSION), xmlPriorToStamp);
         }
     }
 }

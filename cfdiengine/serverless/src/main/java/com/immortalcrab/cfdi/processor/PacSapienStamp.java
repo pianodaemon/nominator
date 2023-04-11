@@ -25,7 +25,7 @@ public class PacSapienStamp implements IStamp<PacReply> {
     final String passwd;
 
     @Override
-    public PacReply impress(final String payload) throws EngineError {
+    public PacReply impress(final String xid, final String payload) throws EngineError {
 
         CFDI client = new CFDI();
         TimbradoCFDIRequest treq = new TimbradoCFDIRequest();
@@ -34,7 +34,7 @@ public class PacSapienStamp implements IStamp<PacReply> {
         // SIGNED BY CUSTOMER
         treq.setTipoPeticion(1);
         treq.setXml(payload);
-        treq.setIdComprobante("0001");
+        treq.setIdComprobante(xid);
 
         TimbradoCFDIResponse tres = client.getBasicHttpBindingICFDI().timbrarCFDI(treq);
         StringBuilder buffer = new StringBuilder();
@@ -48,7 +48,7 @@ public class PacSapienStamp implements IStamp<PacReply> {
 
         return new PacReply(
                 buffer.append(tres.getXml().getValue()),
-                "0001");
+                xid);
     }
 
     public static PacSapienStamp setup(final String carrier, final String login, final String passwd) {
