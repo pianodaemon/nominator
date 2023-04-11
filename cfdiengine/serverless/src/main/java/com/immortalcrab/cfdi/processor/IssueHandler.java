@@ -20,6 +20,8 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
         try {
             var producer = Producer.obtainSteadyPipeline();
             for (SQSEvent.SQSMessage msg : event.getRecords()) {
+                var queueName = extractQueueNameFromMessage(msg);
+                log.info(String.format("We've got a message to process from queue %s", queueName));
                 var details = producer.doIssue(percolatePayload(msg));
                 log.debug(String.format("Issue for %s is attained {%s}",
                         details.getName(), details.getBuffer().toString()));
@@ -29,6 +31,11 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
         }
 
         return null;
+    }
+
+    private String extractQueueNameFromMessage(SQSEvent.SQSMessage msg) {
+        String[] particles = msg.getEventSourceArn().split(":");
+        return particles[particles.length - 1];
     }
 
     private Payload percolatePayload(SQSEvent.SQSMessage msg) throws EngineError {
