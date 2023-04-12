@@ -32,7 +32,7 @@ Resources:
       CodeUri: serverless.zip
       Description: Cfdi Function Factory
       MemorySize: 512
-      Timeout: 30
+      Timeout: 240
     DependsOn:
       - Subscriptor
 
