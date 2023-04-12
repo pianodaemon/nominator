@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
+import java.math.BigDecimal;
 
 import mx.gob.sat.cfd._4.Comprobante;
 import mx.gob.sat.cfd._4.ObjectFactory;
@@ -162,7 +163,10 @@ public class FacturaXml {
             cfdi.setConceptos(conceptos);
 
             var impuestos = cfdiFactory.createComprobanteImpuestos();
-            impuestos.setTotalImpuestosRetenidos(req.getImpuestosAttributes().getTotalImpuestosRetenidos());
+	    BigDecimal totalImpuestosRetenidos = req.getImpuestosAttributes().getTotalImpuestosRetenidos();
+	    if (totalImpuestosRetenidos.compareTo(new BigDecimal(0)) == 0) {
+                impuestos.setTotalImpuestosRetenidos(req.getImpuestosAttributes().getTotalImpuestosRetenidos());
+	    }
             impuestos.setTotalImpuestosTrasladados(req.getImpuestosAttributes().getTotalImpuestosTrasladados());
 
             var impuestosRetenciones = cfdiFactory.createComprobanteImpuestosRetenciones();
