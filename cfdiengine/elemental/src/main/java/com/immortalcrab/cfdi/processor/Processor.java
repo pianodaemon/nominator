@@ -31,7 +31,8 @@ public abstract class Processor {
     private final @NonNull
     Map<String, Stages<? extends IDecodeStep, ? extends IXmlStep>> scenarios;
 
-    public PacReply engage(final String kind, final String label, final Map<String, String> issuerAttribs, InputStreamReader isr)
+    public PacReply engage(final String kind, final String label, final String issuer,
+            final Map<String, String> issuerAttribs, InputStreamReader isr)
             throws EngineError {
 
         Optional<Stages<? extends IDecodeStep, ? extends IXmlStep>> stages = Optional.ofNullable(this.getScenarios().get(kind));
@@ -56,7 +57,8 @@ public abstract class Processor {
                         this.fetchKey(this.getResources(), issuerAttribs),
                         this.fetchCertNumber(issuerAttribs));
 
-        saveOnPersistance(this.getStorage(), reply);
+        saveOnPersistance(this.getStorage(),
+                String.format("%s/%s", issuer, kind), reply);
 
         return reply;
     }
@@ -67,7 +69,7 @@ public abstract class Processor {
         return openPayload(payload, this::engage);
     }
 
-    protected abstract void saveOnPersistance(IStorage st, PacReply pacResult) throws EngineError;
+    protected abstract void saveOnPersistance(IStorage st, final String directory, PacReply pacResult) throws EngineError;
 
     protected abstract PacReply openPayload(final IPayload payload, Pickard pic) throws EngineError;
 
@@ -104,7 +106,9 @@ public abstract class Processor {
     @FunctionalInterface
     public interface Pickard {
 
-        PacReply route(final String kind, final String label, final Map<String, String> issuerAttribs, InputStreamReader isr) throws EngineError;
+        PacReply route(final String kind, final String label,
+                final String issuer, final Map<String, String> issuerAttribs,
+                InputStreamReader isr) throws EngineError;
     }
 
     @FunctionalInterface
