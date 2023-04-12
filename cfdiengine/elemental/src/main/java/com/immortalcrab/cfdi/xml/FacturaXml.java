@@ -187,7 +187,7 @@ public class FacturaXml {
                 impTraslado.setBase(impTras.getBase());
                 impTraslado.setImpuesto(impTras.getImpuesto());
                 impTraslado.setTipoFactor(CTipoFactor.fromValue(impTras.getTipoFactor()));
-                impTraslado.setTasaOCuota(impTras.getTasaOCuota());
+                impTraslado.setTasaOCuota(impTras.getTasaOCuota().setScale(6));
                 impTraslado.setImporte(impTras.getImporte());
 
                 impuestosTraslados.getTraslado().add(impTraslado);
