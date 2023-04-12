@@ -1,6 +1,5 @@
 package com.immortalcrab.cfdi.processor;
 
-import java.io.IOException;
 import com.immortalcrab.cfdi.errors.EngineError;
 import com.immortalcrab.cfdi.helpers.AWSEvent;
 import com.immortalcrab.cfdi.helpers.Payload;
@@ -8,25 +7,31 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.amazonaws.arn.Arn;
+import com.amazonaws.services.lambda.runtime.events.SQSBatchResponse;
 import com.immortalcrab.cfdi.errors.ErrorCodes;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.IOException;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class IssueHandler implements RequestHandler<SQSEvent, Void> {
+public class IssueHandler implements RequestHandler<SQSEvent, SQSBatchResponse> {
 
     @Override
-    public Void handleRequest(SQSEvent event, Context context) {
+    public SQSBatchResponse handleRequest(SQSEvent event, Context context) {
 
+        List<SQSBatchResponse.BatchItemFailure> failures = new ArrayList<>();
         for (SQSEvent.SQSMessage msg : event.getRecords()) {
             try {
                 handleMessage(Producer.obtainSteadyPipeline(), msg);
             } catch (EngineError ex) {
                 log.error("Exception handling batch seed request.", ex);
+                failures.add(new SQSBatchResponse.BatchItemFailure(msg.getMessageId()));
             }
         }
 
-        return null;
+        return new SQSBatchResponse(failures);
     }
 
     private void handleMessage(Producer producer, SQSEvent.SQSMessage msg) throws EngineError {
