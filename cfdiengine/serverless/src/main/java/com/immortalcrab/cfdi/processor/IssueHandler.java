@@ -26,7 +26,8 @@ public class IssueHandler implements RequestHandler<SQSEvent, SQSBatchResponse> 
             try {
                 handleMessage(Producer.obtainSteadyPipeline(), msg);
             } catch (EngineError ex) {
-                log.error("Exception handling batch seed request.", ex);
+                final String emsg = String.format("Exception handling message with id %s", msg.getMessageId());
+                log.error(emsg, ex);
                 failures.add(new SQSBatchResponse.BatchItemFailure(msg.getMessageId()));
             }
         });
