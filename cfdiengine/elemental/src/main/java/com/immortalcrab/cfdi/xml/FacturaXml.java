@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.math.BigDecimal;
 import java.util.List;
 
 import mx.gob.sat.cfd._4.Comprobante;
@@ -127,8 +126,7 @@ public class FacturaXml {
                     traslado.setBase(t.getBase());
                     traslado.setImpuesto(t.getImpuesto());
                     traslado.setTipoFactor(CTipoFactor.fromValue(t.getTipoFactor()));
-                    BigDecimal toc = t.getTasaOCuota();
-                    traslado.setTasaOCuota(toc.setScale(6));
+                    traslado.setTasaOCuota(t.getTasaOCuota());
                     traslado.setImporte(t.getImporte());
 
                     traslados.getTraslado().add(traslado);
