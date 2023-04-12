@@ -16,6 +16,7 @@ import com.amazonaws.arn.Arn;
 import com.immortalcrab.cfdi.errors.ErrorCodes;
 
 import lombok.extern.log4j.Log4j2;
+import software.amazon.awssdk.services.sqs.model.QueueDoesNotExistException;
 
 @Log4j2
 public class IssueHandler implements RequestHandler<SQSEvent, Void> {
@@ -35,14 +36,12 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
     }
 
     private void handleMessage(Producer producer, SQSEvent.SQSMessage msg) throws EngineError {
-        Arn theArn = Arn.fromString(msg.getEventSourceArn());
-        var queueName = theArn.getResourceAsString();
-        SqsClient sqsClient = SqsClient.builder().region(Region.of(theArn.getRegion())).build();
-        log.info(String.format("We've got a message to process from queue %s", queueName));
+        Arn eventSourceArn = Arn.fromString(msg.getEventSourceArn());
+        log.info(String.format("We've got a message to process from queue %s", eventSourceArn.getResourceAsString()));
         var details = producer.doIssue(percolatePayload(msg));
         log.debug(String.format("Issue for %s is attained {%s}",
                 details.getName(), details.getBuffer().toString()));
-        erradicateMessageFromQueue(sqsClient, queueName, msg.getReceiptHandle());
+        erradicateMessageFromQueue(eventSourceArn, msg.getReceiptHandle());
     }
 
     private Payload percolatePayload(SQSEvent.SQSMessage msg) throws EngineError {
@@ -59,8 +58,13 @@ public class IssueHandler implements RequestHandler<SQSEvent, Void> {
         }
     }
 
-    private static void erradicateMessageFromQueue(SqsClient sqsClient, final String queueName, final String receiptHandle) {
+    private static void erradicateMessageFromQueue(Arn eventSourceArn, final String receiptHandle) throws QueueDoesNotExistException {
 
+        var queueName = eventSourceArn.getResourceAsString();
+        Region queueRegion = Region.of(eventSourceArn.getRegion());
+        SqsClient sqsClient = SqsClient.builder().region(queueRegion).build();
+
+        log.debug(String.format("Attemping to delete message from queue %s in region %s", queueName, queueRegion.toString()));
         GetQueueUrlResponse getQueueUrlResponse = sqsClient.getQueueUrl(GetQueueUrlRequest.builder().queueName(queueName).build());
 
         DeleteMessageRequest deleteMessageRequest = DeleteMessageRequest.builder()
