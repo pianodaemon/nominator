@@ -163,10 +163,10 @@ public class FacturaXml {
             cfdi.setConceptos(conceptos);
 
             var impuestos = cfdiFactory.createComprobanteImpuestos();
-	    BigDecimal totalImpuestosRetenidos = req.getImpuestosAttributes().getTotalImpuestosRetenidos();
-	    if (totalImpuestosRetenidos.compareTo(new BigDecimal(0)) == 0) {
+            BigDecimal totalImpuestosRetenidos = req.getImpuestosAttributes().getTotalImpuestosRetenidos();
+            if (totalImpuestosRetenidos.compareTo(new BigDecimal(0)) != 0) {
                 impuestos.setTotalImpuestosRetenidos(req.getImpuestosAttributes().getTotalImpuestosRetenidos());
-	    }
+            }
             impuestos.setTotalImpuestosTrasladados(req.getImpuestosAttributes().getTotalImpuestosTrasladados());
 
             var impuestosRetenciones = cfdiFactory.createComprobanteImpuestosRetenciones();
