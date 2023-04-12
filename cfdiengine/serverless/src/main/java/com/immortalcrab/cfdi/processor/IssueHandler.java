@@ -22,14 +22,14 @@ public class IssueHandler implements RequestHandler<SQSEvent, SQSBatchResponse> 
     public SQSBatchResponse handleRequest(SQSEvent event, Context context) {
 
         List<SQSBatchResponse.BatchItemFailure> failures = new ArrayList<>();
-        for (SQSEvent.SQSMessage msg : event.getRecords()) {
+        event.getRecords().forEach(msg -> {
             try {
                 handleMessage(Producer.obtainSteadyPipeline(), msg);
             } catch (EngineError ex) {
                 log.error("Exception handling batch seed request.", ex);
                 failures.add(new SQSBatchResponse.BatchItemFailure(msg.getMessageId()));
             }
-        }
+        });
 
         return new SQSBatchResponse(failures);
     }

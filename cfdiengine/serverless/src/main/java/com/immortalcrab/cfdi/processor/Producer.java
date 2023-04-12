@@ -75,9 +75,9 @@ public class Producer extends Processor {
     }
 
     @Override
-    protected void saveOnPersistance(IStorage st, PacReply pacResult) throws EngineError {
+    protected void saveOnPersistance(IStorage st, final String prefix, PacReply pacResult) throws EngineError {
 
-        final String fileName = String.format("%s/%s", st.getTargetName(), pacResult.getName());
+        final String fileName = String.format("%s/%s", prefix, pacResult.getName());
         byte[] in = pacResult.getBuffer().toString().getBytes(StandardCharsets.UTF_8);
 
         st.upload(XML_MIME_TYPE, in.length, fileName, new ByteArrayInputStream(in));
@@ -94,6 +94,7 @@ public class Producer extends Processor {
         return pic.route(
                 parts[S3ReqURLParser.URIParticles.KIND.ordinal()],
                 parts[S3ReqURLParser.URIParticles.LABEL.ordinal()],
+                parts[S3ReqURLParser.URIParticles.ISSUER.ordinal()],
                 issuer.orElseThrow(
                         () -> new EngineError("The issuer requested is not registered",
                                 ErrorCodes.REQUEST_INVALID)).turnIntoMap(), instreamReader);
