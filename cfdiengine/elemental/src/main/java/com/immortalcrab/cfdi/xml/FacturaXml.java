@@ -128,8 +128,7 @@ public class FacturaXml {
                     traslado.setImpuesto(t.getImpuesto());
                     traslado.setTipoFactor(CTipoFactor.fromValue(t.getTipoFactor()));
                     BigDecimal toc = t.getTasaOCuota();
-		    toc.setScale(6);
-                    traslado.setTasaOCuota(toc);
+                    traslado.setTasaOCuota(toc.setScale(6));
                     traslado.setImporte(t.getImporte());
 
                     traslados.getTraslado().add(traslado);
