@@ -126,7 +126,7 @@ public class FacturaXml {
                     traslado.setBase(t.getBase());
                     traslado.setImpuesto(t.getImpuesto());
                     traslado.setTipoFactor(CTipoFactor.fromValue(t.getTipoFactor()));
-                    traslado.setTasaOCuota(t.getTasaOCuota());
+                    traslado.setTasaOCuota(t.getTasaOCuota().setScale(6));
                     traslado.setImporte(t.getImporte());
 
                     traslados.getTraslado().add(traslado);
@@ -141,7 +141,7 @@ public class FacturaXml {
                     retencion.setBase(r.getBase());
                     retencion.setImpuesto(r.getImpuesto());
                     retencion.setTipoFactor(CTipoFactor.fromValue(r.getTipoFactor()));
-                    retencion.setTasaOCuota(r.getTasaOCuota());
+                    retencion.setTasaOCuota(r.getTasaOCuota().setScale(6));
                     retencion.setImporte(r.getImporte());
 
                     retenciones.getRetencion().add(retencion);
