@@ -216,6 +216,8 @@ Resources:
       Enabled: true
       EventSourceArn: !GetAtt CfdiInQueue.Arn
       FunctionName: !GetAtt CfdiFactoryFunc.Arn
+      FunctionResponseTypes:
+        - 'ReportBatchItemFailures'
       BatchSize: 1
 
   CfdiFactoryFuncPermission:
